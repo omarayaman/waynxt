@@ -3,26 +3,73 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Navbar from "@/app/(auth)/login/Navbar";
+import Navbar from "./NavbarRegister";
+import NavbarRegister from "./NavbarRegister";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="min-h-screen flex bg-[#050505] text-white font-sans">
-      <Navbar />
+    <div className="relative min-h-screen bg-[#050505] text-white font-sans overflow-hidden">
+      {/* Full-screen Background Image */}
+      {/* <Image
+        src="/images/worldmap.png"
+        alt="World map background"
+        fill
+        className="object-cover object-center"
+        priority
+      /> */}
 
-      {/* Left Section - Form */}
-      <div className="w-full lg:w-[45%] xl:w-[40%] flex flex-col justify-center px-8 sm:px-16 relative z-0 pt-36 pb-12 lg:pt-[120px]">
-        <div className="max-w-[600px] w-full ml-[10%]">
-          <h1 className="text-[42px] font-bold text-[#E3D010] mb-3 tracking-tight">
-            Welcome back
+      {/* Dark gradient overlay */}
+      <div className="absolute inset-0 bg-linear-to-r from-[#050505] from-50% via-[#050505]/80 to-transparent z-[1]"></div>
+      {/* Top Navigation */}
+      <NavbarRegister step={1} />
+      {/* Form Content */}
+      <div className="relative z-10 flex items-center min-h-[calc(100vh-40px)]">
+        <div className="w-full max-w-[600px] px-8 lg:px-10 ml-[10%]">
+          <h1 className="text-[42px] font-bold  text-[#E3D010] mb-3 tracking-tight">
+            Create your account
           </h1>
-          <p className="text-gray-300 mb-10 text-[15px] leading-relaxed pr-8">
-            Your saved places, conversations, and discoveries are waiting.
+          <p className="text-gray-300 mb-10 text-[15px] leading-relaxed">
+            Start exploring with a personalized experience.
           </p>
 
           <form className="space-y-5" action="#">
+            {/* Name Field */}
+            <div className="space-y-2">
+              <label
+                className="text-[13px] text-gray-300 block ml-1"
+                htmlFor="name"
+              >
+                Name
+              </label>
+              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-[#E3D010] transition-all duration-300">
+                <div className="absolute left-4 text-gray-400">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  id="name"
+                  placeholder="Ziad emad"
+                  className="w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-4 py-4 outline-none text-sm rounded-xl"
+                  required
+                />
+              </div>
+            </div>
+
             {/* Email Field */}
             <div className="space-y-2">
               <label
@@ -31,7 +78,7 @@ export default function LoginPage() {
               >
                 Email
               </label>
-              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-[#E3D010] focus-within:bg-[#1a1a1a] transition-all duration-300 shadow-sm">
+              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-[#E3D010] transition-all duration-300">
                 <div className="absolute left-4 text-gray-400">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +113,7 @@ export default function LoginPage() {
               >
                 Password
               </label>
-              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-[#E3D010] focus-within:bg-[#1a1a1a] transition-all duration-300 shadow-sm">
+              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-[#E3D010] transition-all duration-300">
                 <div className="absolute left-4 text-gray-400">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -132,45 +179,52 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Options */}
-            <div className="flex justify-between items-center pt-1 px-1">
+            {/* Terms Checkbox */}
+            <div className="flex items-center pt-1 px-1">
               <label className="flex items-center gap-2 cursor-pointer group">
                 <div className="w-4 h-4 rounded-[4px] border border-gray-600 bg-[#181818] flex items-center justify-center group-hover:border-[#E3D010] transition-colors">
                   {/* checked icon could go here */}
                 </div>
                 <span className="text-[13px] text-gray-400 select-none group-hover:text-gray-200 transition-colors">
-                  Remember me
+                  I agree to the Terms & Privacy Policy
                 </span>
-                {/* Hidden actual checkbox */}
                 <input type="checkbox" className="hidden" />
               </label>
-              <Link
-                href="/forgot-password"
-                className="text-[13px] text-gray-400 hover:text-white transition-colors"
-              >
-                Forget Password?
-              </Link>
             </div>
 
-            {/* Login Button */}
+            {/* Continue Button */}
             <button
               type="submit"
-              className="w-full bg-[#DFD616] hover:bg-[#EAE121] text-[#0a0a0a] font-bold text-[15px] py-4 rounded-xl mt-4 transition-all duration-300 shadow-[0_0_15px_rgba(223,214,22,0.15)] hover:shadow-[0_0_20px_rgba(223,214,22,0.3)]"
+              className="w-full flex items-center justify-center gap-2 bg-[#DFD616] hover:bg-[#EAE121] text-[#0a0a0a] font-bold text-[15px] py-4 rounded-xl mt-4 transition-all duration-300 shadow-[0_0_15px_rgba(223,214,22,0.15)] hover:shadow-[0_0_20px_rgba(223,214,22,0.3)]"
             >
-              Log in
+              Continue
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
             </button>
 
             {/* OR Separator */}
-            <div className="flex items-center gap-4 my-8">
-              <div className="flex-1 border-t border-[#222]"></div>
-              <span className="text-gray-500 text-sm font-medium pb-1">or</span>
-              <div className="flex-1 border-t border-[#222]"></div>
+            <div className="flex items-center gap-4 my-6">
+              <div className="flex-1 border-t border-[#333]"></div>
+              <span className="text-gray-500 text-sm font-medium">or</span>
+              <div className="flex-1 border-t border-[#333]"></div>
             </div>
 
             {/* Google Login */}
             <button
               type="button"
-              className="w-full flex items-center justify-center gap-3 bg-transparent border border-[#333] hover:border-gray-500 hover:bg-[#111] text-gray-200 py-3.5 rounded-xl transition-all duration-300"
+              className="w-full flex items-center justify-center gap-3 bg-transparent border border-[#333] hover:border-gray-500 hover:bg-[#111]/50 text-gray-200 py-3.5 rounded-xl transition-all duration-300"
             >
               <svg
                 width="20"
@@ -202,18 +256,6 @@ export default function LoginPage() {
             </button>
           </form>
         </div>
-      </div>
-
-      {/* Right Section - Image Background */}
-      <div className="hidden lg:block lg:w-[55%] xl:w-[60%] relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/70 to-transparent z-10"></div>
-        <Image
-          src="/bg-pharaoh.png"
-          alt="Ancient Egyptian pharaoh statue in a modern museum"
-          fill
-          className="object-cover object-center"
-          priority
-        />
       </div>
     </div>
   );
