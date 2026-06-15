@@ -3,11 +3,43 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Navbar from "./NavbarRegister";
+import { useRouter } from "next/navigation";
+import { authService } from "@/services/auth.service";
 import NavbarRegister from "./NavbarRegister";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!termsAccepted) {
+      setErrorMessage("Please agree to the Terms & Privacy Policy");
+      return;
+    }
+    
+    setIsLoading(true);
+    setErrorMessage("");
+
+    try {
+      await authService.register({ name, email, password });
+      // On success, try to login automatically
+      await authService.login({ email, password });
+      router.push("/");
+    } catch (error: any) {
+      setErrorMessage(
+        error.response?.data?.message || "An error occurred during registration. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="relative min-h-screen bg-[#050505] text-white font-sans overflow-hidden">
@@ -34,7 +66,13 @@ export default function RegisterPage() {
             Start exploring with a personalized experience.
           </p>
 
-          <form className="space-y-5" action="#">
+          {errorMessage && (
+            <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+              {errorMessage}
+            </div>
+          )}
+
+          <form className="space-y-5" onSubmit={handleSubmit}>
             {/* Name Field */}
             <div className="space-y-2">
               <label
@@ -63,6 +101,8 @@ export default function RegisterPage() {
                 <input
                   type="text"
                   id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="Ziad emad"
                   className="w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-4 py-4 outline-none text-sm rounded-xl"
                   required
@@ -98,6 +138,8 @@ export default function RegisterPage() {
                 <input
                   type="email"
                   id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Jhonsmith@gmail.com"
                   className="w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-4 py-4 outline-none text-sm rounded-xl"
                   required
@@ -133,6 +175,8 @@ export default function RegisterPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
                   className="w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-12 py-4 outline-none text-sm rounded-xl"
                   required
@@ -182,23 +226,43 @@ export default function RegisterPage() {
             {/* Terms Checkbox */}
             <div className="flex items-center pt-1 px-1">
               <label className="flex items-center gap-2 cursor-pointer group">
-                <div className="w-4 h-4 rounded-[4px] border border-gray-600 bg-[#181818] flex items-center justify-center group-hover:border-[#E3D010] transition-colors">
-                  {/* checked icon could go here */}
+                <div className={`w-4 h-4 rounded-[4px] border ${termsAccepted ? 'border-[#E3D010] bg-[#E3D010]' : 'border-gray-600 bg-[#181818]'} flex items-center justify-center group-hover:border-[#E3D010] transition-colors`}>
+                  {termsAccepted && (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  )}
                 </div>
                 <span className="text-[13px] text-gray-400 select-none group-hover:text-gray-200 transition-colors">
                   I agree to the Terms & Privacy Policy
                 </span>
-                <input type="checkbox" className="hidden" />
+                <input 
+                  type="checkbox" 
+                  className="hidden" 
+                  checked={termsAccepted}
+                  onChange={(e) => setTermsAccepted(e.target.checked)}
+                />
               </label>
             </div>
 
             {/* Continue Button */}
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 bg-[#DFD616] hover:bg-[#EAE121] text-[#0a0a0a] font-bold text-[15px] py-4 rounded-xl mt-4 transition-all duration-300 shadow-[0_0_15px_rgba(223,214,22,0.15)] hover:shadow-[0_0_20px_rgba(223,214,22,0.3)]"
+              disabled={isLoading}
+              className="w-full flex items-center justify-center gap-2 bg-[#DFD616] hover:bg-[#EAE121] text-[#0a0a0a] font-bold text-[15px] py-4 rounded-xl mt-4 transition-all duration-300 shadow-[0_0_15px_rgba(223,214,22,0.15)] hover:shadow-[0_0_20px_rgba(223,214,22,0.3)] disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              Continue
-              <svg
+              {isLoading ? (
+                <>
+                  <svg className="animate-spin h-5 w-5 text-[#0a0a0a]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creating account...
+                </>
+              ) : (
+                <>
+                  Continue
+                  <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="18"
                 height="18"
