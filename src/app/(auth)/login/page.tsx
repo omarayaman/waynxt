@@ -23,9 +23,10 @@ export default function LoginPage() {
     try {
       await authService.login({ email, password });
       router.push("/"); // Redirect to dashboard
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } } };
       setErrorMessage(
-        error.response?.data?.message || "An error occurred during login. Please try again."
+        err.response?.data?.message || "An error occurred during login. Please try again."
       );
     } finally {
       setIsLoading(false);
