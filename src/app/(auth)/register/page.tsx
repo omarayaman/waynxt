@@ -28,13 +28,14 @@ export default function RegisterPage() {
     setErrorMessage("");
 
     try {
-      await authService.register({ name, email, password });
+      await authService.register({full_name: name, email, password });
       // On success, try to login automatically
       await authService.login({ email, password });
       router.push("/");
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } } };
       setErrorMessage(
-        error.response?.data?.message || "An error occurred during registration. Please try again."
+        err.response?.data?.message || "An error occurred during registration. Please try again."
       );
     } finally {
       setIsLoading(false);
@@ -276,7 +277,9 @@ export default function RegisterPage() {
                 <path d="M5 12h14" />
                 <path d="m12 5 7 7-7 7" />
               </svg>
-            </button>
+            </>
+          )}
+        </button>
 
             {/* OR Separator */}
             <div className="flex items-center gap-4 my-6">
