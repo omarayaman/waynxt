@@ -6,6 +6,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/auth.service";
 import NavbarRegister from "./NavbarRegister";
+import { z } from "zod";
+
+const registerSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters."),
+  email: z.string().min(1, "Email is required.").email("Please enter a valid email address."),
+  password: z.string().min(6, "Password must be at least 6 characters."),
+});
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -16,16 +23,30 @@ export default function RegisterPage() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<{name?: string, email?: string, password?: string}>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFieldErrors({});
+    setErrorMessage("");
+
+    const validation = registerSchema.safeParse({ name, email, password });
+    if (!validation.success) {
+      const formattedErrors = validation.error.format();
+      setFieldErrors({
+        name: formattedErrors.name?._errors[0],
+        email: formattedErrors.email?._errors[0],
+        password: formattedErrors.password?._errors[0],
+      });
+      return;
+    }
+
     if (!termsAccepted) {
       setErrorMessage("Please agree to the Terms & Privacy Policy");
       return;
     }
     
     setIsLoading(true);
-    setErrorMessage("");
 
     try {
       await authService.register({full_name: name, email, password });
@@ -103,12 +124,18 @@ export default function RegisterPage() {
                   type="text"
                   id="name"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    if (fieldErrors.name) setFieldErrors({ ...fieldErrors, name: undefined });
+                  }}
                   placeholder="Ziad emad"
-                  className="w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-4 py-4 outline-none text-sm rounded-xl"
-                  required
+                  className={`w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-4 py-4 outline-none text-sm rounded-xl ${fieldErrors.name ? 'border border-red-500' : ''}`}
+                  
                 />
               </div>
+              {fieldErrors.name && (
+                <p className="text-red-500 text-xs mt-1 ml-1">{fieldErrors.name}</p>
+              )}
             </div>
 
             {/* Email Field */}
@@ -140,12 +167,18 @@ export default function RegisterPage() {
                   type="email"
                   id="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (fieldErrors.email) setFieldErrors({ ...fieldErrors, email: undefined });
+                  }}
                   placeholder="Jhonsmith@gmail.com"
-                  className="w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-4 py-4 outline-none text-sm rounded-xl"
-                  required
+                  className={`w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-4 py-4 outline-none text-sm rounded-xl ${fieldErrors.email ? 'border border-red-500' : ''}`}
+                  
                 />
               </div>
+              {fieldErrors.email && (
+                <p className="text-red-500 text-xs mt-1 ml-1">{fieldErrors.email}</p>
+              )}
             </div>
 
             {/* Password Field */}
@@ -177,10 +210,13 @@ export default function RegisterPage() {
                   type={showPassword ? "text" : "password"}
                   id="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (fieldErrors.password) setFieldErrors({ ...fieldErrors, password: undefined });
+                  }}
                   placeholder="Password"
-                  className="w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-12 py-4 outline-none text-sm rounded-xl"
-                  required
+                  className={`w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-12 py-4 outline-none text-sm rounded-xl ${fieldErrors.password ? 'border border-red-500' : ''}`}
+                  
                 />
                 <button
                   type="button"
@@ -222,6 +258,9 @@ export default function RegisterPage() {
                   )}
                 </button>
               </div>
+              {fieldErrors.password && (
+                <p className="text-red-500 text-xs mt-1 ml-1">{fieldErrors.password}</p>
+              )}
             </div>
 
             {/* Terms Checkbox */}

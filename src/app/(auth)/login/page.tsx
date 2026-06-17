@@ -6,6 +6,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/auth.service";
 import Navbar from "@/app/(auth)/login/Navbar";
+import { z } from "zod";
+
+const loginSchema = z.object({
+  email: z.string().min(1, "Email is required").email("Please enter a valid email address."),
+  password: z.string().min(1, "Password is required."),
+});
 
 export default function LoginPage() {
   const router = useRouter();
@@ -14,11 +20,24 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<{email?: string, password?: string}>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setFieldErrors({});
     setErrorMessage("");
+
+    const validation = loginSchema.safeParse({ email, password });
+    if (!validation.success) {
+      const formattedErrors = validation.error.format();
+      setFieldErrors({
+        email: formattedErrors.email?._errors[0],
+        password: formattedErrors.password?._errors[0],
+      });
+      return;
+    }
+
+    setIsLoading(true);
 
     try {
       await authService.login({ email, password });
@@ -84,12 +103,18 @@ export default function LoginPage() {
                   type="email"
                   id="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (fieldErrors.email) setFieldErrors({ ...fieldErrors, email: undefined });
+                  }}
                   placeholder="Jhonsmith@gmail.com"
-                  className="w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-4 py-4 outline-none text-sm rounded-xl"
-                  required
+                  className={`w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-4 py-4 outline-none text-sm rounded-xl ${fieldErrors.email ? 'border border-red-500' : ''}`}
+                  
                 />
               </div>
+              {fieldErrors.email && (
+                <p className="text-red-500 text-xs mt-1 ml-1">{fieldErrors.email}</p>
+              )}
             </div>
 
             {/* Password Field */}
@@ -121,10 +146,13 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   id="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (fieldErrors.password) setFieldErrors({ ...fieldErrors, password: undefined });
+                  }}
                   placeholder="Password"
-                  className="w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-12 py-4 outline-none text-sm rounded-xl"
-                  required
+                  className={`w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-12 py-4 outline-none text-sm rounded-xl ${fieldErrors.password ? 'border border-red-500' : ''}`}
+                  
                 />
                 <button
                   type="button"
@@ -166,6 +194,9 @@ export default function LoginPage() {
                   )}
                 </button>
               </div>
+              {fieldErrors.password && (
+                <p className="text-red-500 text-xs mt-1 ml-1">{fieldErrors.password}</p>
+              )}
             </div>
 
             {/* Options */}
