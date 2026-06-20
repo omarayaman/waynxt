@@ -14,7 +14,7 @@ export default function FloatingAiButton() {
         viewBox="0 0 24 24"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
-        className="group-hover:rotate-12 transition-transform"
+        className="group-hover:rotate-90 transition-transform duration-500"
       >
         <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" />
         <path d="M20 3L20.8 5.2L23 6L20.8 6.8L20 9L19.2 6.8L17 6L19.2 5.2L20 3Z" />
