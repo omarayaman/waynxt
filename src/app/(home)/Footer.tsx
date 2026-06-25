@@ -18,27 +18,27 @@ export default function Footer() {
               className="object-contain"
             />
           </div>
-          <Link href="/about" className="text-gray-300 hover:text-white transition-colors">About Us</Link>
-          <Link href="/how-it-works" className="text-gray-300 hover:text-white transition-colors">How it works</Link>
-          <Link href="/ask-waynx" className="text-gray-300 hover:text-white transition-colors">Ask Waynx</Link>
+          <Link href="/about" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">About Us</Link>
+          <Link href="/about#how-it-works" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">How it works</Link>
+          <Link href="/ask-waynx" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">Ask Waynx</Link>
         </div>
 
         {/* Middle Column - Explore */}
         <div className="flex flex-col gap-6">
           <h4 className="text-[#E3D010] font-bold text-xl mb-2">Explore</h4>
-          <Link href="/places" className="text-gray-300 hover:text-white transition-colors">Places</Link>
-          <Link href="/places?category=history" className="text-gray-300 hover:text-white transition-colors">History & Heritage</Link>
-          <Link href="/places?category=beaches" className="text-gray-300 hover:text-white transition-colors">Beaches & Nature</Link>
-          <Link href="/places?category=wellness" className="text-gray-300 hover:text-white transition-colors">Wellness & Healing</Link>
-          <Link href="/places?category=culture" className="text-gray-300 hover:text-white transition-colors">Culture & Local Life</Link>
+          <Link href="/places" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">Places</Link>
+          <Link href="/places?category=history" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">History & Heritage</Link>
+          <Link href="/places?category=beaches" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">Beaches & Nature</Link>
+          <Link href="/places?category=wellness" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">Wellness & Healing</Link>
+          <Link href="/places?category=culture" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">Culture & Local Life</Link>
         </div>
 
         {/* Right Column - Legal */}
         <div className="flex flex-col gap-6">
           <h4 className="text-[#E3D010] font-bold text-xl mb-2">Legal</h4>
-          <Link href="/privacy" className="text-gray-300 hover:text-white transition-colors">Privacy policy</Link>
-          <Link href="/terms" className="text-gray-300 hover:text-white transition-colors">Terms of service</Link>
-          <Link href="/contact" className="text-gray-300 hover:text-white transition-colors">Contact</Link>
+          <Link href="/privacy" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">Privacy policy</Link>
+          <Link href="/terms" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">Terms of service</Link>
+          <Link href="/contact" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">Contact</Link>
         </div>
 
       </div>

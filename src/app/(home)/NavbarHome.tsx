@@ -1,13 +1,26 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function NavbarHome() {
+  const pathname = usePathname();
+
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "Places", href: "/places" },
+    { name: "About", href: "/about" },
+    { name: "Ask Waynx", href: "/ask-waynx" },
+  ];
+
   return (
     <nav className="absolute top-0 w-full h-[110px] flex justify-between items-center px-6 lg:px-12 z-50 border-b border-[#333333]">
       {/* Left: Logo */}
       <div className="flex items-center -ml-2 lg:-ml-4">
-        <div className="shrink-0">
+        <Link href="/" className="shrink-0 outline-none focus:outline-none">
           <Image
             src="/icons/full_Logo.svg"
             alt="Waynx Logo"
@@ -15,38 +28,35 @@ export default function NavbarHome() {
             height={60}
             className="object-contain"
           />
-        </div>
+        </Link>
       </div>
 
       {/* Center: Links */}
       <div className="hidden lg:flex items-center space-x-12 h-full">
-        <div className="h-full flex items-center relative">
-          <Link
-            href="/"
-            className="text-[#E3D010] font-medium hover:text-yellow-400 transition-colors"
-          >
-            Home
-          </Link>
-          <div className="absolute bottom-[-1px] left-[-10px] right-[-10px] h-[3px] bg-[#E3D010]"></div>
-        </div>
-        <Link
-          href="/places"
-          className="text-gray-300 font-medium hover:text-white transition-colors"
-        >
-          Places
-        </Link>
-        <Link
-          href="/about"
-          className="text-gray-300 font-medium hover:text-white transition-colors"
-        >
-          About
-        </Link>
-        <Link
-          href="/ask-waynx"
-          className="text-gray-300 font-medium hover:text-white transition-colors"
-        >
-          Ask Waynx
-        </Link>
+        {navLinks.map((link) => {
+          const isActive = pathname === link.href;
+          return (
+            <div key={link.name} className="h-full flex items-center relative">
+              <Link
+                href={link.href}
+                className={`${
+                  isActive
+                    ? "text-[#E3D010]"
+                    : "text-gray-300 hover:text-white hover:text-yellow-400"
+                } font-medium transition-colors`}
+              >
+                {link.name}
+              </Link>
+              {isActive && (
+                <motion.div
+                  layoutId="navbar-indicator"
+                  className="absolute bottom-[-1px] left-[-10px] right-[-10px] h-[3px] bg-[#E3D010]"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Right: Auth Buttons */}
