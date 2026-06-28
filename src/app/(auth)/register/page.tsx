@@ -52,6 +52,11 @@ export default function RegisterPage() {
       await authService.register({full_name: name, email, password });
       // On success, try to login automatically
       await authService.login({ email, password });
+      
+      // Update global auth state before redirecting
+      const { useAuthStore } = await import('@/store/useAuthStore');
+      await useAuthStore.getState().fetchCurrentUser();
+      
       router.push("/");
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };

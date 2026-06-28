@@ -70,9 +70,8 @@ api.interceptors.response.use(
           refresh_token: refreshToken,
         });
 
-        // The API likely returns access_token and refresh_token
-        const newAccessToken = data.token || data.access_token;
-        const newRefreshToken = data.refresh_token || refreshToken;
+        const newAccessToken = data.token || data.access_token || data.data?.token || data.data?.access_token;
+        const newRefreshToken = data.refresh_token || data.data?.refresh_token || refreshToken;
 
         Cookies.set('accessToken', newAccessToken, { expires: 1 });
         if (newRefreshToken) {
@@ -88,9 +87,11 @@ api.interceptors.response.use(
         processQueue(err, null);
         Cookies.remove('accessToken');
         Cookies.remove('refreshToken');
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
-        }
+        
+        // Let application handle redirect
+        const { useAuthStore } = await import('@/store/useAuthStore');
+        useAuthStore.getState().setUser(null);
+        
         return Promise.reject(err);
       } finally {
         isRefreshing = false;

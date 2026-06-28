@@ -41,6 +41,11 @@ export default function LoginPage() {
 
     try {
       await authService.login({ email, password });
+      
+      // Update global auth state before redirecting
+      const { useAuthStore } = await import('@/store/useAuthStore');
+      await useAuthStore.getState().fetchCurrentUser();
+      
       router.push("/"); // Redirect to dashboard
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };
