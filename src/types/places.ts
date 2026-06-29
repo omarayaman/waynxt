@@ -76,6 +76,7 @@ export interface PlacesFilters {
 export interface Category {
   category: string;
   count: number;
+  image_url: string;
 }
 
 export interface City {

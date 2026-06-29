@@ -5,20 +5,31 @@ import NavbarHome from "../NavbarHome";
 import { usePlacesStore } from "@/store/usePlacesStore";
 import { usePlaces } from "@/hooks/usePlaces";
 import { Pagination } from "@/components/Pagination";
+import { useCategories } from "@/hooks/useCategories";
 import { 
   Search, Sparkles, Landmark, Waves, Diamond, Moon, Building2, 
   SlidersHorizontal, Check, ChevronDown, ChevronLeft, ChevronRight, Heart, MapPin, Map,
-  Loader2
+  Loader2, Tent, TreePine, Utensils, Activity, Sun
 } from "lucide-react";
 
-const FILTER_CATEGORIES = [
-  { id: "all", label: "All Experiences", icon: Sparkles },
-  { id: "historical", label: "Historical", icon: Landmark },
-  { id: "coastal", label: "Coastal", icon: Waves },
-  { id: "hidden_gems", label: "Hidden Gems", icon: Diamond },
-  { id: "nightlife", label: "Nightlife", icon: Moon },
-  { id: "museums", label: "Museums", icon: Building2 },
-];
+// We keep the static All Experiences icon for the "all" button
+const ALL_EXPERIENCES = { id: "all", label: "All Experiences", icon: Sparkles };
+
+const CATEGORY_ICONS: Record<string, any> = {
+  history: Landmark,
+  adventure: Tent,
+  beach: Sun,
+  nature: TreePine,
+  religious: Building2,
+  food: Utensils,
+  wellness: Activity,
+  // fallbacks
+  historical: Landmark,
+  coastal: Waves,
+  hidden_gems: Diamond,
+  nightlife: Moon,
+  museums: Building2,
+};
 
 const BUDGET_LEVELS = [
   { id: "low", label: "Low" },
@@ -78,6 +89,7 @@ function PlacesContent() {
   } = usePlacesStore();
 
   const { places, meta, isLoading, error } = usePlaces();
+  const { categories, isLoading: isCategoriesLoading } = useCategories();
 
   const [isSortOpen, setIsSortOpen] = useState(false);
   const totalPages = meta ? Math.ceil(meta.total / perPage) : 1;
@@ -111,24 +123,47 @@ function PlacesContent() {
 
         {/* Filter Chips Top (Category) */}
         <div className="w-full max-w-[1300px] mt-12 flex flex-wrap items-center justify-start gap-3 md:gap-4">
-          {FILTER_CATEGORIES.map(cat => {
-            const Icon = cat.icon;
-            const isActive = activeCategory === cat.id;
-            return (
-              <button 
-                key={cat.id}
-                onClick={() => setCategory(cat.id)}
-                className={`px-5 py-2.5 rounded-full flex items-center gap-2 text-xs md:text-sm font-medium transition-colors ${
-                  isActive 
-                    ? "bg-[#1A1805] border border-[#DFD616] text-[#DFD616]" 
-                    : "bg-transparent border border-[#222222] text-[#888888] hover:text-white hover:border-[#444444]"
-                }`}
-              >
-                <Icon size={16} strokeWidth={1.5} />
-                {cat.label}
-              </button>
-            )
-          })}
+          {/* All Experiences Button */}
+          <button 
+            onClick={() => setCategory('all')}
+            className={`px-5 py-2.5 rounded-full flex items-center gap-2 text-xs md:text-sm font-medium transition-colors ${
+              activeCategory === 'all' || !activeCategory
+                ? "bg-[#1A1805] border border-[#DFD616] text-[#DFD616]" 
+                : "bg-transparent border border-[#222222] text-[#888888] hover:text-white hover:border-[#444444]"
+            }`}
+          >
+            <ALL_EXPERIENCES.icon size={16} strokeWidth={1.5} />
+            {ALL_EXPERIENCES.label}
+          </button>
+
+          {/* Dynamic Categories */}
+          {isCategoriesLoading ? (
+            <div className="flex gap-3">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="w-28 h-10 rounded-full bg-[#111111] border border-[#222222] animate-pulse"></div>
+              ))}
+            </div>
+          ) : (
+            categories.map(cat => {
+              const isActive = activeCategory === cat.category;
+              const Icon = CATEGORY_ICONS[cat.category.toLowerCase()] || Diamond; // Fallback to Diamond if no icon matched
+              
+              return (
+                <button 
+                  key={cat.category}
+                  onClick={() => setCategory(cat.category)}
+                  className={`px-5 py-2.5 rounded-full flex items-center gap-2 text-xs md:text-sm font-medium transition-colors ${
+                    isActive 
+                      ? "bg-[#1A1805] border border-[#DFD616] text-[#DFD616]" 
+                      : "bg-transparent border border-[#222222] text-[#888888] hover:text-white hover:border-[#444444]"
+                  }`}
+                >
+                  <Icon size={16} strokeWidth={1.5} />
+                  <span className="capitalize">{cat.category}</span>
+                </button>
+              )
+            })
+          )}
         </div>
 
         {/* Main Content Area: Sidebar + Grid */}

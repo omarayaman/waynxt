@@ -10,6 +10,7 @@ import Footer from "./Footer";
 
 export default function Home() {
   return (
+    <>
     <div className="relative bg-[#050505] text-white font-sans overflow-x-hidden">
       {/* Hero Section */}
       <section className="relative min-h-screen">
@@ -77,9 +78,10 @@ export default function Home() {
 
       {/* Footer */}
       <Footer />
-
-      {/* Floating AI Button */}
-      <FloatingAiButton />
     </div>
+
+    {/* Floating AI Button (outside the overflow-hidden div) */}
+    <FloatingAiButton />
+    </>
   );
 }
