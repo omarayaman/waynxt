@@ -18,13 +18,10 @@ import {
   Utensils,
   Activity,
   Diamond,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import { placesService } from "@/services/places.service";
 import { useCategories } from "@/hooks/useCategories";
 import { Place } from "@/types/places";
-import Image from "next/image";
 
 const TRENDING_TAGS = [
   "Pyramids of Giza",

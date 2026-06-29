@@ -120,7 +120,7 @@ export default function SetupPage() {
                       type="button"
                       onClick={() => setStoryPreference(item)}
                       className={`px-8 py-2.5 rounded-xl border text-[14px] transition-all duration-300 ${
-                        storyPreference === item
+                        isSelected
                           ? "bg-[#DFD616] border-[#DFD616] text-[#0a0a0a] font-medium"
                           : "bg-transparent border-[#333] text-gray-400 hover:border-gray-500"
                       }`}
@@ -135,7 +135,7 @@ export default function SetupPage() {
             {/* Finish Button */}
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 bg-[#DFD616] hover:bg-[#EAE121] text-[#0a0a0a] font-bold text-[15px] py-4 rounded-xl !mt-12 transition-all duration-300 shadow-[0_0_15px_rgba(223,214,22,0.15)] hover:shadow-[0_0_20px_rgba(223,214,22,0.3)]"
+              className="w-full flex items-center justify-center gap-2 bg-[#DFD616] hover:bg-[#EAE121] text-[#0a0a0a] font-bold text-[15px] py-4 rounded-xl mt-12! transition-all duration-300 shadow-[0_0_15px_rgba(223,214,22,0.15)] hover:shadow-[0_0_20px_rgba(223,214,22,0.3)]"
             >
               Finish sign up
               <svg

@@ -39,7 +39,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       // Adjust depending on how backend wraps response (e.g., response.data or response directly)
       const userData = response.data || response;
       set({ user: userData, isAuthenticated: true, isLoading: false });
-    } catch (error) {
+    } catch {
       set({ user: null, isAuthenticated: false, isLoading: false });
     }
   },

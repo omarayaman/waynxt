@@ -76,9 +76,10 @@ export function usePlaces() {
         if (response.meta) {
           setMeta(response.meta);
         }
-      } catch (err: any) {
-        if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
-          setError(err.message || 'Failed to fetch places');
+      } catch (err: unknown) {
+        const error = err as Error;
+        if (error.name !== 'CanceledError' && error.name !== 'AbortError') {
+          setError(error.message || 'Failed to fetch places');
         }
       } finally {
         setIsLoading(false);

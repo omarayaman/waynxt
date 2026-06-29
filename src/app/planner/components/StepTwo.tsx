@@ -34,7 +34,7 @@ export default function StepTwo() {
     <div className="flex flex-col gap-10 font-poppins text-white">
       {/* Budget */}
       <div>
-        <h2 className="text-3xl font-bold font-clash mb-2">What's your budget?</h2>
+        <h2 className="text-3xl font-bold font-clash mb-2">What&apos;s your budget?</h2>
         <p className="text-gray-400 mb-6">Per-day spending comfort level.</p>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

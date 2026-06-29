@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, Suspense } from "react";
+import Link from "next/link";
 import NavbarHome from "../NavbarHome";
 import { usePlacesStore } from "@/store/usePlacesStore";
 import { usePlaces } from "@/hooks/usePlaces";
@@ -8,14 +9,14 @@ import { Pagination } from "@/components/Pagination";
 import { useCategories } from "@/hooks/useCategories";
 import { 
   Search, Sparkles, Landmark, Waves, Diamond, Moon, Building2, 
-  SlidersHorizontal, Check, ChevronDown, ChevronLeft, ChevronRight, Heart, MapPin, Map,
+  SlidersHorizontal, Check, ChevronDown, Heart, MapPin, Map,
   Loader2, Tent, TreePine, Utensils, Activity, Sun
 } from "lucide-react";
 
 // We keep the static All Experiences icon for the "all" button
 const ALL_EXPERIENCES = { id: "all", label: "All Experiences", icon: Sparkles };
 
-const CATEGORY_ICONS: Record<string, any> = {
+const CATEGORY_ICONS: Record<string, React.ElementType> = {
   history: Landmark,
   adventure: Tent,
   beach: Sun,
@@ -399,8 +400,9 @@ function PlacesContent() {
               ) : (
                 // Places
                 places.map((place) => (
-                  <div key={place.id} className="group relative w-full h-[380px] rounded-[2rem] overflow-hidden border border-[#222222] hover:border-[#DFD616]/50 transition-all duration-300 cursor-pointer">
+                  <Link href={`/places/${place.id}`} key={place.id} className="group relative w-full h-[380px] block rounded-[2rem] overflow-hidden border border-[#222222] hover:border-[#DFD616]/50 transition-all duration-300 cursor-pointer">
                     {/* Background Image */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img 
                       src={place.thumbnail_url || "https://images.unsplash.com/photo-1539667468225-eebb663053e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"} 
                       alt={place.name}
@@ -435,7 +437,7 @@ function PlacesContent() {
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))
               )}
             </div>

@@ -13,8 +13,9 @@ export function useCategories() {
         setIsLoading(true);
         const response = await placesService.getCategories();
         setCategories(response.data || []);
-      } catch (err: any) {
-        setError(err.message || 'Failed to fetch categories');
+      } catch (err: unknown) {
+        const error = err as Error;
+        setError(error.message || 'Failed to fetch categories');
       } finally {
         setIsLoading(false);
       }

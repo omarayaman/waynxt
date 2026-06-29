@@ -27,7 +27,7 @@ export default function StepOne() {
       {/* What Excites You */}
       <div>
         <h2 className="text-3xl font-bold font-clash mb-2">What excites you?</h2>
-        <p className="text-gray-400 mb-6">Select the experiences you're looking for. Tap as many as you like.</p>
+        <p className="text-gray-400 mb-6">Select the experiences you&apos;re looking for. Tap as many as you like.</p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {interestOptions.map((option) => {
@@ -61,7 +61,7 @@ export default function StepOne() {
 
       {/* Who's coming along */}
       <div>
-        <h2 className="text-3xl font-bold font-clash mb-2">Who's coming along?</h2>
+        <h2 className="text-3xl font-bold font-clash mb-2">Who&apos;s coming along?</h2>
         <p className="text-gray-400 mb-6">This shapes the vibe of your recommendations.</p>
         
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

@@ -7,11 +7,11 @@ import { userService } from "@/services/user.service";
 import { UserStats } from "@/types/user";
 import { Place } from "@/types/places";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { MapPin, Target, Trophy, Settings, Camera, LogOut } from "lucide-react";
+import { MapPin, Target, Trophy, Settings, Camera } from "lucide-react";
 import NavbarHome from "@/app/(home)/NavbarHome";
 
 export default function ProfilePage() {
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
   const [stats, setStats] = useState<UserStats | null>(null);
   const [savedPlaces, setSavedPlaces] = useState<Place[]>([]);
   const [isLoadingStats, setIsLoadingStats] = useState(true);
@@ -132,7 +132,7 @@ export default function ProfilePage() {
             
             {savedPlaces.length === 0 ? (
               <div className="bg-[#141414] border border-[#222] rounded-2xl p-12 text-center">
-                <p className="text-gray-400">You haven't saved any places yet.</p>
+                <p className="text-gray-400">You haven&apos;t saved any places yet.</p>
                 <button className="mt-4 px-6 py-2 bg-[#DFD616] text-black font-medium rounded-full hover:bg-yellow-400 transition-colors">
                   Explore Places
                 </button>
