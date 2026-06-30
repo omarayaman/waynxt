@@ -32,7 +32,7 @@ export default function AskWaynxPage() {
 
       <main className="flex-1 w-full max-w-[800px] mx-auto px-6 pt-32 pb-8 flex flex-col relative z-10">
         {/* Header */}
-        <div className="text-center mb-12 shrink-0">
+        <div className="text-center mb-8 shrink-0">
           <h1 className="text-[40px] md:text-[52px] font-medium text-white mb-3">
             Ask WAYNX
           </h1>
@@ -43,8 +43,8 @@ export default function AskWaynxPage() {
 
         {messages.length === 0 ? (
           // Initial State
-          <div className="flex flex-col items-center flex-1 w-full">
-            <div className="flex-1 flex flex-col items-center justify-center -mt-10">
+          <div className="flex flex-col items-center w-full mt-20">
+            <div className="flex flex-col items-center justify-center mb-16">
               <div className="w-12 h-12 rounded-full bg-[#1A1809] flex items-center justify-center text-[#DFD616] mb-4">
                 <Sparkles size={20} />
               </div>
@@ -53,9 +53,9 @@ export default function AskWaynxPage() {
               </p>
             </div>
 
-            <div className="w-full shrink-0 mb-1.5">
-              <p className="text-[#666666] text-xs mb-2">Suggested prompts:</p>
-              <div className="flex flex-wrap gap-2">
+            <div className="w-full shrink-0 mb-6">
+              <p className="text-[#666666] text-xs mb-3">Suggested prompts:</p>
+              <div className="flex flex-wrap gap-2.5">
                 {SUGGESTED_PROMPTS.map((prompt) => (
                   <button
                     key={prompt}

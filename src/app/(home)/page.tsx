@@ -5,7 +5,6 @@ import AiSearchSection from "./AiSearchSection";
 import InterestsSection from "./InterestsSection";
 import CuratedForYou from "./CuratedForYou";
 import UpcomingEvents from "./UpcomingEvents";
-import FloatingAiButton from "./FloatingAiButton";
 import Footer from "./Footer";
 
 export default function Home() {
@@ -79,9 +78,6 @@ export default function Home() {
       {/* Footer */}
       <Footer />
     </div>
-
-    {/* Floating AI Button (outside the overflow-hidden div) */}
-    <FloatingAiButton />
     </>
   );
 }

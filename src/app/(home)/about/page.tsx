@@ -83,7 +83,7 @@ export default function AboutPage() {
             How it works
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-[#DFD616]/30 hover:shadow-[0_10px_30px_rgba(223,214,22,0.05)] cursor-default">
+            <Link href="/ask-waynx" className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-[#DFD616]/30 hover:shadow-[0_10px_30px_rgba(223,214,22,0.05)] cursor-pointer">
               <div className="w-8 h-8 rounded-full bg-[#DFD616] text-[#0a0a0a] font-bold flex items-center justify-center mb-6 text-sm">
                 1
               </div>
@@ -91,9 +91,9 @@ export default function AboutPage() {
               <p className="text-xs text-gray-500 leading-relaxed">
                 Get clear answers in plain language.
               </p>
-            </div>
+            </Link>
             
-            <div className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-[#DFD616]/30 hover:shadow-[0_10px_30px_rgba(223,214,22,0.05)] cursor-default">
+            <Link href="/places" className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-[#DFD616]/30 hover:shadow-[0_10px_30px_rgba(223,214,22,0.05)] cursor-pointer">
               <div className="w-8 h-8 rounded-full bg-[#DFD616] text-[#0a0a0a] font-bold flex items-center justify-center mb-6 text-sm">
                 2
               </div>
@@ -101,7 +101,7 @@ export default function AboutPage() {
               <p className="text-xs text-gray-500 leading-relaxed">
                 Story-driven pages with highlights and practical info.
               </p>
-            </div>
+            </Link>
 
             <Link href="/search" className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-[#DFD616]/30 hover:shadow-[0_10px_30px_rgba(223,214,22,0.05)] cursor-pointer">
               <div className="w-8 h-8 rounded-full bg-[#DFD616] text-[#0a0a0a] font-bold flex items-center justify-center mb-6 text-sm">
