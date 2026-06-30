@@ -29,14 +29,14 @@ export default function StepOne() {
         <h2 className="text-3xl font-bold font-clash mb-2">What excites you?</h2>
         <p className="text-gray-400 mb-6">Select the experiences you&apos;re looking for. Tap as many as you like.</p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="flex flex-wrap gap-5 md:gap-6">
           {interestOptions.map((option) => {
             const isActive = interests.includes(option.id);
             return (
               <button
                 key={option.id}
                 onClick={() => toggleInterest(option.id)}
-                className={`flex flex-col items-start p-5 rounded-xl border transition-all duration-200 text-left ${
+                className={`flex flex-col items-start py-3 px-5 pr-6 rounded-xl border transition-all duration-200 text-left ${
                   isActive
                     ? "border-[#F7EA00] bg-[#1a1a10] shadow-[0_0_15px_rgba(247,234,0,0.1)]"
                     : "border-gray-800 bg-transparent hover:border-gray-600"
@@ -64,14 +64,14 @@ export default function StepOne() {
         <h2 className="text-3xl font-bold font-clash mb-2">Who&apos;s coming along?</h2>
         <p className="text-gray-400 mb-6">This shapes the vibe of your recommendations.</p>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="flex flex-wrap gap-5 md:gap-6">
           {whoOptions.map((option) => {
             const isActive = whoIsTraveling === option.id;
             return (
               <button
                 key={option.id}
                 onClick={() => setWhoIsTraveling(option.id)}
-                className={`flex flex-col items-start p-5 rounded-xl border transition-all duration-200 text-left ${
+                className={`flex flex-col items-start py-3 px-5 pr-6 rounded-xl border transition-all duration-200 text-left ${
                   isActive
                     ? "border-[#F7EA00] bg-[#1a1a10] shadow-[0_0_15px_rgba(247,234,0,0.1)]"
                     : "border-gray-800 bg-transparent hover:border-gray-600"
