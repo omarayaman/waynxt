@@ -100,78 +100,82 @@ function PlacesContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-poppins flex flex-col">
-      <NavbarHome />
+    <div className="h-[100dvh] bg-[#050505] text-white font-poppins flex flex-col overflow-hidden">
+      <div className="shrink-0">
+        <NavbarHome />
+      </div>
 
-      <main className="flex-1 w-full px-4 pt-24 pb-32 relative z-10 flex flex-col items-center">
+      <main className="flex-1 w-full max-w-[1600px] mx-auto px-4 pt-24 pb-4 flex flex-col overflow-hidden">
         
-        {/* Search Bar */}
-        <div className="w-full max-w-[800px] mt-16 md:mt-24 relative">
-          <div className="absolute left-5 top-1/2 -translate-y-1/2 text-[#666666]">
-            <Search size={20} strokeWidth={1.5} />
-          </div>
-          <input 
-            type="text" 
-            value={search}
-            onChange={handleSearchChange}
-            placeholder="Explore Egypt... e.g. 'Luxor temples' or 'Red Sea diving'" 
-            className="w-full bg-[#0F0F0F] border border-[#222222] rounded-full py-4 pl-14 pr-16 text-sm text-white placeholder:text-[#666666] focus:outline-none focus:border-[#DFD616]/50 transition-colors"
-          />
-          <button className="absolute right-2 top-1/2 -translate-y-1/2 w-[38px] h-[38px] rounded-full bg-[#1A1805] border border-[#DFD616]/30 flex items-center justify-center text-[#DFD616] hover:bg-[#2A2608] transition-colors">
-            {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} strokeWidth={1.5} />}
-          </button>
-        </div>
-
-        {/* Filter Chips Top (Category) */}
-        <div className="w-full max-w-[1300px] mt-12 flex flex-wrap items-center justify-start gap-3 md:gap-4">
-          {/* All Experiences Button */}
-          <button 
-            onClick={() => setCategory('all')}
-            className={`px-5 py-2.5 rounded-full flex items-center gap-2 text-xs md:text-sm font-medium transition-colors ${
-              activeCategory === 'all' || !activeCategory
-                ? "bg-[#1A1805] border border-[#DFD616] text-[#DFD616]" 
-                : "bg-transparent border border-[#222222] text-[#888888] hover:text-white hover:border-[#444444]"
-            }`}
-          >
-            <ALL_EXPERIENCES.icon size={16} strokeWidth={1.5} />
-            {ALL_EXPERIENCES.label}
-          </button>
-
-          {/* Dynamic Categories */}
-          {isCategoriesLoading ? (
-            <div className="flex gap-3">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="w-28 h-10 rounded-full bg-[#111111] border border-[#222222] animate-pulse"></div>
-              ))}
+        {/* Top Header: Search and Categories */}
+        <div className="w-full shrink-0 flex flex-col items-center">
+            {/* Search Bar */}
+            <div className="w-full max-w-[800px] mt-4 relative mx-auto">
+              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-[#666666]">
+                <Search size={20} strokeWidth={1.5} />
+              </div>
+              <input 
+                type="text" 
+                value={search}
+                onChange={handleSearchChange}
+                placeholder="Explore Egypt... e.g. 'Luxor temples' or 'Red Sea diving'" 
+                className="w-full bg-[#0F0F0F] border border-[#222222] rounded-full py-4 pl-14 pr-16 text-sm text-white placeholder:text-[#666666] focus:outline-none focus:border-[#DFD616]/50 transition-colors"
+              />
+              <button className="absolute right-2 top-1/2 -translate-y-1/2 w-[38px] h-[38px] rounded-full bg-[#1A1805] border border-[#DFD616]/30 flex items-center justify-center text-[#DFD616] hover:bg-[#2A2608] transition-colors">
+                {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} strokeWidth={1.5} />}
+              </button>
             </div>
-          ) : (
-            categories.map(cat => {
-              const isActive = activeCategory === cat.category;
-              const Icon = CATEGORY_ICONS[cat.category.toLowerCase()] || Diamond; // Fallback to Diamond if no icon matched
-              
-              return (
-                <button 
-                  key={cat.category}
-                  onClick={() => setCategory(cat.category)}
-                  className={`px-5 py-2.5 rounded-full flex items-center gap-2 text-xs md:text-sm font-medium transition-colors ${
-                    isActive 
-                      ? "bg-[#1A1805] border border-[#DFD616] text-[#DFD616]" 
-                      : "bg-transparent border border-[#222222] text-[#888888] hover:text-white hover:border-[#444444]"
-                  }`}
-                >
-                  <Icon size={16} strokeWidth={1.5} />
-                  <span className="capitalize">{cat.category}</span>
-                </button>
-              )
-            })
-          )}
+
+            {/* Filter Chips Top (Category) */}
+            <div className="w-full mt-8 mb-12 flex flex-wrap items-center justify-center gap-3 md:gap-4">
+              {/* All Experiences Button */}
+              <button 
+                onClick={() => setCategory('all')}
+                className={`px-5 py-2.5 rounded-full flex items-center gap-2 text-xs md:text-sm font-medium transition-colors ${
+                  activeCategory === 'all' || !activeCategory
+                    ? "bg-[#1A1805] border border-[#DFD616] text-[#DFD616]" 
+                    : "bg-transparent border border-[#222222] text-[#888888] hover:text-white hover:border-[#444444]"
+                }`}
+              >
+                <ALL_EXPERIENCES.icon size={16} strokeWidth={1.5} />
+                {ALL_EXPERIENCES.label}
+              </button>
+
+              {/* Dynamic Categories */}
+              {isCategoriesLoading ? (
+                <div className="flex gap-3">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="w-28 h-10 rounded-full bg-[#111111] border border-[#222222] animate-pulse"></div>
+                  ))}
+                </div>
+              ) : (
+                categories.map(cat => {
+                  const isActive = activeCategory === cat.category;
+                  const Icon = CATEGORY_ICONS[cat.category.toLowerCase()] || Diamond;
+                  
+                  return (
+                    <button 
+                      key={cat.category}
+                      onClick={() => setCategory(cat.category)}
+                      className={`px-5 py-2.5 rounded-full flex items-center gap-2 text-xs md:text-sm font-medium transition-colors ${
+                        isActive 
+                          ? "bg-[#1A1805] border border-[#DFD616] text-[#DFD616]" 
+                          : "bg-transparent border border-[#222222] text-[#888888] hover:text-white hover:border-[#444444]"
+                      }`}
+                    >
+                      <Icon size={16} strokeWidth={1.5} />
+                      <span className="capitalize">{cat.category}</span>
+                    </button>
+                  )
+                })
+              )}
+            </div>
         </div>
 
-        {/* Main Content Area: Sidebar + Grid */}
-        <div className="w-full max-w-[1300px] mx-auto mt-8 flex flex-col lg:flex-row gap-8 items-start">
-          
-          {/* Left: Advanced Filters Sidebar */}
-          <div className="w-full lg:w-[280px] shrink-0 bg-[#0a0a0a] border border-[#222222] rounded-3xl p-6 md:p-8 lg:sticky top-24 max-h-[80vh] overflow-y-auto custom-scrollbar">
+        {/* Two-Column Content Layout */}
+        <div className="w-full flex-1 flex gap-6 min-h-0 overflow-hidden">
+        {/* Left: Advanced Filters Sidebar */}
+        <div className="hidden lg:block w-[280px] xl:w-[320px] shrink-0 bg-[#0a0a0a] border border-[#222222] rounded-3xl p-6 h-full overflow-y-auto custom-scrollbar">
             {/* Header */}
             <div className="flex items-center gap-3 mb-6">
               <SlidersHorizontal size={20} className="text-[#DFD616]" />
@@ -326,10 +330,13 @@ function PlacesContent() {
 
           </div>
           
-          {/* Right Side: Cards Grid */}
-          <div className="flex-1 w-full min-h-[500px]">
-            {/* Grid Header */}
-            <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4 relative z-20">
+          {/* Right Main Area */}
+          <div className="flex-1 h-full flex flex-col relative w-full lg:pr-2">
+            
+            {/* Scrollable Content Area */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 lg:pr-4 pb-6 mt-2">
+              {/* Grid Header */}
+              <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4 relative z-20">
               <h2 className="text-xl text-white font-medium">
                 Discover <span className="text-[#DFD616]">Egypt</span>
                 {!isLoading && meta && (
@@ -379,7 +386,7 @@ function PlacesContent() {
             )}
 
             {/* Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative z-10 w-full pb-10">
               {isLoading ? (
                 // Skeletons
                 [...Array(6)].map((_, i) => (
@@ -458,8 +465,8 @@ function PlacesContent() {
               </button>
             </div>
             
+            </div>
           </div>
-
         </div>
 
       </main>
