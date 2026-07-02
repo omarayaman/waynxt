@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import NavbarHome from "../NavbarHome";
 import { Sparkles, Send, CheckCircle2, MapPin, Navigation, ExternalLink, Image as ImageIcon } from "lucide-react";
 
@@ -13,9 +14,17 @@ const SUGGESTED_PROMPTS = [
   "Quick history of Ancient Egypt"
 ];
 
-export default function AskWaynxPage() {
+function AskWaynxContent() {
+  const searchParams = useSearchParams();
   const [query, setQuery] = useState("");
   const [messages, setMessages] = useState<{role: 'user' | 'ai', content: string}[]>([]);
+
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q) {
+      setQuery(q);
+    }
+  }, [searchParams]);
 
   const handleSend = (text: string) => {
     if (!text.trim()) return;
@@ -188,5 +197,13 @@ export default function AskWaynxPage() {
         }}
       />
     </div>
+  );
+}
+
+export default function AskWaynxPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#050505]" />}>
+      <AskWaynxContent />
+    </Suspense>
   );
 }

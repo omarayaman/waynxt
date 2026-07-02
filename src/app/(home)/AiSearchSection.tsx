@@ -1,5 +1,12 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+
 export default function AiSearchSection() {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+
   const uniqueSuggestions = [
     "Plan my first trip to Egypt",
     "Explain the history of the pyramids",
@@ -7,6 +14,18 @@ export default function AiSearchSection() {
     "Best places for a Nile cruise",
     "Museums worth visiting in one day",
   ];
+
+  const handleSearch = () => {
+    if (query.trim()) {
+      router.push(`/ask-waynx?q=${encodeURIComponent(query.trim())}`);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   return (
     <section className="relative w-full bg-[#050505] py-24 flex flex-col items-center justify-center px-4 overflow-hidden z-10">
@@ -30,10 +49,16 @@ export default function AiSearchSection() {
           <div className="relative flex items-center bg-[#111111] border border-[#E3D010]/40 rounded-full px-6 py-4 transition-all duration-300 focus-within:border-[#E3D010]">
             <input
               type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="Ask anything about Egypt..."
               className="flex-1 bg-transparent text-white placeholder-gray-500 outline-none text-lg"
             />
-            <button className="ml-4 text-[#E3D010] hover:scale-110 transition-transform flex-shrink-0">
+            <button 
+              onClick={handleSearch}
+              className="ml-4 text-[#E3D010] hover:scale-110 transition-transform flex-shrink-0"
+            >
               <svg
                 width="24"
                 height="24"
@@ -80,6 +105,7 @@ export default function AiSearchSection() {
           {uniqueSuggestions.map((suggestion, index) => (
             <button
               key={index}
+              onClick={() => setQuery(suggestion)}
               className="px-5 py-3 rounded-full border border-gray-600 bg-transparent text-gray-400 text-[13px] md:text-sm hover:text-white hover:border-[#E3D010] hover:bg-[#111111] transition-all duration-300"
             >
               {suggestion}
