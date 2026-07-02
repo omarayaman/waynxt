@@ -10,43 +10,47 @@ export default function TripWizard() {
   const { step } = useTripStore();
 
   const steps = [
-    { num: 1, label: "TRIP" },
-    { num: 2, label: "STYLE" },
-    { num: 3, label: "TIMING" },
+    { num: 1, label: "Trip" },
+    { num: 2, label: "Style" },
+    { num: 3, label: "Timing" },
   ];
 
   return (
-    <div className="w-full max-w-4xl mx-auto flex flex-col font-poppins mt-2">
-      
-      {/* Top Stepper */}
-      <div className="flex items-center justify-center mb-8">
-        <div className="flex items-center gap-6 md:gap-8">
+    <div className="flex-1 min-h-0 min-w-0 flex flex-col font-poppins w-full">
+      {/* Stepper */}
+      <div className="shrink-0 flex items-center justify-center mb-3 sm:mb-4">
+        <div className="flex items-center w-full max-w-md">
           {steps.map((s, idx) => {
             const isCompleted = step > s.num;
             const isActive = step === s.num;
-            
+
             return (
               <React.Fragment key={s.num}>
-                <div className="flex flex-col items-center gap-3">
-                  <div 
-                    className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg border-2 transition-all ${
+                <div className="flex flex-col items-center gap-1.5 shrink-0">
+                  <div
+                    className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all ${
                       isCompleted || isActive
-                        ? "border-[#F7EA00] text-[#F7EA00]" 
-                        : "border-gray-600 text-gray-600"
+                        ? "border-[#F7EA00] bg-[#F7EA00]/10 text-[#F7EA00]"
+                        : "border-gray-700 text-gray-600"
                     }`}
                   >
                     {isCompleted ? "✓" : s.num}
                   </div>
-                  <span className={`text-[10px] tracking-widest uppercase font-semibold ${
-                    isActive ? "text-[#F7EA00]" : "text-gray-500"
-                  }`}>
+                  <span
+                    className={`text-[10px] tracking-wide uppercase font-medium ${
+                      isActive ? "text-[#F7EA00]" : "text-gray-500"
+                    }`}
+                  >
                     {s.label}
                   </span>
                 </div>
-                
-                {/* Connecting Line */}
+
                 {idx < steps.length - 1 && (
-                  <div className="w-16 md:w-24 h-px bg-gray-700 -mt-6"></div>
+                  <div
+                    className={`flex-1 h-0.5 mx-2 sm:mx-3 mb-5 rounded-full transition-colors ${
+                      step > s.num ? "bg-[#F7EA00]/50" : "bg-gray-800"
+                    }`}
+                  />
                 )}
               </React.Fragment>
             );
@@ -54,18 +58,18 @@ export default function TripWizard() {
         </div>
       </div>
 
-      {/* Wizard Card Container */}
-      <div className="bg-[#111111] border border-gray-800 rounded-[2rem] p-8 md:p-12 shadow-2xl relative">
-        <div className="text-[#F7EA00] text-sm font-bold tracking-widest uppercase mb-8">
-          STEP 0{step} / 3
+      {/* Wizard card — glass, lets map show through */}
+      <div className="flex-1 min-h-0 rounded-2xl border border-white/10 bg-black/30 backdrop-blur-sm p-4 sm:p-5 flex flex-col">
+        <div className="text-[#F7EA00] text-xs font-bold tracking-widest uppercase mb-3 sm:mb-4 shrink-0">
+          Step 0{step} / 3
         </div>
 
-        {/* Dynamic Step Content */}
-        {step === 1 && <StepOne />}
-        {step === 2 && <StepTwo />}
-        {step === 3 && <StepThree />}
+        <div className="flex-1 min-h-0 flex flex-col">
+          {step === 1 && <StepOne />}
+          {step === 2 && <StepTwo />}
+          {step === 3 && <StepThree />}
+        </div>
       </div>
-      
     </div>
   );
 }

@@ -1,7 +1,18 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const HIDDEN_PATHS = ["/planner"];
 
 export default function FloatingAiButton() {
+  const pathname = usePathname();
+
+  if (HIDDEN_PATHS.some((path) => pathname.startsWith(path))) {
+    return null;
+  }
+
   return (
     <Link
       href="/ask-waynx"

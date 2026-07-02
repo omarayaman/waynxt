@@ -1,0 +1,38 @@
+import React from "react";
+
+interface StepFooterProps {
+  onBack?: () => void;
+  backDisabled?: boolean;
+  onContinue: () => void;
+  continueLabel?: string;
+  continueDisabled?: boolean;
+}
+
+export default function StepFooter({
+  onBack,
+  backDisabled = false,
+  onContinue,
+  continueLabel = "Continue",
+  continueDisabled = false,
+}: StepFooterProps) {
+  return (
+    <div className="flex justify-between items-center pt-4 mt-auto border-t border-white/10 shrink-0">
+      <button
+        type="button"
+        onClick={onBack}
+        disabled={backDisabled || !onBack}
+        className="text-gray-400 hover:text-white transition-colors text-sm px-4 py-2 rounded-lg border border-white/10 hover:bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-400 disabled:hover:bg-transparent"
+      >
+        &larr; Back
+      </button>
+      <button
+        type="button"
+        onClick={onContinue}
+        disabled={continueDisabled}
+        className="bg-[#DFD616] hover:bg-[#EAE121] text-[#0a0a0a] font-bold text-sm px-6 py-2 rounded-xl transition-all duration-300 shadow-[0_0_12px_rgba(223,214,22,0.15)] hover:shadow-[0_0_18px_rgba(223,214,22,0.28)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
+      >
+        {continueLabel}
+      </button>
+    </div>
+  );
+}
