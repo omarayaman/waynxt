@@ -2,8 +2,9 @@ import React from 'react';
 import { placesService } from '@/services/places.service';
 import { Place } from '@/types/places';
 import { notFound } from 'next/navigation';
-import { MapPin, DollarSign, Sun, Users, Clock, Sparkles, Heart } from 'lucide-react';
+import { MapPin, DollarSign, Sun, Users, Clock, Sparkles } from 'lucide-react';
 import AskAiCta from './AskAiCta';
+import { SavePlaceButton } from '@/components/SavePlaceButton';
 import NavbarHome from '../../NavbarHome';
 import Link from 'next/link';
 
@@ -93,6 +94,9 @@ export default async function PlaceDetailsPage({ params }: { params: Promise<{ i
               </span>
             </div>
             <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight">{place.name}</h1>
+            <div className="mt-4">
+              <SavePlaceButton placeId={place.id} className="w-10 h-10" iconSize={18} />
+            </div>
           </div>
         </div>
 
@@ -198,9 +202,7 @@ export default async function PlaceDetailsPage({ params }: { params: Promise<{ i
                           <Sparkles size={12} strokeWidth={2.5} />
                           {relatedPlace.rating > 0 ? `${relatedPlace.rating} Rating` : 'New'}
                         </div>
-                        <button className="w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-black/60 transition-colors">
-                          <Heart size={14} />
-                        </button>
+                        <SavePlaceButton placeId={relatedPlace.id} />
                       </div>
 
                       <div className="absolute bottom-5 left-4 right-4 z-10">

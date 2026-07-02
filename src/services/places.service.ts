@@ -75,5 +75,20 @@ export const placesService = {
   async getPlaceReviews(id: number): Promise<ApiResponse<Review[]>> {
     const { data } = await api.get<ApiResponse<Review[]>>(`/places/${id}/reviews`);
     return data;
-  }
+  },
+
+  async savePlace(id: number): Promise<ApiResponse<{ message: string }>> {
+    const { data } = await api.post<ApiResponse<{ message: string }>>(`/places/${id}/save`);
+    return data;
+  },
+
+  async unsavePlace(id: number): Promise<ApiResponse<{ message: string }>> {
+    const { data } = await api.delete<ApiResponse<{ message: string }>>(`/places/${id}/save`);
+    return data;
+  },
+
+  async checkSaveStatus(id: number): Promise<ApiResponse<{ is_saved: boolean }>> {
+    const { data } = await api.get<ApiResponse<{ is_saved: boolean }>>(`/places/${id}/save`);
+    return data;
+  },
 };

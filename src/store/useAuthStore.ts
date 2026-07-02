@@ -52,6 +52,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (error) {
       console.error('Logout error', error);
     } finally {
+      const { useSavedPlacesStore } = await import('@/store/useSavedPlacesStore');
+      useSavedPlacesStore.getState().reset();
       set({ user: null, isAuthenticated: false });
       if (typeof window !== 'undefined') {
         window.location.href = '/login';

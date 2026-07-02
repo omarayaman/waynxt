@@ -6,10 +6,11 @@ import NavbarHome from "../NavbarHome";
 import { usePlacesStore } from "@/store/usePlacesStore";
 import { usePlaces } from "@/hooks/usePlaces";
 import { Pagination } from "@/components/Pagination";
+import { SavePlaceButton } from "@/components/SavePlaceButton";
 import { useCategories } from "@/hooks/useCategories";
 import { 
   Search, Sparkles, Landmark, Waves, Diamond, Moon, Building2, 
-  SlidersHorizontal, Check, ChevronDown, Heart, MapPin, Map,
+  SlidersHorizontal, Check, ChevronDown, MapPin, Map,
   Loader2, Tent, TreePine, Utensils, Activity, Sun
 } from "lucide-react";
 
@@ -424,9 +425,7 @@ function PlacesContent() {
                         <Sparkles size={12} strokeWidth={2.5} />
                         {place.rating > 0 ? `${place.rating} Rating` : 'New'}
                       </div>
-                      <button className="w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-black/60 transition-colors">
-                        <Heart size={14} />
-                      </button>
+                      <SavePlaceButton placeId={place.id} />
                     </div>
 
                     {/* Bottom Content */}

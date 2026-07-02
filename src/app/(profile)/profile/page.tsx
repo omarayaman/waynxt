@@ -6,8 +6,9 @@ import { Loader2 } from "lucide-react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import NavbarHome from "@/app/(home)/NavbarHome";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useSavedPlacesStore } from "@/store/useSavedPlacesStore";
 import { userService } from "@/services/user.service";
-import type { SavedPlaceProfile, UserPreferences, UserStats } from "@/types/user";
+import type { UserPreferences, UserStats } from "@/types/user";
 import { ProfileHeader } from "./components/ProfileHeader";
 import { ProfileNav, type ProfileSection } from "./components/ProfileNav";
 import { ProfileOverview } from "./components/ProfileOverview";
@@ -52,15 +53,21 @@ export default function ProfilePage() {
 function ProfilePageContent() {
   const searchParams = useSearchParams();
   const { user, setUser } = useAuthStore();
+  const {
+    places: savedPlaces,
+    meta: placesMeta,
+    isLoadingList: isLoadingPlaces,
+    togglingIds,
+    fetchSavedPlaces,
+    unsaveFromProfile,
+  } = useSavedPlacesStore();
+
   const [activeSection, setActiveSection] = useState<ProfileSection>(() =>
     parseSection(searchParams.get("tab"))
   );
   const [stats, setStats] = useState<UserStats | null>(null);
-  const [savedPlaces, setSavedPlaces] = useState<SavedPlaceProfile[]>([]);
   const [placesPage, setPlacesPage] = useState(1);
-  const [placesTotal, setPlacesTotal] = useState(0);
   const [isLoadingStats, setIsLoadingStats] = useState(true);
-  const [isLoadingPlaces, setIsLoadingPlaces] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [avatarError, setAvatarError] = useState("");
 
@@ -79,19 +86,6 @@ function ProfilePageContent() {
     }
   }, []);
 
-  const fetchSavedPlaces = useCallback(async (page: number) => {
-    setIsLoadingPlaces(true);
-    try {
-      const response = await userService.getSavedPlaces({ page, perPage: PLACES_PER_PAGE });
-      setSavedPlaces(response.data);
-      setPlacesTotal(response.meta.total);
-    } catch (error) {
-      console.error("Error fetching saved places", error);
-    } finally {
-      setIsLoadingPlaces(false);
-    }
-  }, []);
-
   useEffect(() => {
     if (!user) return;
     fetchStats();
@@ -99,7 +93,7 @@ function ProfilePageContent() {
 
   useEffect(() => {
     if (!user || activeSection !== "saved-places") return;
-    fetchSavedPlaces(placesPage);
+    fetchSavedPlaces({ page: placesPage, perPage: PLACES_PER_PAGE });
   }, [user, activeSection, placesPage, fetchSavedPlaces]);
 
   const handleAvatarChange = async (file: File) => {
@@ -143,8 +137,13 @@ function ProfilePageContent() {
     const url = section === "overview" ? "/profile" : `/profile?tab=${section}`;
     window.history.replaceState(null, "", url);
     if (section === "saved-places" && savedPlaces.length === 0 && !isLoadingPlaces) {
-      fetchSavedPlaces(placesPage);
+      fetchSavedPlaces({ page: placesPage, perPage: PLACES_PER_PAGE });
     }
+  };
+
+  const handleUnsave = async ({ placeId }: { placeId: number }) => {
+    await unsaveFromProfile({ placeId });
+    await fetchStats();
   };
 
   if (!user) return null;
@@ -154,7 +153,9 @@ function ProfilePageContent() {
     year: "numeric",
   });
 
+  const placesTotal = placesMeta.total;
   const totalPages = Math.max(1, Math.ceil(placesTotal / PLACES_PER_PAGE));
+  const savedPlacesCount = stats?.saved_places_count ?? placesMeta.total;
 
   return (
     <ProtectedRoute>
@@ -183,7 +184,7 @@ function ProfilePageContent() {
               active={activeSection}
               onChange={handleNavigate}
               counts={{
-                savedPlaces: stats?.saved_places_count,
+                savedPlaces: savedPlacesCount,
                 chatSessions: stats?.chat_sessions_count,
                 trips: stats?.ai_plans_created,
               }}
@@ -206,6 +207,8 @@ function ProfilePageContent() {
                   totalPages={totalPages}
                   totalCount={placesTotal}
                   onPageChange={setPlacesPage}
+                  onUnsave={handleUnsave}
+                  unsavingIds={togglingIds}
                 />
               )}
 

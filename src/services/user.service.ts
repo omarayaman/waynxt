@@ -4,7 +4,21 @@ import {
   UserStats,
   UserPreferences,
   SavedPlacesResponse,
+  SavedPlaceProfile,
+  SavedPlaceApiItem,
 } from '@/types/user';
+
+function mapSavedPlaceItem(item: SavedPlaceApiItem): SavedPlaceProfile {
+  return {
+    id: String(item.id),
+    place_id: item.place_id ?? item.place?.id ?? 0,
+    place_name: item.place_name ?? item.place?.name ?? 'Unknown place',
+    location: item.location ?? item.place?.city ?? '',
+    saved_at: item.saved_at ?? item.created_at,
+    category: item.place?.category,
+    thumbnail_url: item.place?.thumbnail_url,
+  };
+}
 
 export interface UpdateProfileInput {
   full_name?: string;
@@ -52,8 +66,10 @@ export const userService = {
 
   async getSavedPlaces({ page = 1, perPage = 10 }: { page?: number; perPage?: number } = {}): Promise<SavedPlacesResponse> {
     const response = await api.get(`/users/saved-places?page=${page}&per_page=${perPage}`);
+    const raw: SavedPlaceApiItem[] = response.data.data || [];
+    const data: SavedPlaceProfile[] = raw.map(mapSavedPlaceItem);
     return {
-      data: response.data.data || [],
+      data,
       meta: response.data.meta || { page, per_page: perPage, total: 0 },
     };
   },
