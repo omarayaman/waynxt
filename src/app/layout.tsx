@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 
 import { AuthProvider } from "@/providers/AuthProvider";
 import FloatingAiButton from "@/components/FloatingAiButton";
+import { ToasterProvider } from "@/components/ToasterProvider";
 
 export default function RootLayout({
   children,
@@ -37,6 +38,7 @@ export default function RootLayout({
         <AuthProvider>
           {children}
           <FloatingAiButton />
+          <ToasterProvider />
         </AuthProvider>
       </body>
     </html>
