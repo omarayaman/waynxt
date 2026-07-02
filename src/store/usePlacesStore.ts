@@ -43,7 +43,7 @@ interface PlacesState {
 
 export const usePlacesStore = create<PlacesState>((set) => ({
   currentPage: 1,
-  perPage: 16,
+  perPage: 150,
   search: "",
   activeCategory: "all",
   activeCities: [],
@@ -112,7 +112,7 @@ export const usePlacesStore = create<PlacesState>((set) => ({
 
   setFiltersFromURL: (params: URLSearchParams) => {
     const page = parseInt(params.get('page') || '1', 10);
-    const perPage = parseInt(params.get('per_page') || '16', 10);
+    const perPage = parseInt(params.get('per_page') || '150', 10);
     
     const cities = params.getAll('cities[]');
     const budgets = params.getAll('budget_level[]');

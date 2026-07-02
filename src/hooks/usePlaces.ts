@@ -11,6 +11,7 @@ export function usePlaces() {
   const [places, setPlaces] = useState<Place[]>([]);
   const [meta, setMeta] = useState<PaginationMeta | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const store = usePlacesStore();
@@ -32,7 +33,7 @@ export function usePlaces() {
       const params = new URLSearchParams();
       
       if (store.currentPage > 1) params.append('page', store.currentPage.toString());
-      if (store.perPage !== 6) params.append('per_page', store.perPage.toString());
+      if (store.perPage !== 150) params.append('per_page', store.perPage.toString());
       if (store.search) params.append('search', store.search);
       if (store.activeCategory && store.activeCategory !== 'all') params.append('category', store.activeCategory);
       if (store.activeSeason) params.append('best_season', store.activeSeason);
@@ -54,7 +55,11 @@ export function usePlaces() {
       }
       abortControllerRef.current = new AbortController();
       
-      setIsLoading(true);
+      if (store.currentPage === 1) {
+        setIsLoading(true);
+      } else {
+        setIsFetchingMore(true);
+      }
       setError(null);
 
       try {
@@ -72,7 +77,17 @@ export function usePlaces() {
           sort_by: store.sortBy
         }, abortControllerRef.current.signal);
 
-        setPlaces(response.data);
+        if (store.currentPage === 1) {
+          setPlaces(response.data);
+        } else {
+          setPlaces(prev => {
+            // Prevent duplicates if React StrictMode fires twice
+            const existingIds = new Set(prev.map(p => p.id));
+            const newPlaces = response.data.filter(p => !existingIds.has(p.id));
+            return [...prev, ...newPlaces];
+          });
+        }
+
         if (response.meta) {
           setMeta(response.meta);
         }
@@ -83,6 +98,7 @@ export function usePlaces() {
         }
       } finally {
         setIsLoading(false);
+        setIsFetchingMore(false);
       }
     };
 
@@ -103,5 +119,5 @@ export function usePlaces() {
     router
   ]);
 
-  return { places, meta, isLoading, error };
+  return { places, meta, isLoading, isFetchingMore, error };
 }

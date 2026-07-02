@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useRef, useEffect } from "react";
 import Link from "next/link";
 import NavbarHome from "../NavbarHome";
 import { usePlacesStore } from "@/store/usePlacesStore";
@@ -33,12 +33,12 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
 };
 
 const BUDGET_LEVELS = [
-  { id: "low", label: "Low" },
-  { id: "medium", label: "Medium" },
-  { id: "high", label: "High" }
+  { id: "low", label: "Budget" },
+  { id: "medium", label: "Mid-range" },
+  { id: "high", label: "Premium" }
 ];
 
-const CITIES = ["Cairo", "Giza", "Luxor", "Aswan"];
+const CITIES = ["Cairo", "Aswan", "Luxor", "Hurghada", "Alexandria"];
 
 const SUITABLE_FOR = [
   { id: "family", label: "Family" },
@@ -89,11 +89,25 @@ function PlacesContent() {
     perPage
   } = usePlacesStore();
 
-  const { places, meta, isLoading, error } = usePlaces();
+  const { places, meta, isLoading, isFetchingMore, error } = usePlaces();
   const { categories, isLoading: isCategoriesLoading } = useCategories();
 
   const [isSortOpen, setIsSortOpen] = useState(false);
   const totalPages = meta ? Math.ceil(meta.total / perPage) : 1;
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!sentinelRef.current || !meta) return;
+    
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !isLoading && !isFetchingMore && currentPage < totalPages) {
+        setCurrentPage(currentPage + 1);
+      }
+    }, { rootMargin: '400px', threshold: 0.1 });
+    
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [isLoading, isFetchingMore, meta, currentPage, totalPages, setCurrentPage]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -185,7 +199,7 @@ function PlacesContent() {
 
             {/* City */}
             <div className="mb-8">
-              <h3 className="font-semibold text-white font-clash mb-4">City</h3>
+              <h3 className="text-white text-xs font-bold tracking-widest uppercase mb-4">CITY</h3>
               <div className="flex flex-col gap-3">
                 {CITIES.map(r => {
                   const isActive = activeCities.includes(r);
@@ -211,11 +225,14 @@ function PlacesContent() {
                   )
                 })}
               </div>
+              <button className="text-[#666666] text-xs flex items-center gap-1 mt-4 hover:text-white transition-colors">
+                Show 29 more <ChevronDown size={12} />
+              </button>
             </div>
 
             {/* Budget Range */}
             <div className="mb-8">
-              <h3 className="font-semibold text-white font-clash mb-4">Budget Level</h3>
+              <h3 className="text-white text-xs font-bold tracking-widest uppercase mb-4">BUDGET</h3>
               <div className="flex items-center gap-2">
                 {BUDGET_LEVELS.map(b => {
                   const isActive = activeBudgets.includes(b.id);
@@ -238,7 +255,7 @@ function PlacesContent() {
 
             {/* Suitable For (Single Select) */}
             <div className="mb-8">
-              <h3 className="font-semibold text-white font-clash mb-4">Suitable For</h3>
+              <h3 className="text-white text-xs font-bold tracking-widest uppercase mb-4">TRAVEL STYLE</h3>
               <div className="flex flex-wrap gap-2">
                 {SUITABLE_FOR.map(s => {
                   const isActive = activeSuitableFor === s.id;
@@ -261,7 +278,7 @@ function PlacesContent() {
 
             {/* Suitable Age (Single Select) */}
             <div className="mb-8">
-              <h3 className="font-semibold text-white font-clash mb-4">Age Group</h3>
+              <h3 className="text-white text-xs font-bold tracking-widest uppercase mb-4">AGE</h3>
               <div className="flex flex-wrap gap-2">
                 {SUITABLE_AGES.map(a => {
                   const isActive = activeAge === a.id;
@@ -284,7 +301,7 @@ function PlacesContent() {
 
             {/* Best Season (Single Select) */}
             <div className="mb-8">
-              <h3 className="font-semibold text-white font-clash mb-4">Best Season</h3>
+              <h3 className="text-white text-xs font-bold tracking-widest uppercase mb-4">SEASON</h3>
               <div className="flex flex-wrap gap-2">
                 {SEASONS.map(s => {
                   const isActive = activeSeason === s.id;
@@ -307,7 +324,7 @@ function PlacesContent() {
 
             {/* Crowd Level (Single Select) */}
             <div>
-              <h3 className="font-semibold text-white font-clash mb-4">Crowd Level</h3>
+              <h3 className="text-white text-xs font-bold tracking-widest uppercase mb-4">CROWD</h3>
               <div className="flex flex-wrap gap-2">
                 {CROWD_LEVELS.map(c => {
                   const isActive = activeCrowdLevel === c.id;
@@ -449,13 +466,12 @@ function PlacesContent() {
               )}
             </div>
 
-            {/* Pagination */}
-            <Pagination 
-              currentPage={currentPage} 
-              totalPages={totalPages} 
-              onPageChange={setCurrentPage} 
-              disabled={isLoading} 
-            />
+            {/* Pagination / Sentinel */}
+            <div ref={sentinelRef} className="w-full h-10 flex items-center justify-center mt-4 mb-8">
+              {isFetchingMore && (
+                <Loader2 size={24} className="animate-spin text-[#DFD616]" />
+              )}
+            </div>
 
             {/* View Interactive Map Button */}
             <div className="mt-12 flex justify-center relative z-10">
@@ -473,17 +489,12 @@ function PlacesContent() {
 
       <style dangerouslySetInnerHTML={{ __html: `
         .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
+          display: none;
+          width: 0px;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: #333;
-          border-radius: 20px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background-color: #555;
+        .custom-scrollbar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
         }
       `}} />
     </div>
