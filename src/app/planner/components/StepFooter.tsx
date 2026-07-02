@@ -4,7 +4,7 @@ interface StepFooterProps {
   onBack?: () => void;
   backDisabled?: boolean;
   onContinue: () => void;
-  continueLabel?: string;
+  continueLabel?: React.ReactNode;
   continueDisabled?: boolean;
 }
 

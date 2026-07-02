@@ -1,10 +1,12 @@
 import { create } from 'zustand';
+import { defaultStartDate, defaultTravelersCount } from '@/lib/trip-mappers';
 
 interface TripState {
   step: number;
   setStep: (step: number) => void;
   nextStep: () => void;
   prevStep: () => void;
+  reset: () => void;
 
   interests: string[];
   toggleInterest: (id: string) => void;
@@ -26,15 +28,39 @@ interface TripState {
 
   journeyLength: number;
   setJourneyLength: (val: number) => void;
+
+  startDate: string;
+  setStartDate: (val: string) => void;
+
+  travelersCount: number;
+  setTravelersCount: (val: number) => void;
+
+  isCreating: boolean;
+  setIsCreating: (val: boolean) => void;
 }
 
-export const useTripStore = create<TripState>((set) => ({
+const initialState = {
   step: 1,
+  interests: [] as string[],
+  whoIsTraveling: '',
+  budget: '',
+  ageGroup: '',
+  crowdPreference: '',
+  season: '',
+  journeyLength: 7,
+  startDate: defaultStartDate(),
+  travelersCount: 2,
+  isCreating: false,
+};
+
+export const useTripStore = create<TripState>((set) => ({
+  ...initialState,
+
   setStep: (step) => set({ step }),
   nextStep: () => set((state) => ({ step: Math.min(state.step + 1, 3) })),
   prevStep: () => set((state) => ({ step: Math.max(state.step - 1, 1) })),
+  reset: () => set({ ...initialState, startDate: defaultStartDate() }),
 
-  interests: [],
   toggleInterest: (id) =>
     set((state) => ({
       interests: state.interests.includes(id)
@@ -42,21 +68,18 @@ export const useTripStore = create<TripState>((set) => ({
         : [...state.interests, id],
     })),
 
-  whoIsTraveling: "",
-  setWhoIsTraveling: (val) => set({ whoIsTraveling: val }),
+  setWhoIsTraveling: (val) =>
+    set({
+      whoIsTraveling: val,
+      travelersCount: defaultTravelersCount(val),
+    }),
 
-  budget: "",
   setBudget: (val) => set({ budget: val }),
-
-  ageGroup: "",
   setAgeGroup: (val) => set({ ageGroup: val }),
-
-  crowdPreference: "",
   setCrowdPreference: (val) => set({ crowdPreference: val }),
-
-  season: "",
   setSeason: (val) => set({ season: val }),
-
-  journeyLength: 7,
   setJourneyLength: (val) => set({ journeyLength: val }),
+  setStartDate: (val) => set({ startDate: val }),
+  setTravelersCount: (val) => set({ travelersCount: val }),
+  setIsCreating: (val) => set({ isCreating: val }),
 }));
