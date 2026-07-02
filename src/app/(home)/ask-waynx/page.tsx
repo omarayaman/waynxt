@@ -17,6 +17,8 @@ function AskWaynxContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const hasAutoSentRef = useRef(false);
+  const handleSendRef = useRef<(text: string) => Promise<void>>(async () => {});
 
   const sessionFromUrl = searchParams.get("session");
   const [query, setQuery] = useState(() => searchParams.get("q") ?? "");
@@ -271,6 +273,17 @@ function AskWaynxContent() {
       setIsLoading(false);
     }
   };
+
+  handleSendRef.current = handleSend;
+
+  useEffect(() => {
+    const q = searchParams.get("q")?.trim();
+    if (!q || hasAutoSentRef.current || sessionFromUrl) return;
+
+    hasAutoSentRef.current = true;
+    router.replace("/ask-waynx", { scroll: false });
+    void handleSendRef.current(q);
+  }, [searchParams, sessionFromUrl, router]);
 
   const isLoadingUrlSession = Boolean(
     sessionFromUrl && loadedSessionId !== sessionFromUrl

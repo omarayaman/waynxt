@@ -43,7 +43,7 @@ interface PlacesState {
 
 export const usePlacesStore = create<PlacesState>((set) => ({
   currentPage: 1,
-  perPage: 16,
+  perPage: 15,
   search: "",
   activeCategory: "all",
   activeCities: [],
@@ -112,14 +112,14 @@ export const usePlacesStore = create<PlacesState>((set) => ({
 
   setFiltersFromURL: (params: URLSearchParams) => {
     const page = parseInt(params.get('page') || '1', 10);
-    const perPage = parseInt(params.get('per_page') || '16', 10);
+    const perPage = parseInt(params.get('per_page') || '15', 10);
     
     const cities = params.getAll('cities[]');
     const budgets = params.getAll('budget_level[]');
     
     set({
       currentPage: isNaN(page) ? 1 : page,
-      perPage: isNaN(perPage) ? 16 : perPage,
+      perPage: isNaN(perPage) ? 15 : perPage,
       search: params.get('search') || "",
       activeCategory: params.get('category') || "all",
       activeCities: cities.length ? cities : [],

@@ -1,35 +1,115 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { Sparkles, Send } from "lucide-react";
 
 const HIDDEN_PATHS = ["/planner", "/ask-waynx"];
 
 export default function FloatingAiButton() {
   const pathname = usePathname();
+  const router = useRouter();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const [expanded, setExpanded] = useState(false);
+  const [question, setQuestion] = useState("");
+
+  useEffect(() => {
+    if (!expanded) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!containerRef.current?.contains(e.target as Node)) {
+        setExpanded(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [expanded]);
+
+  useEffect(() => {
+    if (expanded) {
+      inputRef.current?.focus();
+    }
+  }, [expanded]);
 
   if (HIDDEN_PATHS.some((path) => pathname.startsWith(path))) {
     return null;
   }
 
+  const submitQuestion = () => {
+    const q = question.trim();
+    if (!q) return;
+    setQuestion("");
+    setExpanded(false);
+    router.push(`/ask-waynx?q=${encodeURIComponent(q)}`);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    submitQuestion();
+  };
+
   return (
-    <Link
-      href="/ask-waynx"
-      className="fixed bottom-8 right-8 z-50 flex items-center gap-2 bg-[#D4F64D] hover:bg-[#C2E53A] text-black font-bold px-6 py-4 rounded-full shadow-[0_4px_20px_rgba(212,246,77,0.3)] hover:shadow-[0_4px_25px_rgba(212,246,77,0.5)] transition-all duration-300 hover:-translate-y-1 group"
+    <div
+      ref={containerRef}
+      className="fixed bottom-6 right-6 z-50"
+      onMouseEnter={() => setExpanded(true)}
+      onMouseLeave={() => setExpanded(false)}
     >
-      <span className="text-[15px]">Ask WAYNX AI</span>
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        xmlns="http://www.w3.org/2000/svg"
-        className="group-hover:rotate-90 transition-transform duration-500"
+      <div
+        className={`flex items-center gap-2 rounded-full border transition-all duration-200 ${
+          expanded
+            ? "border-[#333] bg-[#111] pl-4 pr-1.5 py-1.5 shadow-lg"
+            : "border-transparent bg-transparent p-0"
+        }`}
       >
-        <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" />
-        <path d="M20 3L20.8 5.2L23 6L20.8 6.8L20 9L19.2 6.8L17 6L19.2 5.2L20 3Z" />
-      </svg>
-    </Link>
+        <form
+          onSubmit={handleSubmit}
+          className={`overflow-hidden transition-all duration-200 ${
+            expanded ? "w-[min(72vw,260px)] opacity-100" : "w-0 opacity-0 pointer-events-none"
+          }`}
+        >
+          <input
+            ref={inputRef}
+            type="text"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            placeholder="Ask anything..."
+            className="w-full bg-transparent text-sm text-white placeholder:text-[#555] focus:outline-none"
+            tabIndex={expanded ? 0 : -1}
+          />
+        </form>
+
+        {expanded && question.trim() && (
+          <button
+            type="button"
+            onClick={submitQuestion}
+            className="shrink-0 w-8 h-8 rounded-full bg-[#DFD616] text-[#0a0a0a] flex items-center justify-center hover:bg-[#EAE121] transition-colors"
+            aria-label="Send question"
+          >
+            <Send size={14} />
+          </button>
+        )}
+
+        <button
+          type="button"
+          onClick={() => {
+            if (!expanded) {
+              setExpanded(true);
+              return;
+            }
+            if (!question.trim()) {
+              router.push("/ask-waynx");
+            }
+          }}
+          aria-label="Ask Waynx AI"
+          className="shrink-0 w-11 h-11 rounded-full bg-[#DFD616] text-[#0a0a0a] flex items-center justify-center shadow-md hover:bg-[#EAE121] transition-colors"
+        >
+          <Sparkles size={18} strokeWidth={2} />
+        </button>
+      </div>
+    </div>
   );
 }
