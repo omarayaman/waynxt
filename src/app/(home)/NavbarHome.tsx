@@ -84,13 +84,13 @@ export default function NavbarHome() {
           <div className="relative" ref={dropdownRef}>
             <button 
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#E3D010] hover:border-white transition-colors focus:outline-none"
+              className="w-10 h-10 rounded-full overflow-hidden border border-[#333333] hover:border-[#DFD616]/50 transition-colors focus:outline-none flex items-center justify-center shrink-0"
             >
               {user.avatar_url ? (
-                <Image src={user.avatar_url} alt={user.full_name} width={48} height={48} className="object-cover w-full h-full" />
+                <Image src={user.avatar_url} alt={user.full_name} width={40} height={40} className="object-cover w-full h-full" />
               ) : (
-                <div className="w-full h-full bg-gray-700 flex items-center justify-center text-white">
-                  <User size={24} />
+                <div className="w-full h-full bg-[#111111] flex items-center justify-center text-[#DFD616]">
+                  <User size={18} strokeWidth={2} />
                 </div>
               )}
             </button>

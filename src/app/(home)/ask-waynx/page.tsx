@@ -17,12 +17,13 @@ function AskWaynxContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const lastLoadedSessionRef = useRef<string | null>(null);
 
-  const [query, setQuery] = useState("");
+  const sessionFromUrl = searchParams.get("session");
+  const [query, setQuery] = useState(() => searchParams.get("q") ?? "");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [loadedSessionId, setLoadedSessionId] = useState<string | null>(null);
   const [activeTitle, setActiveTitle] = useState<string | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -40,26 +41,42 @@ function AskWaynxContent() {
     scrollToBottom();
   }, [messages, isLoading, scrollToBottom]);
 
-  const fetchHistory = useCallback(async () => {
-    setIsLoadingHistory(true);
+  useEffect(() => {
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const response = await chatService.getHistory({ page: 1, per_page: 30 });
+        if (!cancelled && response.success && response.data) {
+          setSessions(response.data);
+        }
+      } catch {
+        // History failure shouldn't block chatting
+      } finally {
+        if (!cancelled) {
+          setIsLoadingHistory(false);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const refreshHistory = useCallback(async () => {
     try {
       const response = await chatService.getHistory({ page: 1, per_page: 30 });
       if (response.success && response.data) {
         setSessions(response.data);
       }
     } catch {
-      // History failure shouldn't block chatting
-    } finally {
-      setIsLoadingHistory(false);
+      // Silent refresh failure is acceptable
     }
   }, []);
 
-  useEffect(() => {
-    fetchHistory();
-  }, [fetchHistory]);
-
   const loadSession = useCallback(async (id: string) => {
-    if (lastLoadedSessionRef.current === id) return;
+    if (loadedSessionId === id) return;
 
     setIsLoadingSession(true);
     setError(null);
@@ -70,13 +87,13 @@ function AskWaynxContent() {
         throw new Error("Failed to load chat session");
       }
 
-      lastLoadedSessionRef.current = response.data.id;
+      setLoadedSessionId(response.data.id);
       setSessionId(response.data.id);
       setActiveTitle(response.data.title);
       setMessages(response.data.messages ?? []);
       router.replace(`/ask-waynx?session=${response.data.id}`, { scroll: false });
     } catch (err) {
-      lastLoadedSessionRef.current = null;
+      setLoadedSessionId(null);
       router.replace("/ask-waynx", { scroll: false });
       if (isAxiosError(err)) {
         const message =
@@ -88,18 +105,48 @@ function AskWaynxContent() {
     } finally {
       setIsLoadingSession(false);
     }
-  }, [router]);
+  }, [loadedSessionId, router]);
 
   useEffect(() => {
-    const sessionFromUrl = searchParams.get("session");
-    if (!sessionFromUrl) return;
-    if (sessionFromUrl !== lastLoadedSessionRef.current) {
-      loadSession(sessionFromUrl);
-    }
-  }, [searchParams, loadSession]);
+    if (!sessionFromUrl || sessionFromUrl === loadedSessionId) return;
+
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const response = await chatService.getSession(sessionFromUrl);
+        if (cancelled) return;
+
+        if (!response.success || !response.data) {
+          throw new Error("Failed to load chat session");
+        }
+
+        setLoadedSessionId(response.data.id);
+        setSessionId(response.data.id);
+        setActiveTitle(response.data.title);
+        setMessages(response.data.messages ?? []);
+      } catch (err) {
+        if (cancelled) return;
+
+        setLoadedSessionId(null);
+        router.replace("/ask-waynx", { scroll: false });
+        if (isAxiosError(err)) {
+          const message =
+            err.response?.data?.error?.message ?? "Could not load this chat session.";
+          setError(message);
+        } else {
+          setError("Could not load this chat session.");
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [sessionFromUrl, loadedSessionId, router]);
 
   const handleNewChat = () => {
-    lastLoadedSessionRef.current = null;
+    setLoadedSessionId(null);
     setMessages([]);
     setSessionId(null);
     setActiveTitle(null);
@@ -177,7 +224,7 @@ function AskWaynxContent() {
       const { session_id, user_message, ai_response } = response.data;
       const isNewSession = !sessionId;
 
-      lastLoadedSessionRef.current = session_id;
+      setLoadedSessionId(session_id);
       setSessionId(session_id);
       setMessages((prev) => [...prev.slice(0, -1), user_message, ai_response]);
 
@@ -206,7 +253,7 @@ function AskWaynxContent() {
         );
       }
 
-      await fetchHistory();
+      await refreshHistory();
     } catch (err) {
       setMessages((prev) => prev.slice(0, -1));
 
@@ -225,14 +272,17 @@ function AskWaynxContent() {
     }
   };
 
-  const showEmptyState = !isLoadingSession && messages.length === 0;
+  const isLoadingUrlSession = Boolean(
+    sessionFromUrl && loadedSessionId !== sessionFromUrl
+  );
+  const showSessionLoading = isLoadingSession || isLoadingUrlSession;
+  const showEmptyState = !showSessionLoading && messages.length === 0;
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-[#050505] text-white">
       <NavbarHome />
 
       <div className="flex flex-1 overflow-hidden pt-[110px]">
-        {/* Desktop sidebar */}
         <div className="hidden w-[280px] shrink-0 border-r border-[#222222] lg:block">
           <ChatSidebar
             sessions={sessions}
@@ -245,7 +295,6 @@ function AskWaynxContent() {
           />
         </div>
 
-        {/* Mobile sidebar overlay */}
         {isSidebarOpen && (
           <div className="fixed inset-0 z-40 lg:hidden">
             <button
@@ -268,7 +317,6 @@ function AskWaynxContent() {
           </div>
         )}
 
-        {/* Main chat area */}
         <main className="flex min-w-0 flex-1 flex-col">
           <div className="flex shrink-0 items-center gap-3 border-b border-[#1A1A1A] px-4 py-3 md:px-6">
             <button
@@ -301,7 +349,7 @@ function AskWaynxContent() {
             </div>
           )}
 
-          {isLoadingSession ? (
+          {showSessionLoading ? (
             <div className="flex flex-1 items-center justify-center">
               <Loader2 size={28} className="animate-spin text-[#DFD616]" />
             </div>
@@ -322,7 +370,7 @@ function AskWaynxContent() {
             value={query}
             onChange={setQuery}
             onSubmit={() => handleSend(query)}
-            disabled={isLoadingSession}
+            disabled={showSessionLoading}
             isLoading={isLoading}
           />
         </main>

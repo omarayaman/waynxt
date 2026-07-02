@@ -4,28 +4,31 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#18191B] pt-20 pb-8 px-6 lg:px-16 flex flex-col items-center">
-      <div className="max-w-[1200px] w-full flex flex-col md:flex-row justify-between gap-12 md:gap-8 mb-16">
+    <footer className="w-full bg-[#18191B] pt-12 pb-6 px-6 lg:px-16 flex flex-col items-center">
+      <div className="max-w-[1200px] w-full flex flex-col md:flex-row justify-between gap-10 md:gap-6 mb-10">
         
-        {/* Left Column - Logo & Main Links */}
-        <div className="flex flex-col gap-6 max-w-[250px]">
-          <div className="mb-2">
-            <Image
-              src="/icons/full_Logo.svg"
-              alt="Waynx Logo"
-              width={160}
-              height={50}
-              className="object-contain"
-            />
-          </div>
+        {/* Column 1 - Logo */}
+        <div className="flex flex-col max-w-[250px]">
+          <Image
+            src="/icons/full_Logo.svg"
+            alt="Waynx Logo"
+            width={160}
+            height={50}
+            className="object-contain"
+          />
+        </div>
+
+        {/* Column 2 - Company */}
+        <div className="flex flex-col gap-3 pt-2 md:pt-4">
+          <h4 className="text-[#E3D010] font-bold text-lg mb-1">Company</h4>
           <Link href="/about" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">About Us</Link>
           <Link href="/about#how-it-works" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">How it works</Link>
           <Link href="/ask-waynx" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">Ask Waynx</Link>
         </div>
 
         {/* Middle Column - Explore */}
-        <div className="flex flex-col gap-6">
-          <h4 className="text-[#E3D010] font-bold text-xl mb-2">Explore</h4>
+        <div className="flex flex-col gap-3 pt-2 md:pt-4">
+          <h4 className="text-[#E3D010] font-bold text-lg mb-1">Explore</h4>
           <Link href="/places" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">Places</Link>
           <Link href="/places?category=history" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">History & Heritage</Link>
           <Link href="/places?category=beaches" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">Beaches & Nature</Link>
@@ -34,8 +37,8 @@ export default function Footer() {
         </div>
 
         {/* Right Column - Legal */}
-        <div className="flex flex-col gap-6">
-          <h4 className="text-[#E3D010] font-bold text-xl mb-2">Legal</h4>
+        <div className="flex flex-col gap-3 pt-2 md:pt-4">
+          <h4 className="text-[#E3D010] font-bold text-lg mb-1">Legal</h4>
           <Link href="/privacy" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">Privacy policy</Link>
           <Link href="/terms" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">Terms of service</Link>
           <Link href="/contact" className="text-gray-300 hover:text-white transition-colors outline-none focus:outline-none">Contact</Link>
