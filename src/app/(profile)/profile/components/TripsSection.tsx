@@ -2,9 +2,10 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { tripService } from "@/services/trip.service";
 import type { Trip } from "@/types/trip";
-import { Loader2, Map, Plus, Trash2, Calendar } from "lucide-react";
+import { Loader2, Map, Plus, Trash2, Calendar, ChevronRight } from "lucide-react";
 import { Pagination } from "@/components/Pagination";
 import { isAxiosError } from "axios";
 
@@ -38,6 +39,7 @@ interface TripsSectionProps {
 }
 
 export function TripsSection({ totalCount }: TripsSectionProps) {
+  const router = useRouter();
   const [trips, setTrips] = useState<Trip[]>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(totalCount ?? 0);
@@ -155,20 +157,27 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
                   return (
                     <tr
                       key={trip.id}
-                      className="group border-b border-[#1a1a1a] last:border-0 hover:bg-[#111] transition-colors"
+                      className="group border-b border-[#1a1a1a] last:border-0 hover:bg-[#111] transition-colors cursor-pointer"
+                      onClick={() => router.push(`/planner/${trip.id}`)}
                     >
                       <td className="px-4 py-3.5">
-                        <div className="flex items-center gap-3">
+                        <Link
+                          href={`/planner/${trip.id}`}
+                          className="flex items-center gap-3"
+                          onClick={(e) => e.stopPropagation()}
+                        >
                           <div className="w-8 h-8 rounded-lg bg-[#161616] flex items-center justify-center shrink-0">
                             <Map size={14} className="text-[#555]" />
                           </div>
                           <div className="min-w-0">
-                            <p className="text-white font-medium truncate">{trip.title}</p>
+                            <p className="text-white font-medium truncate group-hover:text-[#F7EA00] transition-colors">
+                              {trip.title}
+                            </p>
                             <p className="text-xs text-[#555] mt-0.5 md:hidden">
                               {getDestinationsLabel(trip)}
                             </p>
                           </div>
-                        </div>
+                        </Link>
                       </td>
                       <td className="px-4 py-3.5 text-[#777] hidden md:table-cell truncate max-w-[180px]">
                         {getDestinationsLabel(trip)}
@@ -187,19 +196,32 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
                         </span>
                       </td>
                       <td className="px-2 py-3.5">
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(trip.id)}
-                          disabled={isDeleting}
-                          className="p-2 rounded-lg text-[#444] hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all disabled:opacity-50"
-                          aria-label="Delete trip"
-                        >
-                          {isDeleting ? (
-                            <Loader2 size={14} className="animate-spin" />
-                          ) : (
-                            <Trash2 size={14} />
-                          )}
-                        </button>
+                        <div className="flex items-center justify-end gap-1">
+                          <Link
+                            href={`/planner/${trip.id}`}
+                            className="p-2 rounded-lg text-[#444] hover:text-[#F7EA00] hover:bg-[#F7EA00]/10 opacity-0 group-hover:opacity-100 transition-all"
+                            aria-label="View trip"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <ChevronRight size={14} />
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(trip.id);
+                            }}
+                            disabled={isDeleting}
+                            className="p-2 rounded-lg text-[#444] hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all disabled:opacity-50"
+                            aria-label="Delete trip"
+                          >
+                            {isDeleting ? (
+                              <Loader2 size={14} className="animate-spin" />
+                            ) : (
+                              <Trash2 size={14} />
+                            )}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
