@@ -139,8 +139,7 @@ export default function EgyptTourismSection() {
           className="flex flex-col items-center gap-5 text-center"
         >
           <p className="max-w-[560px] text-sm italic leading-relaxed text-gray-500 md:text-base">
-            &ldquo;Egypt is not a country you visit once — it&apos;s a place that
-            stays with you forever.&rdquo;
+            "Egypt is not a country you visit once — it's a place that stays with you forever."
           </p>
           <Link
             href="/places"
