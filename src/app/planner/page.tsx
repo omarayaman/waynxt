@@ -23,7 +23,7 @@ export default function PlannerPage() {
 
       <div className="relative z-10 h-full flex items-center justify-center px-4 sm:px-6 py-5 sm:py-6">
         {/* Unified glass panel — header + form feel like one piece */}
-        <div className="w-full max-w-7xl h-full max-h-[900px] flex flex-col lg:flex-row rounded-3xl border border-white/10 bg-black/35 backdrop-blur-md shadow-[0_8px_60px_rgba(0,0,0,0.55)] overflow-hidden min-h-0">
+        <div className="w-full max-w-7xl h-full max-h-[700px] flex flex-col lg:flex-row rounded-3xl border border-white/10 bg-black/35 backdrop-blur-md shadow-[0_8px_60px_rgba(0,0,0,0.55)] overflow-hidden min-h-0">
           <header className="relative shrink-0 lg:w-[36%] xl:w-[34%] flex flex-col justify-center px-6 sm:px-8 py-6 lg:py-8 border-b lg:border-b-0 lg:border-r border-white/10">
             <div className="absolute inset-0 bg-linear-to-br from-[#F7EA00]/5 via-transparent to-transparent pointer-events-none" />
 
