@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const HIDDEN_PATHS = ["/planner"];
+const HIDDEN_PATHS = ["/planner", "/ask-waynx"];
 
 export default function FloatingAiButton() {
   const pathname = usePathname();
