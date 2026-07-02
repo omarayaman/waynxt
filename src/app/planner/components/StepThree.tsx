@@ -69,23 +69,12 @@ export default function StepThree() {
         season,
       });
 
-      const { trip, isMock, mockReason } = await tripService.createTrip(input);
+      const { trip } = await tripService.createTrip(input);
 
-      if (isMock) {
-        const mockMessages: Record<string, string> = {
-          timeout: `السيرفر لم يرد خلال ${Math.round(TRIP_CREATE_TIMEOUT_MS / 1000)} ثانية — بيانات تجريبية وهمية`,
-          unreachable: 'تعذر الاتصال بالسيرفر — بيانات تجريبية وهمية',
-          server: 'السيرفر غير متاح حالياً — بيانات تجريبية وهمية',
-        };
-        toast.warning(mockMessages[mockReason ?? 'unreachable'] ?? mockMessages.unreachable, {
-          duration: 6000,
-        });
-      } else {
-        toast.success("Trip plan created successfully!");
-      }
+      toast.success("Trip plan created successfully!");
 
       reset();
-      router.push(`/planner/${trip.id}${isMock ? "?mock=1" : ""}`);
+      router.push(`/planner/${trip.id}`);
     } catch {
       setError("Something went wrong. Please try again.");
       toast.error("Failed to create trip plan");

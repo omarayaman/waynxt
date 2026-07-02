@@ -23,19 +23,3 @@ export function isNetworkError(error: unknown): boolean {
   );
 }
 
-/** Server unreachable, timed out, or temporarily unavailable — safe to use mock data. */
-export function shouldUseMockFallback(error: unknown): boolean {
-  if (!isAxiosError(error)) return false;
-
-  const status = error.response?.status;
-  if (status === 401 || status === 403) return false;
-  if (status === 503 || status === 502 || status === 504) return true;
-
-  return isTimeoutError(error) || isNetworkError(error);
-}
-
-export function getMockFallbackReason(error: unknown): 'timeout' | 'unreachable' | 'server' {
-  if (isTimeoutError(error)) return 'timeout';
-  if (isNetworkError(error)) return 'unreachable';
-  return 'server';
-}

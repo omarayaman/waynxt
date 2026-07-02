@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -10,7 +10,6 @@ import {
   Calendar,
   CheckCircle2,
   Loader2,
-  Map,
   RefreshCw,
   Trash2,
   Users,
@@ -19,11 +18,13 @@ import { tripService } from "@/services/trip.service";
 import type { Trip, TripStatus } from "@/types/trip";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import NavbarHome from "@/app/(home)/NavbarHome";
-import { MockDataBanner } from "./MockDataBanner";
-import { InteractiveRoadmap } from "./InteractiveRoadmap";
 import { ExpensesSection } from "./ExpensesSection";
+import { MiniRoadmap } from "./MiniRoadmap";
+import { CityItinerary } from "./CityItinerary";
+import { ActivityDetailCard } from "./ActivityDetailCard";
+import { buildRoadmapStops } from "@/lib/trip-roadmap";
 
-type Tab = "itinerary" | "expenses";
+type Tab = "plan" | "expenses";
 
 interface TripDetailViewProps {
   tripId: string;
@@ -41,7 +42,7 @@ function statusStyle(status: string): string {
     case "confirmed":
       return "text-blue-400/80 bg-blue-400/10 border-blue-400/20";
     default:
-      return "text-[#888] bg-[#1a1a1a] border-[#2a2a2a]";
+      return "text-[#DFD616] bg-[#26210F] border-[#DFD616]/30";
   }
 }
 
@@ -49,16 +50,62 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [trip, setTrip] = useState<Trip | null>(null);
-  const [activeTab, setActiveTab] = useState<Tab>("itinerary");
+  const [activeTab, setActiveTab] = useState<Tab>("plan");
   const [isLoading, setIsLoading] = useState(true);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState("");
+  
+  const [activeStopId, setActiveStopId] = useState<string | null>(null);
+  const [activeDayNumber, setActiveDayNumber] = useState<number | null>(null);
 
-  const isMock =
-    searchParams.get("mock") === "1" ||
-    tripService.isMockTrip(tripId);
+  // Derive flat list of stops
+  const stops = useMemo(() => {
+    if (!trip?.destinations) return [];
+    return buildRoadmapStops(trip.destinations);
+  }, [trip?.destinations]);
+
+  // Derived stats
+  const totalDays = trip?.destinations?.reduce((acc, dest) => acc + (dest.days_allocated || 0), 0) || 0;
+  const totalDestinations = trip?.destinations?.length || 0;
+  const totalActivities = stops.length;
+
+  const activeStopIndex = stops.findIndex(s => s.id === activeStopId);
+  const activeStop = activeStopIndex !== -1 ? stops[activeStopIndex] : null;
+
+  const handlePrevStop = useCallback(() => {
+    if (activeStopIndex > 0) {
+      const prev = stops[activeStopIndex - 1];
+      setActiveStopId(prev.id);
+      setActiveDayNumber(prev.dayNumber);
+    }
+  }, [activeStopIndex, stops]);
+
+  const handleNextStop = useCallback(() => {
+    if (activeStopIndex < stops.length - 1) {
+      const next = stops[activeStopIndex + 1];
+      setActiveStopId(next.id);
+      setActiveDayNumber(next.dayNumber);
+    }
+  }, [activeStopIndex, stops]);
+
+  const handleSelectStop = useCallback((id: string) => {
+    const idx = stops.findIndex(s => s.id === id);
+    if (idx !== -1) {
+      setActiveStopId(id);
+      setActiveDayNumber(stops[idx].dayNumber);
+    }
+  }, [stops]);
+
+  const handleSelectDayFromMini = useCallback((dayNumber: number) => {
+    setActiveDayNumber(dayNumber);
+    const el = document.querySelector(`[data-day="${dayNumber}"]`);
+    if (el) {
+      // Offset slightly to account for fixed headers if any, but scroll into view is fine
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, []);
 
   const fetchTrip = useCallback(async () => {
     setIsLoading(true);
@@ -78,11 +125,6 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
   }, [fetchTrip]);
 
   const handleRegenerate = async () => {
-    if (isMock) {
-      toast.info("Regenerate is not available for demo data");
-      return;
-    }
-
     setIsRegenerating(true);
     try {
       const updated = await tripService.regenerateItinerary(tripId);
@@ -126,16 +168,21 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
   };
 
   const tabs: { id: Tab; label: string }[] = [
-    { id: "itinerary", label: "Roadmap" },
+    { id: "plan", label: "Trip Plan" },
     { id: "expenses", label: "Expenses" },
   ];
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-[#090909] text-white">
+      <div 
+        className="min-h-screen text-white relative pb-20"
+        style={{
+          background: "radial-gradient(ellipse 900px 500px at 15% -10%, rgba(245,197,24,0.04), transparent 60%), radial-gradient(ellipse 700px 500px at 100% 0%, rgba(255,93,122,0.03), transparent 60%), #0B0A08"
+        }}
+      >
         <NavbarHome />
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 relative z-10">
           <Link
             href="/profile?tab=trips"
             className="inline-flex items-center gap-1.5 text-sm text-[#666] hover:text-white transition-colors mb-6"
@@ -153,120 +200,130 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
               <p className="text-red-400">{error || "Trip not found"}</p>
               <Link
                 href="/planner"
-                className="inline-block mt-4 text-sm text-[#F7EA00] hover:underline"
+                className="inline-block mt-4 text-sm text-[#DFD616] hover:underline"
               >
                 Create a new trip
               </Link>
             </div>
           ) : (
             <>
-              <MockDataBanner show={isMock} />
-
-              <div className="mt-4 rounded-2xl border border-[#1a1a1a] bg-[#0d0d0d] overflow-hidden">
-                <div className="p-5 sm:p-6 border-b border-[#1a1a1a]">
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-[#161616] flex items-center justify-center shrink-0">
-                        <Map size={18} className="text-[#F7EA00]" />
-                      </div>
-                      <div>
-                        <h1 className="text-xl sm:text-2xl font-clash font-bold text-white">
-                          {trip.title}
-                        </h1>
-                        <div className="flex flex-wrap items-center gap-3 mt-2 text-xs text-[#666]">
-                          <span className="inline-flex items-center gap-1">
-                            <Calendar size={12} />
-                            {formatDateRange(trip.start_date, trip.end_date)}
-                          </span>
-                          <span className="inline-flex items-center gap-1">
-                            <Users size={12} />
-                            {trip.travelers_count} traveler{trip.travelers_count !== 1 ? "s" : ""}
-                          </span>
-                          <span
-                            className={`inline-block px-2 py-0.5 rounded border text-[11px] capitalize ${statusStyle(trip.status)}`}
-                          >
-                            {trip.status}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 shrink-0">
-                      {trip.status === "draft" && (
-                        <button
-                          type="button"
-                          onClick={handleConfirm}
-                          disabled={isUpdatingStatus}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#0a0a0a] bg-[#DFD616] hover:bg-[#EAE121] rounded-lg transition-colors disabled:opacity-50"
-                        >
-                          {isUpdatingStatus ? (
-                            <Loader2 size={13} className="animate-spin" />
-                          ) : (
-                            <CheckCircle2 size={13} />
-                          )}
-                          Confirm trip
-                        </button>
-                      )}
-                      <button
-                        type="button"
-                        onClick={handleRegenerate}
-                        disabled={isRegenerating || isMock}
-                        title={isMock ? "Not available for demo data" : undefined}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs text-white bg-[#1a1a1a] hover:bg-[#222] rounded-lg transition-colors disabled:opacity-40"
-                      >
-                        {isRegenerating ? (
-                          <Loader2 size={13} className="animate-spin" />
-                        ) : (
-                          <RefreshCw size={13} />
-                        )}
-                        Regenerate
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleDelete}
-                        disabled={isDeleting}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs text-red-400 border border-red-500/20 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50"
-                      >
-                        {isDeleting ? (
-                          <Loader2 size={13} className="animate-spin" />
-                        ) : (
-                          <Trash2 size={13} />
-                        )}
-                        Delete
-                      </button>
-                    </div>
+              {/* Trip Header */}
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 bg-linear-to-br from-[#151310] to-[#19170F] border border-[#2C2917] rounded-2xl p-5 mb-5">
+                <div>
+                  <h1 className="text-xl sm:text-2xl font-clash font-bold text-white mb-2">
+                    {trip.title}
+                  </h1>
+                  <div className="flex flex-wrap items-center gap-2.5 text-[12.5px] text-[#9A9585]">
+                    <span className="inline-flex items-center gap-1.5"><Calendar size={13} /> {formatDateRange(trip.start_date, trip.end_date)}</span>
+                    <span className="text-[#5F5C50]">&bull;</span>
+                    <span className="inline-flex items-center gap-1.5"><Users size={13} /> {trip.travelers_count} traveler{trip.travelers_count !== 1 ? "s" : ""}</span>
+                    <span className="text-[#5F5C50]">&bull;</span>
+                    <span className={`px-2 py-0.5 rounded-full border text-[10.5px] capitalize ${statusStyle(trip.status)}`}>
+                      {trip.status}
+                    </span>
                   </div>
                 </div>
 
-                <div className="flex border-b border-[#1a1a1a] px-5 sm:px-6">
-                  {tabs.map((tab) => (
+                <div className="flex flex-wrap gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={handleRegenerate}
+                    disabled={isRegenerating}
+                    className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-[#9A9585] bg-transparent hover:bg-[#ffffff05] border border-[#2C2917] rounded-xl transition-colors disabled:opacity-50"
+                  >
+                    {isRegenerating ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
+                    Regenerate
+                  </button>
+                  {trip.status === "draft" && (
                     <button
-                      key={tab.id}
                       type="button"
-                      onClick={() => setActiveTab(tab.id)}
-                      className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors -mb-px ${
-                        activeTab === tab.id
-                          ? "border-[#F7EA00] text-[#F7EA00]"
-                          : "border-transparent text-[#666] hover:text-white"
-                      }`}
+                      onClick={handleConfirm}
+                      disabled={isUpdatingStatus}
+                      className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-[#1a1608] bg-[#DFD616] hover:bg-[#EAE121] rounded-xl transition-colors disabled:opacity-50"
                     >
-                      {tab.label}
+                      {isUpdatingStatus ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
+                      Confirm Trip
                     </button>
-                  ))}
-                </div>
-
-                <div className="p-5 sm:p-6">
-                  {activeTab === "itinerary" && (
-                    <InteractiveRoadmap
-                      destinations={trip.destinations ?? []}
-                      seed={trip.id}
-                    />
                   )}
-                  {activeTab === "expenses" && (
-                    <ExpensesSection tripId={tripId} />
-                  )}
+                  <button
+                    type="button"
+                    onClick={handleDelete}
+                    disabled={isDeleting}
+                    className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-red-400 bg-transparent hover:bg-red-500/10 border border-[#2C2917] rounded-xl transition-colors disabled:opacity-50"
+                  >
+                    {isDeleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                    Delete
+                  </button>
                 </div>
               </div>
+
+              {/* Tabs */}
+              <div className="flex gap-6 border-b border-[#2C2917] mb-5">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`py-2.5 px-1 text-[13px] font-semibold transition-colors border-b-2 -mb-[1px] ${
+                      activeTab === tab.id
+                        ? "border-[#DFD616] text-[#DFD616]"
+                        : "border-transparent text-[#5F5C50] hover:text-[#9A9585]"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {activeTab === "plan" && (
+                <>
+                  {/* Stats */}
+                  <div className="grid grid-cols-3 gap-[1px] bg-[#2C2917] border border-[#2C2917] rounded-xl overflow-hidden mb-6">
+                    <div className="bg-[#19170F] p-3.5 sm:p-4 text-center sm:text-left">
+                      <div className="text-[#DFD616] text-xl sm:text-2xl font-extrabold">{totalDays}</div>
+                      <div className="text-[#5F5C50] text-[10.5px] tracking-widest mt-0.5">TOTAL DAYS</div>
+                    </div>
+                    <div className="bg-[#19170F] p-3.5 sm:p-4 text-center sm:text-left">
+                      <div className="text-[#DFD616] text-xl sm:text-2xl font-extrabold">{totalDestinations}</div>
+                      <div className="text-[#5F5C50] text-[10.5px] tracking-widest mt-0.5">DESTINATIONS</div>
+                    </div>
+                    <div className="bg-[#19170F] p-3.5 sm:p-4 text-center sm:text-left">
+                      <div className="text-[#DFD616] text-xl sm:text-2xl font-extrabold">{totalActivities}</div>
+                      <div className="text-[#5F5C50] text-[10.5px] tracking-widest mt-0.5">ACTIVITIES</div>
+                    </div>
+                  </div>
+
+                  <MiniRoadmap 
+                    destinations={trip.destinations ?? []} 
+                    activeDayNumber={activeDayNumber}
+                    onSelectDay={handleSelectDayFromMini}
+                  />
+
+                  <CityItinerary 
+                    destinations={trip.destinations ?? []}
+                    stops={stops}
+                    activeStopId={activeStopId}
+                    onSelectStop={handleSelectStop}
+                  />
+
+                  <ActivityDetailCard 
+                    stop={activeStop}
+                    totalActivities={totalActivities}
+                    onPrev={handlePrevStop}
+                    onNext={handleNextStop}
+                    onClose={() => {
+                      setActiveStopId(null);
+                      setActiveDayNumber(null);
+                    }}
+                  />
+                </>
+              )}
+
+              {activeTab === "expenses" && (
+                <div className="bg-[#0d0d0d] border border-[#1a1a1a] rounded-2xl p-5 sm:p-6">
+                  <ExpensesSection tripId={tripId} />
+                </div>
+              )}
             </>
           )}
         </div>

@@ -1,4 +1,5 @@
 import type { TripActivity, TripDestination } from '@/types/trip';
+import type React from 'react';
 
 export type TransportMode = 'plane' | 'train' | 'car' | 'walk';
 
@@ -169,43 +170,44 @@ export const EGYPT_ROADMAP_THEME = {
   trail: '#2a2418',
 } as const;
 
-export function getActivityIcon(type?: string): string {
-  switch (type?.toLowerCase()) {
-    case 'cultural':
-    case 'historical':
-      return '🏛️';
-    case 'shopping':
-      return '🛍️';
-    case 'food':
-      return '🍽️';
-    case 'adventure':
-      return '🧗';
-    case 'beach':
-      return '🏖️';
-    case 'nature':
-      return '🌿';
-    default:
-      return '📍';
-  }
+import { Landmark, Umbrella, Utensils, Heart, Church, TreePine, Mountain, MapPin } from 'lucide-react';
+
+export function getActivityIcon(type?: string): React.ElementType {
+  const t = type?.toLowerCase() || '';
+  if (t.includes('cultural') || t.includes('historic')) return Landmark;
+  if (t.includes('religious')) return Church;
+  if (t.includes('shopping') || t.includes('market')) return Utensils; // Shopping icon wasn't in list, use Utensils for food/markets or add ShoppingBag
+  if (t.includes('food') || t.includes('dining')) return Utensils;
+  if (t.includes('adventure') || t.includes('desert') || t.includes('safari')) return Mountain;
+  if (t.includes('beach') || t.includes('sea') || t.includes('coast') || t.includes('hurghada') || t.includes('sharm')) return Umbrella;
+  if (t.includes('nature') || t.includes('park')) return TreePine;
+  if (t.includes('wellness') || t.includes('spa')) return Heart;
+  
+  // Fallbacks by city name
+  if (t.includes('cairo')) return Landmark;
+  if (t.includes('luxor') || t.includes('aswan')) return Landmark;
+  if (t.includes('alexandria')) return Umbrella;
+
+  return MapPin;
 }
 
 export function getActivityTypeLabel(type?: string): string {
   switch (type?.toLowerCase()) {
     case 'cultural':
     case 'historical':
-      return 'أثري';
+      return 'Historical';
     case 'shopping':
-      return 'تسوق';
+      return 'Shopping';
     case 'food':
-      return 'طعام';
+      return 'Food';
     case 'adventure':
-      return 'مغامرة';
+      return 'Adventure';
     case 'beach':
-      return 'شاطئ';
+      return 'Beach';
     case 'nature':
-      return 'طبيعة';
+      return 'Nature';
     default:
-      return 'سياحة';
+      return 'Sightseeing';
   }
 }
 

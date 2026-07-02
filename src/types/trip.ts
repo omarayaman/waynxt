@@ -26,6 +26,12 @@ export interface TripActivity {
   order_in_day: number;
   activity_type?: string;
   image_url?: string;
+  thumbnail_url?: string;
+  place?: {
+    id: number;
+    name: string;
+    thumbnail_url?: string;
+  };
 }
 
 export interface TripDay {

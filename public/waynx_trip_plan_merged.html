@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>Waynx — Trip Plan (Merged)</title>
+<style>
+  :root{
+    --bg:#0B0A08;
+    --bg-elev:#151310;
+    --bg-card:#19170F;
+    --hairline:#2C2917;
+    --yellow:#F5C518;
+    --yellow-dim:#8A7318;
+    --text:#EDEAE0;
+    --text-dim:#9A9585;
+    --text-faint:#5F5C50;
+    --pink:#FF5D7A;
+    --route:#3A331A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(245,197,24,0.06), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 0%, rgba(255,93,122,0.04), transparent 60%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, 'Cairo', sans-serif;
+    padding:28px 18px 80px;
+    max-width:900px;
+    margin:0 auto;
+  }
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+  .logo{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:0.5px;}
+  .logo .mark{width:22px;height:22px;background:var(--yellow);clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%);}
+  .logo small{display:block;font-weight:400;color:var(--text-faint);font-size:9px;letter-spacing:2px;}
+  nav{display:flex;gap:22px;font-size:13px;color:var(--text-dim);direction:ltr;}
+
+  .trip-header{
+    display:flex;justify-content:space-between;align-items:flex-start;
+    background:linear-gradient(135deg, var(--bg-elev), var(--bg-card));
+    border:1px solid var(--hairline);border-radius:14px;padding:18px 20px;margin-bottom:16px;
+  }
+  .trip-header h1{font-size:19px;font-weight:700;}
+  .trip-header .meta{color:var(--text-dim);font-size:12.5px;margin-top:6px;display:flex;gap:10px;flex-wrap:wrap;}
+  .badge{background:#26210F;color:var(--yellow);font-size:10.5px;padding:2px 8px;border-radius:20px;border:1px solid var(--yellow-dim);}
+  .actions{display:flex;gap:8px;}
+  .btn{border-radius:8px;padding:8px 14px;font-size:12.5px;font-weight:600;border:1px solid var(--hairline);background:transparent;color:var(--text-dim);cursor:pointer;}
+  .btn.primary{background:var(--yellow);color:#1a1608;border:none;}
+
+  .tabs{display:flex;gap:26px;border-bottom:1px solid var(--hairline);margin-bottom:18px;}
+  .tab{padding:10px 2px;font-size:13px;color:var(--text-faint);font-weight:600;cursor:pointer;}
+  .tab.active{color:var(--yellow);border-bottom:2px solid var(--yellow);}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hairline);border:1px solid var(--hairline);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+  .stat{background:var(--bg-card);padding:14px 16px;}
+  .stat .num{color:var(--yellow);font-size:22px;font-weight:800;}
+  .stat .lbl{color:var(--text-faint);font-size:10.5px;letter-spacing:1px;margin-top:2px;}
+
+  /* mini roadmap scrubber — bridges the two designs */
+  .roadmap-wrap{margin-bottom:26px;}
+  .roadmap-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .roadmap-title h3{font-size:12.5px;color:var(--text-dim);font-weight:600;}
+  .roadmap-title span{font-size:11px;color:var(--text-faint);}
+  .roadmap{
+    display:flex;gap:0;overflow-x:auto;padding:14px 6px 20px;
+    background:var(--bg-card);border:1px solid var(--hairline);border-radius:14px;
+  }
+  .rnode{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;width:82px;position:relative;cursor:pointer;}
+  .rnode:not(:last-child)::after{
+    content:'';position:absolute;top:22px;right:-41px;width:82px;height:2px;
+    background:repeating-linear-gradient(90deg,var(--route) 0 6px,transparent 6px 11px);
+  }
+  .rnode .ring{width:44px;height:44px;border-radius:50%;border:2px solid var(--hairline);
+    background:#2a2618;display:flex;align-items:center;justify-content:center;font-size:16px;position:relative;z-index:1;}
+  .rnode.active .ring{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(245,197,24,0.15);}
+  .rnode .cap{font-size:9.5px;color:var(--text-dim);text-align:center;margin-top:6px;line-height:1.3;}
+  .rnode.active .cap{color:var(--yellow);}
+  .rnode .city{font-size:8px;color:var(--text-faint);}
+
+  /* city group */
+  .city-group{background:var(--bg-card);border:1px solid var(--hairline);border-radius:14px;margin-bottom:14px;overflow:hidden;}
+  .city-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer;}
+  .city-head .left{display:flex;align-items:center;gap:10px;}
+  .pin{width:8px;height:8px;border-radius:50%;background:var(--pink);}
+  .city-head h2{font-size:15px;font-weight:700;}
+  .city-head .sub{font-size:11px;color:var(--text-faint);margin-top:2px;}
+  .days-pill{background:#26210F;color:var(--yellow);font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid var(--yellow-dim);}
+
+  .day-block{padding:0 16px 14px 16px;}
+  .day-row{display:flex;gap:12px;}
+  .day-spine{width:34px;flex:0 0 34px;display:flex;flex-direction:column;align-items:center;padding-top:4px;}
+  .day-spine .dlabel{font-size:10px;color:var(--text-faint);font-weight:700;}
+  .day-spine .dur{font-size:9px;color:var(--text-faint);margin-top:2px;}
+  .day-spine .line{flex:1;width:2px;background:repeating-linear-gradient(180deg,var(--route) 0 5px,transparent 5px 9px);margin-top:8px;}
+  .acts{flex:1;display:flex;flex-direction:column;gap:8px;padding-bottom:10px;}
+  .act{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    background:var(--bg-elev);border:1px solid var(--hairline);border-radius:10px;padding:10px 12px;cursor:pointer;
+    transition:border-color .15s;
+  }
+  .act:hover{border-color:var(--yellow-dim);}
+  .act.selected{border-color:var(--yellow);background:#211D10;}
+  .act .dot{width:6px;height:6px;border-radius:50%;background:var(--yellow);flex:0 0 auto;}
+  .act .name{font-size:13.5px;font-weight:600;}
+  .act .cat{font-size:10px;color:var(--text-faint);margin-top:2px;}
+  .act .right{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--text-dim);white-space:nowrap;}
+  .act .hrs{color:var(--yellow);font-weight:700;}
+  .star{color:var(--yellow);}
+
+  /* selected activity detail — sticky bottom card, borrowed language from the roadmap screen */
+  .detail-wrap{position:sticky;bottom:14px;margin-top:20px;}
+  .detail{
+    display:flex;gap:14px;background:linear-gradient(135deg,#1B1710,#100E0A);
+    border:1px solid var(--yellow-dim);border-radius:16px;padding:14px;
+    box-shadow:0 20px 40px -12px rgba(0,0,0,0.6);
+  }
+  .detail img{width:130px;height:110px;object-fit:cover;border-radius:10px;flex:0 0 auto;}
+  .detail .info{flex:1;}
+  .detail .step{font-size:10.5px;color:var(--text-faint);margin-bottom:4px;}
+  .detail h3{color:var(--yellow);font-size:16px;margin-bottom:4px;}
+  .detail .loc{font-size:11.5px;color:var(--text-dim);margin-bottom:6px;}
+  .detail p{font-size:12px;color:var(--text-dim);line-height:1.5;margin-bottom:8px;}
+  .detail .facts{display:flex;gap:14px;font-size:11px;color:var(--text-faint);}
+  .navrow{display:flex;gap:8px;margin-top:10px;}
+  .navrow button{flex:1;background:#211D10;border:1px solid var(--hairline);color:var(--text-dim);border-radius:8px;padding:8px;font-size:12px;cursor:pointer;}
+  .navrow button.next{background:var(--yellow);color:#1a1608;border:none;font-weight:700;}
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="logo"><div class="mark"></div>WAYNX<small>AI TRAVEL ADVISOR</small></div>
+    <nav><span>Home</span><span>Places</span><span style="color:var(--yellow)">Trip Plan</span></nav>
+  </div>
+
+  <div class="trip-header">
+    <div>
+      <h1>History &amp; Nature Trip to Egypt</h1>
+      <div class="meta">
+        <span>Aug 1 – Aug 5, 2026</span>
+        <span>2 travelers</span>
+        <span class="badge">Draft</span>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn">Regenerate</button>
+      <button class="btn primary">Confirm Trip</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab">Top Places</div>
+    <div class="tab active">Trip Plan</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num">9</div><div class="lbl">TOTAL DAYS</div></div>
+    <div class="stat"><div class="num">3</div><div class="lbl">DESTINATIONS</div></div>
+    <div class="stat"><div class="num">17</div><div class="lbl">ACTIVITIES</div></div>
+  </div>
+
+  <div class="roadmap-wrap">
+    <div class="roadmap-title"><h3>Full Trip Route</h3><span>Tap any stop to jump to it below</span></div>
+    <div class="roadmap">
+      <div class="rnode"><div class="ring">🐫</div><div class="cap">Cairo</div><div class="city">5 days</div></div>
+      <div class="rnode active"><div class="ring">🕌</div><div class="cap">Cairo</div><div class="city">Day 1</div></div>
+      <div class="rnode"><div class="ring">🏛️</div><div class="cap">Cairo</div><div class="city">Day 2</div></div>
+      <div class="rnode"><div class="ring">🏰</div><div class="cap">Alexandria</div><div class="city">Day 6</div></div>
+      <div class="rnode"><div class="ring">📚</div><div class="cap">Alexandria</div><div class="city">Day 7</div></div>
+      <div class="rnode"><div class="ring">🏺</div><div class="cap">Luxor</div><div class="city">Day 8</div></div>
+      <div class="rnode"><div class="ring">🎈</div><div class="cap">Luxor</div><div class="city">Day 8</div></div>
+      <div class="rnode"><div class="ring">🐚</div><div class="cap">Hurghada</div><div class="city">Day 9</div></div>
+    </div>
+  </div>
+
+  <!-- CAIRO -->
+  <div class="city-group">
+    <div class="city-head">
+      <div class="left"><div class="pin"></div><div><h2>Cairo</h2><div class="sub">Religious &amp; historic</div></div></div>
+      <div class="days-pill">5 DAYS</div>
+    </div>
+    <div class="day-block">
+      <div class="day-row">
+        <div class="day-spine"><div class="dlabel">D1</div><div class="dur">6H</div><div class="line"></div></div>
+        <div class="acts">
+          <div class="act selected">
+            <div style="display:flex;align-items:center;gap:8px;"><div class="dot"></div><div><div class="name">Al-Azhar Mosque</div><div class="cat">Religious</div></div></div>
+            <div class="right"><span class="hrs">2H</span><span class="star">★ 4.7</span></div>
+          </div>
+          <div class="act">
+            <div style="display:flex;align-items:center;gap:8px;"><div class="dot"></div><div><div class="name">Mohamed Ali Mosque</div><div class="cat">Religious</div></div></div>
+            <div class="right"><span class="hrs">2H</span><span class="star">★ 4.6</span></div>
+          </div>
+          <div class="act">
+            <div style="display:flex;align-items:center;gap:8px;"><div class="dot"></div><div><div class="name">Hanging Church</div><div class="cat">Religious</div></div></div>
+            <div class="right"><span class="hrs">1H</span><span class="star">★ 4.5</span></div>
+          </div>
+          <div class="act">
+            <div style="display:flex;align-items:center;gap:8px;"><div class="dot"></div><div><div class="name">Amr Ibn Al-As Mosque</div><div class="cat">Religious</div></div></div>
+            <div class="right"><span class="hrs">1H</span><span class="star">★ 4.4</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="day-row">
+        <div class="day-spine"><div class="dlabel">D2</div><div class="dur">6H</div></div>
+        <div class="acts">
+          <div class="act">
+            <div style="display:flex;align-items:center;gap:8px;"><div class="dot"></div><div><div class="name">Egyptian Museum</div><div class="cat">History</div></div></div>
+            <div class="right"><span class="hrs">3H</span><span class="star">★ 4.7</span></div>
+          </div>
+          <div class="act">
+            <div style="display:flex;align-items:center;gap:8px;"><div class="dot"></div><div><div class="name">Khan El-Khalili Bazaar</div><div class="cat">Food &amp; markets</div></div></div>
+            <div class="right"><span class="hrs">3H</span><span class="star">★ 4.5</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALEXANDRIA (collapsed style) -->
+  <div class="city-group">
+    <div class="city-head">
+      <div class="left"><div class="pin" style="background:#5DD6FF"></div><div><h2>Alexandria</h2><div class="sub">Coastal &amp; historic</div></div></div>
+      <div class="days-pill">2 DAYS</div>
+    </div>
+  </div>
+
+  <!-- LUXOR (collapsed style) -->
+  <div class="city-group">
+    <div class="city-head">
+      <div class="left"><div class="pin" style="background:#F5C518"></div><div><h2>Luxor</h2><div class="sub">Ancient sites</div></div></div>
+      <div class="days-pill">2 DAYS</div>
+    </div>
+  </div>
+
+  <div class="detail-wrap">
+    <div class="detail">
+      <img src="https://images.unsplash.com/photo-1554296697-cdb7f9de8b3f?w=300&q=60" alt="Al-Azhar Mosque">
+      <div class="info">
+        <div class="step">Stop 2 of 17 · Cairo · Day 1</div>
+        <h3>Al-Azhar Mosque</h3>
+        <div class="loc">Cairo · Religious · ★ 4.7</div>
+        <p>One of the oldest and most significant mosques in historic Cairo, and a leading center of religious learning for over a thousand years.</p>
+        <div class="facts"><span>⏱ 09:00–11:00 · 2H</span><span>💰 Free</span></div>
+        <div class="navrow">
+          <button>← Prev</button>
+          <button class="next">Next →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
