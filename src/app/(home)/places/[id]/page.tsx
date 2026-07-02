@@ -49,13 +49,16 @@ export default async function PlaceDetailsPage({ params }: { params: Promise<{ i
   // Fetch related places in the same category
   let topRatedPlaces: Place[] = [];
   try {
-    const relatedRes = await placesService.getPlaces({ category: place.category });
+    const relatedRes = await placesService.getPlaces({ 
+      category: place.category,
+      per_page: 15 
+    });
     
-    // Filter out current, sort by rating desc, slice top 6
+    // Filter out current, sort by rating desc, slice top 8
     topRatedPlaces = (relatedRes.data || [])
       .filter((p) => p.id !== place.id)
       .sort((a, b) => b.rating - a.rating)
-      .slice(0, 6);
+      .slice(0, 8);
   } catch (error) {
     console.error("Failed to fetch related places:", error);
     // Graceful fallback, just show empty related places
@@ -94,7 +97,7 @@ export default async function PlaceDetailsPage({ params }: { params: Promise<{ i
         </div>
 
         {/* Content Container */}
-        <div className="w-full max-w-6xl px-6 flex flex-col gap-12 mt-8">
+        <div className="w-full max-w-[1600px] px-4 md:px-8 lg:px-12 flex flex-col gap-12 mt-8">
           
           {/* 2. Quick Info Bar */}
           <div className="flex flex-wrap items-center gap-4 py-4 border-y border-[#1A1A1A]">
@@ -131,7 +134,7 @@ export default async function PlaceDetailsPage({ params }: { params: Promise<{ i
           {/* 3. Description Section */}
           <section>
             <h2 className="text-2xl font-medium text-white mb-4">Description</h2>
-            <p className="text-[#A1A1AA] text-base leading-relaxed max-w-4xl">
+            <p className="text-[#A1A1AA] text-lg md:text-xl leading-relaxed max-w-5xl">
               {place.description}
             </p>
           </section>
@@ -140,12 +143,12 @@ export default async function PlaceDetailsPage({ params }: { params: Promise<{ i
           <section className="flex flex-col gap-6">
             {suitableFor.length > 0 && (
               <div>
-                <h3 className="text-xs font-bold text-[#666666] tracking-widest uppercase mb-3">Suitable For</h3>
-                <div className="flex flex-wrap gap-2">
+                <h3 className="text-sm font-bold text-[#666666] tracking-widest uppercase mb-4">Suitable For</h3>
+                <div className="flex flex-wrap gap-3">
                   {suitableFor.map((tag) => (
                     <span 
                       key={tag}
-                      className="px-4 py-1.5 rounded-full bg-[#2A280D] text-[#DFD616] text-[13px] font-medium capitalize"
+                      className="px-5 py-2 rounded-full bg-[#2A280D] text-[#DFD616] text-sm md:text-base font-medium capitalize"
                     >
                       {tag}
                     </span>
@@ -156,12 +159,12 @@ export default async function PlaceDetailsPage({ params }: { params: Promise<{ i
 
             {suitableAge.length > 0 && (
               <div>
-                <h3 className="text-xs font-bold text-[#666666] tracking-widest uppercase mb-3">Suitable Age</h3>
-                <div className="flex flex-wrap gap-2">
+                <h3 className="text-sm font-bold text-[#666666] tracking-widest uppercase mb-4">Suitable Age</h3>
+                <div className="flex flex-wrap gap-3">
                   {suitableAge.map((tag) => (
                     <span 
                       key={tag}
-                      className="px-4 py-1.5 rounded-full bg-transparent border border-[#333333] text-[#A1A1AA] text-[13px] font-medium capitalize"
+                      className="px-5 py-2 rounded-full bg-transparent border border-[#333333] text-[#A1A1AA] text-sm md:text-base font-medium capitalize"
                     >
                       {tag}
                     </span>
@@ -178,7 +181,7 @@ export default async function PlaceDetailsPage({ params }: { params: Promise<{ i
                 Top rated {place.category} places
               </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {topRatedPlaces.map((relatedPlace) => (
                   <Link href={`/places/${relatedPlace.id}`} key={relatedPlace.id} className="block group">
                     <div className="relative w-full h-[300px] md:h-[350px] rounded-3xl overflow-hidden border border-[#222222] group-hover:border-[#DFD616]/50 transition-all duration-300">

@@ -53,7 +53,7 @@ export default function NavbarHome() {
         {navLinks.map((link) => {
           const isActive = pathname === link.href;
           return (
-            <div key={link.name} className="h-full flex items-center relative">
+            <div key={link.name} className="relative flex items-center">
               <Link
                 href={link.href}
                 className={`${
@@ -67,7 +67,7 @@ export default function NavbarHome() {
               {isActive && (
                 <motion.div
                   layoutId="navbar-indicator"
-                  className="absolute bottom-[-1px] left-[-10px] right-[-10px] h-[3px] bg-[#E3D010]"
+                  className="absolute -bottom-2 left-[-10px] right-[-10px] h-[3px] bg-[#E3D010]"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
