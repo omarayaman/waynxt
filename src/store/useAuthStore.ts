@@ -1,16 +1,18 @@
 import { create } from 'zustand';
 import { authService } from '@/services/auth.service';
+import { UserPreferences } from '@/types/user';
 
 interface User {
   id: string;
   full_name: string;
   email: string;
-  auth_provider: string;
-  avatar_url: string;
-  city: string;
+  auth_provider?: string;
+  avatar_url?: string;
+  city?: string;
   role: string;
   explorer_points: number;
-  badge_type: string;
+  badge_type?: string;
+  preferences?: UserPreferences;
   last_login?: string;
   created_at: string;
   updated_at: string;
@@ -50,6 +52,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (error) {
       console.error('Logout error', error);
     } finally {
+      const { useSavedPlacesStore } = await import('@/store/useSavedPlacesStore');
+      useSavedPlacesStore.getState().reset();
       set({ user: null, isAuthenticated: false });
       if (typeof window !== 'undefined') {
         window.location.href = '/login';

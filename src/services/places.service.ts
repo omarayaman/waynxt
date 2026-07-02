@@ -1,7 +1,13 @@
 import { api } from '@/lib/api';
 import { 
-  ApiResponse, Place, PlacesFilters, Category, City, TrendingSearch, Review 
+  ApiResponse, Place, PlacesFilters, Category, City, TrendingSearch, Review,
+  CreateReviewPayload, UpdateReviewPayload
 } from '@/types/places';
+
+interface ReviewsQueryParams {
+  page?: number;
+  per_page?: number;
+}
 
 export const placesService = {
   async getPlaces(filters: PlacesFilters, signal?: AbortSignal): Promise<ApiResponse<Place[]>> {
@@ -72,8 +78,61 @@ export const placesService = {
     return data;
   },
 
-  async getPlaceReviews(id: number): Promise<ApiResponse<Review[]>> {
-    const { data } = await api.get<ApiResponse<Review[]>>(`/places/${id}/reviews`);
+  async getPlaceReviews(
+    id: number,
+    params?: ReviewsQueryParams
+  ): Promise<ApiResponse<Review[]>> {
+    const { data } = await api.get<ApiResponse<Review[]>>(`/places/${id}/reviews`, {
+      params,
+    });
     return data;
-  }
+  },
+
+  async createReview(
+    placeId: number,
+    payload: CreateReviewPayload
+  ): Promise<ApiResponse<Review>> {
+    const { data } = await api.post<ApiResponse<Review>>(
+      `/places/${placeId}/reviews`,
+      payload
+    );
+    return data;
+  },
+
+  async updateReview(
+    placeId: number,
+    reviewId: string,
+    payload: UpdateReviewPayload
+  ): Promise<ApiResponse<Review>> {
+    const { data } = await api.put<ApiResponse<Review>>(
+      `/places/${placeId}/reviews/${reviewId}`,
+      payload
+    );
+    return data;
+  },
+
+  async deleteReview(
+    placeId: number,
+    reviewId: string
+  ): Promise<ApiResponse<{ message: string }>> {
+    const { data } = await api.delete<ApiResponse<{ message: string }>>(
+      `/places/${placeId}/reviews/${reviewId}`
+    );
+    return data;
+  },
+
+  async savePlace(id: number): Promise<ApiResponse<{ message: string }>> {
+    const { data } = await api.post<ApiResponse<{ message: string }>>(`/places/${id}/save`);
+    return data;
+  },
+
+  async unsavePlace(id: number): Promise<ApiResponse<{ message: string }>> {
+    const { data } = await api.delete<ApiResponse<{ message: string }>>(`/places/${id}/save`);
+    return data;
+  },
+
+  async checkSaveStatus(id: number): Promise<ApiResponse<{ is_saved: boolean }>> {
+    const { data } = await api.get<ApiResponse<{ is_saved: boolean }>>(`/places/${id}/save`);
+    return data;
+  },
 };

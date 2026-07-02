@@ -1,6 +1,24 @@
 import { api } from '@/lib/api';
-import { UserProfile, UserStats, UserPreferences } from '@/types/user';
-import { Place } from '@/types/places';
+import {
+  UserProfile,
+  UserStats,
+  UserPreferences,
+  SavedPlacesResponse,
+  SavedPlaceProfile,
+  SavedPlaceApiItem,
+} from '@/types/user';
+
+function mapSavedPlaceItem(item: SavedPlaceApiItem): SavedPlaceProfile {
+  return {
+    id: String(item.id),
+    place_id: item.place_id ?? item.place?.id ?? 0,
+    place_name: item.place_name ?? item.place?.name ?? 'Unknown place',
+    location: item.location ?? item.place?.city ?? '',
+    saved_at: item.saved_at ?? item.created_at,
+    category: item.place?.category,
+    thumbnail_url: item.place?.thumbnail_url,
+  };
+}
 
 export interface UpdateProfileInput {
   full_name?: string;
@@ -9,17 +27,8 @@ export interface UpdateProfileInput {
 }
 
 export interface ChangePasswordInput {
-  old_password?: string;
-  new_password?: string;
-}
-
-export interface SavedPlacesResponse {
-  data: Place[];
-  meta: {
-    page: number;
-    per_page: number;
-    total: number;
-  };
+  old_password: string;
+  new_password: string;
 }
 
 export const userService = {
@@ -35,7 +44,7 @@ export const userService = {
 
   async changePassword(data: ChangePasswordInput): Promise<{ message: string }> {
     const response = await api.put('/users/password', data);
-    return response.data;
+    return response.data.data || response.data;
   },
 
   async uploadAvatar(file: File): Promise<UserProfile> {
@@ -55,13 +64,18 @@ export const userService = {
     return response.data.data || response.data;
   },
 
-  async getSavedPlaces(page: number = 1, perPage: number = 10): Promise<SavedPlacesResponse> {
+  async getSavedPlaces({ page = 1, perPage = 10 }: { page?: number; perPage?: number } = {}): Promise<SavedPlacesResponse> {
     const response = await api.get(`/users/saved-places?page=${page}&per_page=${perPage}`);
-    return response.data;
+    const raw: SavedPlaceApiItem[] = response.data.data || [];
+    const data: SavedPlaceProfile[] = raw.map(mapSavedPlaceItem);
+    return {
+      data,
+      meta: response.data.meta || { page, per_page: perPage, total: 0 },
+    };
   },
 
   async deleteAccount(): Promise<{ message: string }> {
     const response = await api.delete('/users/account');
-    return response.data;
-  }
+    return response.data.data || response.data;
+  },
 };

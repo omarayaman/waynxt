@@ -89,12 +89,29 @@ export interface TrendingSearch {
   count: number;
 }
 
+export interface ReviewUser {
+  id: string;
+  full_name: string;
+  avatar_url?: string;
+}
+
 export interface Review {
   id: string;
+  place_id: number;
   user_id: string;
-  user_name?: string;
-  user_avatar?: string;
   rating: number;
   comment: string;
+  user?: ReviewUser;
   created_at: string;
+  updated_at: string;
+}
+
+export interface CreateReviewPayload {
+  rating: number;
+  comment?: string;
+}
+
+export interface UpdateReviewPayload {
+  rating?: number;
+  comment?: string;
 }
