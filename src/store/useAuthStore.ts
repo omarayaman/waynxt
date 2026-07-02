@@ -1,16 +1,18 @@
 import { create } from 'zustand';
 import { authService } from '@/services/auth.service';
+import { UserPreferences } from '@/types/user';
 
 interface User {
   id: string;
   full_name: string;
   email: string;
-  auth_provider: string;
-  avatar_url: string;
-  city: string;
+  auth_provider?: string;
+  avatar_url?: string;
+  city?: string;
   role: string;
   explorer_points: number;
-  badge_type: string;
+  badge_type?: string;
+  preferences?: UserPreferences;
   last_login?: string;
   created_at: string;
   updated_at: string;
