@@ -38,8 +38,8 @@ export const authService = {
     return response.data;
   },
 
-  async googleLogin(tokenStr: string) {
-    const response = await api.post('/auth/google', { token: tokenStr });
+  async googleLogin(payload: { email: string; full_name: string; provider_id: string }) {
+    const response = await api.post('/auth/google', payload);
     const respData = response.data.data || response.data;
 
     const token = respData.tokens?.access_token || respData.token || respData.access_token;

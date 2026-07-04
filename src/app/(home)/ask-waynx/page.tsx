@@ -4,14 +4,13 @@ import React, { Suspense, useCallback, useEffect, useRef, useState } from "react
 import { useRouter, useSearchParams } from "next/navigation";
 import NavbarHome from "../NavbarHome";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { chatService } from "@/services/chat.service";
-import { ChatMessage, ChatSession } from "@/types/chat";
+import { ChatMessage } from "@/types/chat";
 import ChatSidebar from "./components/ChatSidebar";
 import ChatEmptyState from "./components/ChatEmptyState";
 import ChatMessageList from "./components/ChatMessageList";
 import ChatInput from "./components/ChatInput";
 import { AlertCircle, Loader2, PanelLeft, Sparkles } from "lucide-react";
-import { isAxiosError } from "axios";
+import { useChatStore } from "@/store/chatStore";
 
 function AskWaynxContent() {
   const router = useRouter();
@@ -22,18 +21,25 @@ function AskWaynxContent() {
 
   const sessionFromUrl = searchParams.get("session");
   const [query, setQuery] = useState(() => searchParams.get("q") ?? "");
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [sessions, setSessions] = useState<ChatSession[]>([]);
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [loadedSessionId, setLoadedSessionId] = useState<string | null>(null);
-  const [activeTitle, setActiveTitle] = useState<string | null>(null);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingSession, setIsLoadingSession] = useState(false);
-  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
-  const [isDeletingId, setIsDeletingId] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isDesktopSidebarOpen, setIsDesktopSidebarOpen] = useState(true);
+
+  // Use granular selectors to prevent over-rendering!
+  const messages = useChatStore((state) => state.messages);
+  const sessions = useChatStore((state) => state.sessions);
+  const sessionId = useChatStore((state) => state.activeSessionId);
+  const activeTitle = useChatStore((state) => state.activeTitle);
+  const isLoading = useChatStore((state) => state.isLoading);
+  const isLoadingSession = useChatStore((state) => state.isLoadingSession);
+  const isLoadingHistory = useChatStore((state) => state.isLoadingHistory);
+  const error = useChatStore((state) => state.error);
+  const isDeletingId = useChatStore((state) => state.isDeletingId);
+
+  const fetchHistory = useChatStore((state) => state.fetchHistory);
+  const loadSessionStore = useChatStore((state) => state.loadSession);
+  const sendMessageStore = useChatStore((state) => state.sendMessage);
+  const deleteSessionStore = useChatStore((state) => state.deleteSession);
+  const startNewChatStore = useChatStore((state) => state.startNewChat);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -43,295 +49,64 @@ function AskWaynxContent() {
     scrollToBottom();
   }, [messages, isLoading, scrollToBottom]);
 
+  // Initial history load
   useEffect(() => {
-    let cancelled = false;
+    fetchHistory();
+  }, [fetchHistory]);
 
-    void (async () => {
-      try {
-        const response = await chatService.getHistory({ page: 1, per_page: 30 });
-        if (!cancelled && response.success && response.data) {
-          setSessions(response.data);
-        }
-      } catch {
-        // History failure shouldn't block chatting
-      } finally {
-        if (!cancelled) {
-          setIsLoadingHistory(false);
-        }
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const refreshHistory = useCallback(async () => {
-    try {
-      const response = await chatService.getHistory({ page: 1, per_page: 30 });
-      if (response.success && response.data) {
-        setSessions(response.data);
-      }
-    } catch {
-      // Silent refresh failure is acceptable
+  // URL syncing logic
+  useEffect(() => {
+    if (!sessionFromUrl || sessionFromUrl === sessionId) {
+      return;
     }
-  }, []);
-
-  const loadSession = useCallback(async (id: string) => {
-    if (loadedSessionId === id) return;
-
-    setIsLoadingSession(true);
-    setError(null);
-
-    try {
-      const response = await chatService.getSession(id);
-      if (!response.success || !response.data) {
-        throw new Error("Failed to load chat session");
-      }
-
-      setLoadedSessionId(response.data.id || id);
-      setSessionId(response.data.id || id);
-      setActiveTitle(response.data.title);
-      setMessages(response.data.messages ?? []);
-      router.replace(`/ask-waynx?session=${response.data.id || id}`, { scroll: false });
-    } catch (err) {
-      setLoadedSessionId(null);
+    
+    if (sessionFromUrl === "undefined" || sessionFromUrl === "null") {
       router.replace("/ask-waynx", { scroll: false });
-      if (isAxiosError(err)) {
-        const message =
-          err.response?.data?.error?.message ?? "Could not load this chat session.";
-        setError(message);
-      } else {
-        setError("Could not load this chat session.");
-      }
-    } finally {
-      setIsLoadingSession(false);
-    }
-  }, [loadedSessionId, router]);
-
-  useEffect(() => {
-    if (
-      !sessionFromUrl ||
-      sessionFromUrl === "undefined" ||
-      sessionFromUrl === "null" ||
-      sessionFromUrl === loadedSessionId
-    ) {
       return;
     }
 
-    let cancelled = false;
+    loadSessionStore(sessionFromUrl).catch(() => {
+      router.replace("/ask-waynx", { scroll: false });
+    });
+  }, [sessionFromUrl, sessionId, loadSessionStore, router]);
 
-    void (async () => {
-      try {
-        const response = await chatService.getSession(sessionFromUrl);
-        if (cancelled) return;
-
-        if (!response.success || !response.data) {
-          throw new Error("Failed to load chat session");
-        }
-
-        setLoadedSessionId(response.data.id);
-        setSessionId(response.data.id);
-        setActiveTitle(response.data.title);
-        setMessages(response.data.messages ?? []);
-      } catch (err) {
-        if (cancelled) return;
-
-        setLoadedSessionId(null);
-        router.replace("/ask-waynx", { scroll: false });
-        if (isAxiosError(err)) {
-          const message =
-            err.response?.data?.error?.message ?? "Could not load this chat session.";
-          // Suppress "invalid session ID" toast to prevent annoying the user
-          if (!message.toLowerCase().includes("invalid session id")) {
-            setError(message);
-          }
-        } else {
-          setError("Could not load this chat session.");
-        }
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [sessionFromUrl, loadedSessionId, router]);
-
-  const handleNewChat = () => {
-    setLoadedSessionId(null);
-    setMessages([]);
-    setSessionId(null);
-    setActiveTitle(null);
-    setError(null);
-    setQuery("");
-    setIsSidebarOpen(false);
+  const handleNewChat = useCallback(() => {
     router.replace("/ask-waynx", { scroll: false });
-  };
+    startNewChatStore();
+    if (window.innerWidth < 1024) setIsSidebarOpen(false);
+  }, [router, startNewChatStore]);
 
-  const handleSelectSession = (id: string) => {
-    if (id === sessionId) {
-      setIsSidebarOpen(false);
-      return;
-    }
-    loadSession(id);
-    setIsSidebarOpen(false);
-  };
+  const handleSelectSession = useCallback(
+    (id: string) => {
+      router.replace(`/ask-waynx?session=${id}`, { scroll: false });
+      if (window.innerWidth < 1024) setIsSidebarOpen(false);
+    },
+    [router]
+  );
 
   const handleDeleteSession = async (id: string) => {
-    setIsDeletingId(id);
-    setError(null);
-
-    try {
-      const response = await chatService.deleteSession(id);
-      if (!response.success) {
-        throw new Error(response.error?.message ?? "Failed to delete chat");
-      }
-
-      setSessions((prev) => prev.filter((s) => s.id !== id));
-
-      if (sessionId === id) {
-        handleNewChat();
-      }
-    } catch (err) {
-      if (isAxiosError(err)) {
-        setError(err.response?.data?.error?.message ?? "Failed to delete chat.");
-      } else if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Failed to delete chat.");
-      }
-    } finally {
-      setIsDeletingId(null);
+    await deleteSessionStore(id);
+    if (sessionId === id) {
+      router.replace("/ask-waynx", { scroll: false });
     }
   };
 
-  const handleSend = async (text: string) => {
-    const trimmed = text.trim();
-    if (!trimmed || isLoading) return;
-
-    setError(null);
-    setQuery("");
-
-    const optimisticUserMessage: ChatMessage = {
-      id: `temp-user-${Date.now()}`,
-      role: "user",
-      content: trimmed,
-      is_verified: false,
-      related_places: [],
-      isNew: true,
-    };
-    
-    const optimisticAiMessageId = `temp-ai-${Date.now()}`;
-    const optimisticAiMessage: ChatMessage = {
-      id: optimisticAiMessageId,
-      role: "assistant",
-      content: "",
-      is_verified: false,
-      related_places: [],
-      isThinking: true,
-      isNew: true,
-    };
-
-    setMessages((prev) => [...prev, optimisticUserMessage, optimisticAiMessage]);
-    setIsLoading(true);
-
-    try {
-      await chatService.streamMessage({
-        sessionId,
-        message: trimmed,
-        onChunk: (text) => {
-          setMessages((prev) => 
-            prev.map(m => m.id === optimisticAiMessageId ? { ...m, content: m.content + text, isThinking: false } : m)
-          );
-        },
-        onDone: async (data) => {
-          // Depending on how the SSE is formatted, it might be nested in a 'data' property
-          const finalSessionId = 
-            data.session_id || 
-            data.data?.session_id || 
-            data.message_id || 
-            data.data?.message_id || 
-            sessionId;
-            
-          const isNewSession = !sessionId;
-
-          if (!finalSessionId) return;
-
-          setLoadedSessionId(finalSessionId);
-          setSessionId(finalSessionId);
-
-          if (isNewSession && finalSessionId) {
-            const title = trimmed.length > 80 ? `${trimmed.slice(0, 77)}...` : trimmed;
-            setActiveTitle(title);
-            setSessions((prev) => {
-              if (prev.some((s) => s.id === finalSessionId)) {
-                return prev.map((s) =>
-                  s.id === finalSessionId
-                    ? { ...s, title, updated_at: new Date().toISOString() }
-                    : s
-                );
-              }
-              return [
-                {
-                  id: finalSessionId,
-                  user_id: "",
-                  title,
-                  created_at: new Date().toISOString(),
-                  updated_at: new Date().toISOString(),
-                  messages: [],
-                },
-                ...prev,
-              ];
-            });
-            router.replace(`/ask-waynx?session=${finalSessionId}`, { scroll: false });
-          } else if (finalSessionId) {
-            setSessions((prev) =>
-              prev.map((s) =>
-                s.id === finalSessionId
-                  ? { ...s, updated_at: new Date().toISOString() }
-                  : s
-              )
-            );
-          }
-
-          if (finalSessionId) {
-            try {
-              const freshSession = await chatService.getSession(finalSessionId);
-              if (freshSession.success && freshSession.data) {
-                setMessages(freshSession.data.messages ?? []);
-              }
-            } catch (err) {
-              // ignore hydration error
-            }
-          }
-
-          await refreshHistory();
-          setIsLoading(false);
-        },
-        onError: (err) => {
-          setError(err.message || "Failed to send message");
-          setIsLoading(false);
-        }
-      });
-    } catch (err) {
-      setMessages((prev) => prev.slice(0, -2));
-
-      if (isAxiosError(err)) {
-        const message =
-          err.response?.data?.error?.message ??
-          "Something went wrong. Please try again.";
-        setError(message);
-      } else if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Something went wrong. Please try again.");
+  const handleSend = useCallback(
+    async (text: string) => {
+      setQuery("");
+      const newSessionId = await sendMessageStore(text);
+      if (newSessionId && newSessionId !== sessionFromUrl) {
+        router.replace(`/ask-waynx?session=${newSessionId}`, { scroll: false });
       }
-      setIsLoading(false);
-    }
-  };
+    },
+    [sendMessageStore, sessionFromUrl, router]
+  );
 
-  handleSendRef.current = handleSend;
+  useEffect(() => {
+    handleSendRef.current = handleSend;
+  }, [handleSend]);
 
+  // Auto-send query param
   useEffect(() => {
     const q = searchParams.get("q")?.trim();
     if (!q || hasAutoSentRef.current || sessionFromUrl) return;
@@ -342,30 +117,51 @@ function AskWaynxContent() {
   }, [searchParams, sessionFromUrl, router]);
 
   const isLoadingUrlSession = Boolean(
-    sessionFromUrl && loadedSessionId !== sessionFromUrl
+    sessionFromUrl && sessionId !== sessionFromUrl
   );
   const showSessionLoading = isLoadingSession || isLoadingUrlSession;
   const showEmptyState = !showSessionLoading && messages.length === 0;
+
+  const handleRegenerate = async (msg: ChatMessage) => {
+    const msgIndex = messages.findIndex((m) => m.id === msg.id);
+    if (msgIndex <= 0) return;
+    
+    let userMessageContent = "";
+    for (let i = msgIndex - 1; i >= 0; i--) {
+      if (messages[i].role === "user") {
+        userMessageContent = messages[i].content;
+        break;
+      }
+    }
+    
+    if (userMessageContent) {
+      await handleSend(userMessageContent);
+    }
+  };
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-[#050505] text-white">
       <NavbarHome />
 
       <div className="flex flex-1 overflow-hidden pt-[110px]">
-        <div className="hidden w-[280px] shrink-0 border-r border-[#222222] lg:block">
-          <ChatSidebar
-            sessions={sessions}
-            activeSessionId={sessionId}
-            isLoadingHistory={isLoadingHistory}
-            isDeletingId={isDeletingId}
-            onNewChat={handleNewChat}
-            onSelectSession={handleSelectSession}
-            onDeleteSession={handleDeleteSession}
-          />
+        <div 
+          className={`relative z-[60] hidden shrink-0 border-[#222222] transition-all duration-300 ease-in-out lg:block ${isDesktopSidebarOpen ? "w-[280px] border-r opacity-100" : "w-0 border-r-0 opacity-0 overflow-hidden"}`}
+        >
+          <div className="h-full w-[280px]">
+            <ChatSidebar
+              sessions={sessions}
+              activeSessionId={sessionId}
+              isLoadingHistory={isLoadingHistory}
+              isDeletingId={isDeletingId}
+              onNewChat={handleNewChat}
+              onSelectSession={handleSelectSession}
+              onDeleteSession={handleDeleteSession}
+            />
+          </div>
         </div>
 
         {isSidebarOpen && (
-          <div className="fixed inset-0 z-40 lg:hidden">
+          <div className="fixed inset-0 z-[70] lg:hidden">
             <button
               className="absolute inset-0 bg-black/60"
               onClick={() => setIsSidebarOpen(false)}
@@ -387,22 +183,36 @@ function AskWaynxContent() {
         )}
 
         <main className="flex min-w-0 flex-1 flex-col">
-          <div className="flex shrink-0 items-center gap-3 border-b border-[#1A1A1A] px-4 py-3 md:px-6">
+          <div className="relative z-[60] flex shrink-0 items-center gap-3 border-b border-[#1A1A1A] px-4 py-3 md:px-6">
             <button
-              onClick={() => setIsSidebarOpen(true)}
-              className="rounded-lg p-2 text-[#888888] hover:bg-[#1A1A1A] hover:text-white lg:hidden"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsSidebarOpen(true);
+              }}
+              className="relative z-[9999] rounded-lg p-2 text-[#888888] hover:bg-[#1A1A1A] hover:text-white lg:hidden cursor-pointer"
               aria-label="Open chat history"
+            >
+              <PanelLeft size={20} />
+            </button>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsDesktopSidebarOpen((prev) => !prev);
+              }}
+              className="relative z-[9999] hidden rounded-lg p-2 text-[#888888] hover:bg-[#1A1A1A] hover:text-white lg:block transition-colors cursor-pointer"
+              aria-label="Toggle chat history"
+              title={isDesktopSidebarOpen ? "Hide sidebar" : "Show sidebar"}
             >
               <PanelLeft size={20} />
             </button>
 
             <div className="flex min-w-0 flex-1 items-center gap-2">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#1A1809] text-[#DFD616]">
-                <Sparkles size={14} />
-              </div>
+              <Sparkles size={18} className="text-[#DFD616] shrink-0" />
               <div className="min-w-0">
                 <h1 className="truncate text-sm font-medium text-white md:text-base">
-                  {activeTitle ?? "New chat"}
+                  {activeTitle || sessions.find((s) => s.id === sessionId)?.title || "New chat"}
                 </h1>
                 <p className="truncate text-[11px] text-[#666666]">
                   Ask about places, trips, and travel in Egypt
@@ -432,29 +242,23 @@ function AskWaynxContent() {
               messages={messages}
               isLoading={isLoading}
               messagesEndRef={messagesEndRef}
+              onReload={handleRegenerate}
             />
           )}
 
-          <ChatInput
-            value={query}
-            onChange={setQuery}
-            onSubmit={() => handleSend(query)}
-            disabled={showSessionLoading}
-            isLoading={isLoading}
-          />
+          <div className="mt-auto p-4 md:p-6">
+            <div className="mx-auto max-w-3xl">
+              <ChatInput
+                value={query}
+                onChange={setQuery}
+                onSubmit={() => handleSend(query)}
+                disabled={isLoading}
+                isLoading={isLoading}
+              />
+            </div>
+          </div>
         </main>
       </div>
-
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #333333; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #444444; }
-      `,
-        }}
-      />
     </div>
   );
 }

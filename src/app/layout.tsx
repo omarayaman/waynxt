@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Waynxt",
-  description: "Waynxt - The next generation travel experience",
+  title: "Waynx",
+  description: "Waynx - The next generation travel experience",
   icons: {
     icon: "/icons/waynxt.svg",
   },
@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 import { AuthProvider } from "@/providers/AuthProvider";
 import FloatingAiButton from "@/components/FloatingAiButton";
 import { ToasterProvider } from "@/components/ToasterProvider";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function RootLayout({
   children,
@@ -35,11 +36,13 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <AuthProvider>
-          {children}
-          <FloatingAiButton />
-          <ToasterProvider />
-        </AuthProvider>
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+          <AuthProvider>
+            {children}
+            <FloatingAiButton />
+            <ToasterProvider />
+          </AuthProvider>
+        </GoogleOAuthProvider>
       </body>
     </html>
   );

@@ -33,7 +33,7 @@ export default function NavbarRegister({ step }: NavbarRegisterProps) {
         <span className="text-gray-300">Already have an account? </span>
         <Link
           href="/login"
-          className="text-[#E3D010] hover:text-yellow-300 transition-colors font-medium"
+          className="text-[#E3D010] hover:text-[#FFF566] hover:[text-shadow:0_0_12px_rgba(227,208,16,0.8)] transition-all duration-300 font-medium"
         >
           log in
         </Link>

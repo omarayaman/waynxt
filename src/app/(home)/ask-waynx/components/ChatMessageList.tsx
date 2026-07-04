@@ -1,20 +1,78 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { ChatMessage } from "@/types/chat";
-import { CheckCircle2, Loader2, MapPin } from "lucide-react";
+import { Check, CheckCircle2, Copy, RefreshCw, Share2, MapPin, Loader2 } from "lucide-react";
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+
+function MessageActionBar({ msg, onReload }: { msg: ChatMessage, onReload?: () => void }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(msg.content);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: "Waynx AI Response",
+        text: msg.content,
+      }).catch(() => {});
+    } else {
+      handleCopy();
+    }
+  };
+
+  return (
+    <div className="mt-2 flex items-center gap-3 text-[#666666]">
+      <button 
+        onClick={handleCopy}
+        className="group relative flex items-center gap-1.5 rounded-md p-1.5 transition-colors hover:bg-[#1A1A1A] hover:text-white"
+        aria-label="Copy response"
+      >
+        {copied ? <Check size={14} className="text-[#00C896]" /> : <Copy size={14} />}
+        <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 scale-95 opacity-0 transition-all group-hover:scale-100 group-hover:opacity-100 rounded bg-[#222222] px-2 py-1 text-[10px] text-white shadow-lg border border-[#333] whitespace-nowrap">
+          {copied ? "Copied!" : "Copy"}
+        </span>
+      </button>
+      <button 
+        onClick={handleShare}
+        className="group relative flex items-center gap-1.5 rounded-md p-1.5 transition-colors hover:bg-[#1A1A1A] hover:text-white"
+        aria-label="Share response"
+      >
+        <Share2 size={14} />
+        <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 scale-95 opacity-0 transition-all group-hover:scale-100 group-hover:opacity-100 rounded bg-[#222222] px-2 py-1 text-[10px] text-white shadow-lg border border-[#333] whitespace-nowrap">
+          Share
+        </span>
+      </button>
+      {onReload && (
+        <button 
+          onClick={onReload}
+          className="group relative flex items-center gap-1.5 rounded-md p-1.5 transition-colors hover:bg-[#1A1A1A] hover:text-white"
+          aria-label="Regenerate response"
+        >
+          <RefreshCw size={14} />
+          <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 scale-95 opacity-0 transition-all group-hover:scale-100 group-hover:opacity-100 rounded bg-[#222222] px-2 py-1 text-[10px] text-white shadow-lg border border-[#333] whitespace-nowrap">
+            Reload
+          </span>
+        </button>
+      )}
+    </div>
+  );
+}
 
 function TypingIndicator() {
   return (
-    <div className="flex items-center gap-1.5 py-1">
-      <div className="h-2 w-2 animate-bounce rounded-full bg-gray-500 [animation-delay:-0.3s]"></div>
-      <div className="h-2 w-2 animate-bounce rounded-full bg-gray-500 [animation-delay:-0.15s]"></div>
-      <div className="h-2 w-2 animate-bounce rounded-full bg-gray-500"></div>
+    <div className="flex items-center gap-1.5 py-2 px-1">
+      <div className="h-2 w-2 animate-bounce rounded-full bg-[#DFD616] drop-shadow-[0_0_6px_rgba(223,214,22,0.8)] [animation-delay:-0.3s]"></div>
+      <div className="h-2 w-2 animate-bounce rounded-full bg-[#DFD616] drop-shadow-[0_0_6px_rgba(223,214,22,0.8)] [animation-delay:-0.15s]"></div>
+      <div className="h-2 w-2 animate-bounce rounded-full bg-[#DFD616] drop-shadow-[0_0_6px_rgba(223,214,22,0.8)]"></div>
     </div>
   );
 }
@@ -42,14 +100,23 @@ function StreamedMarkdown({ content, animate = true }: { content: string, animat
           h2: ({ children }) => <h2 className={`mb-3 mt-4 text-lg font-bold text-white drop-shadow-[0_0_15px_rgba(223,214,22,0.5)] ${animClass}`}>{children}</h2>,
           h3: ({ children }) => <h3 className={`mb-2 mt-3 text-base font-bold text-white drop-shadow-[0_0_12px_rgba(223,214,22,0.5)] ${animClass}`}>{children}</h3>,
           blockquote: ({ children }) => <blockquote className={`border-l-2 border-[#DFD616] pl-4 italic text-gray-400 ${animClass}`}>{children}</blockquote>,
-          code: ({ inline, children }) =>
-            inline ? (
-              <code className={`rounded bg-[#222222] px-1.5 py-0.5 text-[#DFD616] ${animClass}`}>{children}</code>
+          pre: ({ children }) => (
+            <pre className={`mb-4 overflow-x-auto rounded-lg bg-[#222222] p-4 text-[#DFD616] ${animClass}`}>
+              {children}
+            </pre>
+          ),
+          code: ({ className, children, ...props }) => {
+            const match = /language-(\w+)/.exec(className || '');
+            return match ? (
+              <code className={className} {...props}>
+                {children}
+              </code>
             ) : (
-              <pre className={`mb-4 overflow-x-auto rounded-lg bg-[#222222] p-4 text-[#DFD616] ${animClass}`}>
-                <code>{children}</code>
-              </pre>
-            ),
+              <code className={`rounded bg-[#222222] px-1.5 py-0.5 text-[#DFD616] ${animClass}`} {...props}>
+                {children}
+              </code>
+            );
+          },
         }}
       >
         {content}
@@ -62,12 +129,14 @@ interface ChatMessageListProps {
   messages: ChatMessage[];
   isLoading: boolean;
   messagesEndRef: React.RefObject<HTMLDivElement | null>;
+  onReload?: (msg: ChatMessage) => void;
 }
 
 export default function ChatMessageList({
   messages,
   isLoading,
   messagesEndRef,
+  onReload,
 }: ChatMessageListProps) {
   return (
     <div className="flex-1 overflow-y-auto custom-scrollbar px-4 py-6 md:px-8">
@@ -81,9 +150,19 @@ export default function ChatMessageList({
               animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-[#DFD616] px-5 py-3.5 text-sm font-medium text-black shadow-sm">
+              <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-[#DFD616] px-5 py-3.5 text-sm font-bold text-black shadow-sm">
                 {msg.content}
               </div>
+            </motion.div>
+          ) : msg.isThinking ? (
+            <motion.div
+              key={msg.id + "-thinking"}
+              className="flex w-fit items-center px-2 py-1"
+              initial={msg.isNew ? { opacity: 0, scale: 0.8 } : false}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <TypingIndicator />
             </motion.div>
           ) : (
             <motion.div
@@ -101,11 +180,12 @@ export default function ChatMessageList({
               )}
 
               <div className="text-sm leading-relaxed text-gray-300">
-                {msg.isThinking ? (
-                  <TypingIndicator />
-                ) : (
-                  <StreamedMarkdown content={msg.content} animate={!!msg.isNew} />
-                )}
+                <StreamedMarkdown content={msg.content} animate={!!msg.isNew} />
+              </div>
+
+              {/* Action Bar */}
+              <div className="flex items-center justify-between border-t border-[#222222] pt-3 mt-1">
+                <MessageActionBar msg={msg} onReload={onReload ? () => onReload(msg) : undefined} />
               </div>
 
               {(msg.related_places ?? []).length > 0 && (
