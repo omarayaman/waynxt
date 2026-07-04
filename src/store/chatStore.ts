@@ -181,7 +181,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
                 set({ sessions: historyRes.data });
               }
             } catch (e) {
-              console.error("Failed to fetch new session ID from history");
+              console.error("Failed to fetch new session ID from history", e);
             }
           }
 
