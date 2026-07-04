@@ -169,7 +169,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
           }));
         },
         onDone: async (data) => {
-          let finalSessionId = data.session_id || data.data?.session_id || activeSessionId;
+          const responseData = data as { session_id?: string; message_id?: string; data?: { session_id?: string; message_id?: string } };
+          let finalSessionId = responseData.session_id || responseData.data?.session_id || activeSessionId;
           const isNewSession = !activeSessionId;
 
           if (isNewSession && !finalSessionId) {
@@ -185,7 +186,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
           }
 
           if (!finalSessionId) {
-            finalSessionId = data.message_id || data.data?.message_id;
+            finalSessionId = responseData.message_id || responseData.data?.message_id || null;
           }
 
           if (!finalSessionId) {

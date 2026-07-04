@@ -19,6 +19,7 @@ export interface TripActivity {
   description?: string;
   category?: string;
   duration_hours: number;
+  duration?: string;
   start_time?: string;
   end_time?: string;
   estimated_cost?: number;
@@ -50,6 +51,7 @@ export interface TripDestination {
   city: string;
   days_allocated: number;
   category?: string;
+  theme?: string;
   order_in_trip: number;
   trip_days?: TripDay[];
 }
