@@ -89,11 +89,11 @@ function AskWaynxContent() {
         throw new Error("Failed to load chat session");
       }
 
-      setLoadedSessionId(response.data.id);
-      setSessionId(response.data.id);
+      setLoadedSessionId(response.data.id || id);
+      setSessionId(response.data.id || id);
       setActiveTitle(response.data.title);
       setMessages(response.data.messages ?? []);
-      router.replace(`/ask-waynx?session=${response.data.id}`, { scroll: false });
+      router.replace(`/ask-waynx?session=${response.data.id || id}`, { scroll: false });
     } catch (err) {
       setLoadedSessionId(null);
       router.replace("/ask-waynx", { scroll: false });
@@ -110,7 +110,14 @@ function AskWaynxContent() {
   }, [loadedSessionId, router]);
 
   useEffect(() => {
-    if (!sessionFromUrl || sessionFromUrl === loadedSessionId) return;
+    if (
+      !sessionFromUrl ||
+      sessionFromUrl === "undefined" ||
+      sessionFromUrl === "null" ||
+      sessionFromUrl === loadedSessionId
+    ) {
+      return;
+    }
 
     let cancelled = false;
 
@@ -135,7 +142,10 @@ function AskWaynxContent() {
         if (isAxiosError(err)) {
           const message =
             err.response?.data?.error?.message ?? "Could not load this chat session.";
-          setError(message);
+          // Suppress "invalid session ID" toast to prevent annoying the user
+          if (!message.toLowerCase().includes("invalid session id")) {
+            setError(message);
+          }
         } else {
           setError("Could not load this chat session.");
         }
@@ -203,61 +213,108 @@ function AskWaynxContent() {
     setQuery("");
 
     const optimisticUserMessage: ChatMessage = {
-      id: `temp-${Date.now()}`,
+      id: `temp-user-${Date.now()}`,
       role: "user",
       content: trimmed,
       is_verified: false,
       related_places: [],
+      isNew: true,
+    };
+    
+    const optimisticAiMessageId = `temp-ai-${Date.now()}`;
+    const optimisticAiMessage: ChatMessage = {
+      id: optimisticAiMessageId,
+      role: "assistant",
+      content: "",
+      is_verified: false,
+      related_places: [],
+      isThinking: true,
+      isNew: true,
     };
 
-    setMessages((prev) => [...prev, optimisticUserMessage]);
+    setMessages((prev) => [...prev, optimisticUserMessage, optimisticAiMessage]);
     setIsLoading(true);
 
     try {
-      const response = await chatService.sendMessage({
+      await chatService.streamMessage({
         sessionId,
         message: trimmed,
+        onChunk: (text) => {
+          setMessages((prev) => 
+            prev.map(m => m.id === optimisticAiMessageId ? { ...m, content: m.content + text, isThinking: false } : m)
+          );
+        },
+        onDone: async (data) => {
+          // Depending on how the SSE is formatted, it might be nested in a 'data' property
+          const finalSessionId = 
+            data.session_id || 
+            data.data?.session_id || 
+            data.message_id || 
+            data.data?.message_id || 
+            sessionId;
+            
+          const isNewSession = !sessionId;
+
+          if (!finalSessionId) return;
+
+          setLoadedSessionId(finalSessionId);
+          setSessionId(finalSessionId);
+
+          if (isNewSession && finalSessionId) {
+            const title = trimmed.length > 80 ? `${trimmed.slice(0, 77)}...` : trimmed;
+            setActiveTitle(title);
+            setSessions((prev) => {
+              if (prev.some((s) => s.id === finalSessionId)) {
+                return prev.map((s) =>
+                  s.id === finalSessionId
+                    ? { ...s, title, updated_at: new Date().toISOString() }
+                    : s
+                );
+              }
+              return [
+                {
+                  id: finalSessionId,
+                  user_id: "",
+                  title,
+                  created_at: new Date().toISOString(),
+                  updated_at: new Date().toISOString(),
+                  messages: [],
+                },
+                ...prev,
+              ];
+            });
+            router.replace(`/ask-waynx?session=${finalSessionId}`, { scroll: false });
+          } else if (finalSessionId) {
+            setSessions((prev) =>
+              prev.map((s) =>
+                s.id === finalSessionId
+                  ? { ...s, updated_at: new Date().toISOString() }
+                  : s
+              )
+            );
+          }
+
+          if (finalSessionId) {
+            try {
+              const freshSession = await chatService.getSession(finalSessionId);
+              if (freshSession.success && freshSession.data) {
+                setMessages(freshSession.data.messages ?? []);
+              }
+            } catch (err) {
+              // ignore hydration error
+            }
+          }
+
+          await refreshHistory();
+          setIsLoading(false);
+        },
+        onError: (err) => {
+          setError(err.message || "Failed to send message");
+          setIsLoading(false);
+        }
       });
-
-      if (!response.success || !response.data) {
-        throw new Error(response.error?.message ?? "Failed to send message");
-      }
-
-      const { session_id, user_message, ai_response } = response.data;
-      const isNewSession = !sessionId;
-
-      setLoadedSessionId(session_id);
-      setSessionId(session_id);
-      setMessages((prev) => [...prev.slice(0, -1), user_message, ai_response]);
-
-      if (isNewSession) {
-        const title = trimmed.length > 80 ? `${trimmed.slice(0, 77)}...` : trimmed;
-        setActiveTitle(title);
-        setSessions((prev) => [
-          {
-            id: session_id,
-            user_id: "",
-            title,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            messages: [],
-          },
-          ...prev,
-        ]);
-        router.replace(`/ask-waynx?session=${session_id}`, { scroll: false });
-      } else {
-        setSessions((prev) =>
-          prev.map((s) =>
-            s.id === session_id
-              ? { ...s, updated_at: new Date().toISOString() }
-              : s
-          )
-        );
-      }
-
-      await refreshHistory();
     } catch (err) {
-      setMessages((prev) => prev.slice(0, -1));
+      setMessages((prev) => prev.slice(0, -2));
 
       if (isAxiosError(err)) {
         const message =
@@ -269,7 +326,6 @@ function AskWaynxContent() {
       } else {
         setError("Something went wrong. Please try again.");
       }
-    } finally {
       setIsLoading(false);
     }
   };

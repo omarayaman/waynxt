@@ -38,7 +38,14 @@ const BUDGET_LEVELS = [
   { id: "high", label: "Premium" }
 ];
 
-const CITIES = ["Cairo", "Aswan", "Luxor", "Hurghada", "Alexandria"];
+const ALL_EGYPT_CITIES = [
+  "Cairo", "Aswan", "Luxor", "Hurghada", "Alexandria", 
+  "Sharm El-Sheikh", "Dahab", "Marsa Alam", "Giza", "Fayoum",
+  "Siwa", "Nuweiba", "Taba", "Port Said", "Ismailia", 
+  "Suez", "Al Arish", "Marsa Matrouh", "Ain Sokhna", "El Gouna",
+  "Saint Catherine", "Safaga", "Al Quseir", "Soma Bay", "Makadi Bay",
+  "Ras Sedr", "Minya", "Asyut", "Sohag"
+];
 
 const SUITABLE_FOR = [
   { id: "family", label: "Family" },
@@ -93,6 +100,10 @@ function PlacesContent() {
   const { categories, isLoading: isCategoriesLoading } = useCategories();
 
   const [isSortOpen, setIsSortOpen] = useState(false);
+  const [showAllCities, setShowAllCities] = useState(false);
+  
+  const displayedCities = showAllCities ? ALL_EGYPT_CITIES : ALL_EGYPT_CITIES.slice(0, 5);
+  
   const totalPages = meta ? Math.ceil(meta.total / perPage) : 1;
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -201,7 +212,7 @@ function PlacesContent() {
             <div className="mb-8">
               <h3 className="text-white text-xs font-bold tracking-widest uppercase mb-4">CITY</h3>
               <div className="flex flex-col gap-3">
-                {CITIES.map(r => {
+                {displayedCities.map(r => {
                   const isActive = activeCities.includes(r);
                   return (
                     <div 
@@ -225,9 +236,15 @@ function PlacesContent() {
                   )
                 })}
               </div>
-              <button className="text-[#666666] text-xs flex items-center gap-1 mt-4 hover:text-white transition-colors">
-                Show 29 more <ChevronDown size={12} />
-              </button>
+              {ALL_EGYPT_CITIES.length > 5 && (
+                <button 
+                  onClick={() => setShowAllCities(!showAllCities)}
+                  className="text-[#666666] text-xs flex items-center gap-1 mt-4 hover:text-white transition-colors"
+                >
+                  {showAllCities ? "Show less" : `Show ${ALL_EGYPT_CITIES.length - 5} more`} 
+                  <ChevronDown size={12} className={`transition-transform ${showAllCities ? "rotate-180" : ""}`} />
+                </button>
+              )}
             </div>
 
             {/* Budget Range */}
@@ -353,8 +370,9 @@ function PlacesContent() {
             {/* Scrollable Content Area */}
             <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 lg:pr-4 pb-6 mt-2">
               {/* Grid Header */}
-              <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4 relative z-20">
-              <h2 className="text-xl text-white font-medium">
+              <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4 sticky top-0 bg-[#050505] z-40 py-2 -mt-2">
+                <div className="absolute top-full left-0 right-0 h-6 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none" />
+              <h2 className="text-xl text-white font-medium relative z-10">
                 Discover <span className="text-[#DFD616]">Egypt</span>
                 {!isLoading && meta && (
                   <span className="text-[#666666] text-sm font-normal ml-3">Showing {meta.total} places</span>

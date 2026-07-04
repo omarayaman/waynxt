@@ -6,6 +6,8 @@ export interface ChatMessage {
   is_verified: boolean;
   related_places: string[] | null;
   created_at?: string;
+  isThinking?: boolean;
+  isNew?: boolean;
 }
 
 export function normalizeChatMessage(message: ChatMessage): ChatMessage {
