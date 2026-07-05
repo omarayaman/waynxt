@@ -12,7 +12,6 @@ interface ProfileOverviewProps {
 }
 
 const statCards = [
-  { key: "destinations_visited" as const, label: "Destinations visited", icon: MapPin },
   { key: "ai_plans_created" as const, label: "AI plans created", icon: Target, section: "trips" as const },
   { key: "saved_places_count" as const, label: "Saved places", icon: Bookmark, section: "saved-places" as const },
   { key: "chat_sessions_count" as const, label: "Chat sessions", icon: MessageSquare, section: "chat-history" as const },

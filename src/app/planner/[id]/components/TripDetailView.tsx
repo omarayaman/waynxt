@@ -17,12 +17,12 @@ import {
 import { tripService } from "@/services/trip.service";
 import type { Trip, TripStatus } from "@/types/trip";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { ExpensesSection } from "./ExpensesSection";
+import { TripTopPlaces } from "./TripTopPlaces";
 import { RoadmapTimeline } from "./RoadmapTimeline";
 import { ActivityDetailCard } from "./ActivityDetailCard";
 import { buildRoadmapStops } from "@/lib/trip-roadmap";
 
-type Tab = "plan" | "expenses";
+type Tab = "plan" | "top-places";
 
 interface TripDetailViewProps {
   tripId: string;
@@ -151,7 +151,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "plan", label: "Trip Plan" },
-    { id: "expenses", label: "Expenses" },
+    { id: "top-places", label: "Top places" },
   ];
 
   return (
@@ -220,7 +220,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                     {isRegenerating ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
                     Regenerate
                   </button>
-                  {trip.status === "draft" && (
+                  {(trip.status === "draft" || trip.status === "planned") && (
                     <button
                       type="button"
                       onClick={handleConfirm}
@@ -279,9 +279,9 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                 </>
               )}
 
-              {activeTab === "expenses" && (
-                <div className="bg-[#0d0d0d] border border-[#1a1a1a] rounded-2xl p-5 sm:p-6">
-                  <ExpensesSection tripId={tripId} />
+              {activeTab === "top-places" && (
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <TripTopPlaces trip={trip} />
                 </div>
               )}
             </>

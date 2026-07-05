@@ -45,6 +45,11 @@ export const placesService = {
     return data;
   },
 
+  async recommendPlaces(payload?: { cities?: string[]; budget?: string; travel_companion?: string; interests?: string[]; age_group?: string; season?: string; crowd_preference?: string; }): Promise<ApiResponse<Place[]>> {
+    const { data } = await api.post<ApiResponse<Place[]>>('/places/recommend', payload || {});
+    return data;
+  },
+
   async getPopularPlaces(): Promise<ApiResponse<Place[]>> {
     const { data } = await api.get<ApiResponse<Place[]>>('/places/popular');
     return data;

@@ -68,25 +68,34 @@ export default function NavbarHome() {
           <Link
             href="/profile"
             aria-label="Go to profile"
-            className={`w-10 h-10 rounded-full overflow-hidden border transition-colors focus:outline-none flex items-center justify-center shrink-0 ${
+            className={`group h-10 rounded-full overflow-hidden border transition-all duration-300 focus:outline-none flex items-center shrink-0 ${
               pathname === "/profile"
-                ? "border-[#DFD616]/60 ring-2 ring-[#DFD616]/20"
-                : "border-[#333333] hover:border-[#DFD616]/50"
+                ? "border-[#DFD616]/60 ring-2 ring-[#DFD616]/20 bg-[#111]"
+                : "border-[#333333] hover:border-[#DFD616]/50 hover:bg-[#111]"
             }`}
           >
-            {user.avatar_url ? (
-              <Image
-                src={user.avatar_url}
-                alt={user.full_name}
-                width={40}
-                height={40}
-                className="object-cover w-full h-full"
-              />
-            ) : (
-              <div className="w-full h-full bg-[#111111] flex items-center justify-center text-[#DFD616]">
-                <User size={18} strokeWidth={2} />
+            <div className="h-full aspect-square shrink-0 relative flex items-center justify-center">
+              {user.avatar_url ? (
+                <Image
+                  src={user.avatar_url}
+                  alt={user.full_name}
+                  width={40}
+                  height={40}
+                  className="object-cover w-full h-full"
+                />
+              ) : (
+                <div className="w-full h-full bg-[#111111] flex items-center justify-center text-[#DFD616]">
+                  <User size={18} strokeWidth={2} />
+                </div>
+              )}
+            </div>
+            <div className="grid grid-cols-[0fr] group-hover:grid-cols-[1fr] transition-[grid-template-columns] duration-300 ease-in-out">
+              <div className="overflow-hidden flex items-center">
+                <span className="text-sm font-medium text-white whitespace-nowrap pr-4 pl-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">
+                  {user.full_name}
+                </span>
               </div>
-            )}
+            </div>
           </Link>
         ) : (
           <>
