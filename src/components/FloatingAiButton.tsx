@@ -55,7 +55,7 @@ export default function FloatingAiButton() {
   return (
     <div
       ref={containerRef}
-      className="fixed bottom-8 right-8 z-50 group"
+      className="fixed bottom-8 right-4 z-50 group"
       onMouseEnter={() => setExpanded(true)}
       onMouseLeave={() => setExpanded(false)}
     >

@@ -10,8 +10,9 @@ import { useCategories } from "@/hooks/useCategories";
 import { 
   Search, Sparkles, Landmark, Waves, Diamond, Moon, Building2, 
   SlidersHorizontal, Check, ChevronDown, Heart, MapPin, Map,
-  Loader2, Tent, TreePine, Utensils, Activity, Sun
+  Loader2, Tent, TreePine, Utensils, Activity, Sun, Clock
 } from "lucide-react";
+import { SavePlaceButton } from "@/components/SavePlaceButton";
 
 // We keep the static All Experiences icon for the "all" button
 const ALL_EXPERIENCES = { id: "all", label: "All Experiences", icon: Sparkles };
@@ -459,16 +460,22 @@ function PlacesContent() {
                         <Sparkles size={12} strokeWidth={2.5} />
                         {place.rating > 0 ? `${place.rating} Rating` : 'New'}
                       </div>
-                      <button className="w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-black/60 transition-colors">
-                        <Heart size={14} />
-                      </button>
+                      <SavePlaceButton placeId={place.id} />
                     </div>
 
                     {/* Bottom Content */}
                     <div className="absolute bottom-5 left-4 right-4 z-10">
-                      <div className="flex items-center gap-1.5 text-[#DFD616] mb-1.5">
-                        <MapPin size={12} strokeWidth={2.5} />
-                        <span className="text-[10px] font-bold tracking-widest uppercase">{place.city}</span>
+                      <div className="flex items-center gap-3 text-[#DFD616] mb-1.5">
+                        <div className="flex items-center gap-1.5">
+                          <MapPin size={12} strokeWidth={2.5} />
+                          <span className="text-[10px] font-bold tracking-widest uppercase">{place.city}</span>
+                        </div>
+                        {place.duration_needed > 0 && (
+                          <div className="flex items-center gap-1.5">
+                            <Clock size={12} strokeWidth={2.5} />
+                            <span className="text-[10px] font-bold tracking-widest uppercase">{place.duration_needed} {place.duration_needed === 1 ? 'Hour' : 'Hours'}</span>
+                          </div>
+                        )}
                       </div>
                       <h3 className="text-xl font-bold text-white mb-3 font-clash">{place.name}</h3>
                       

@@ -156,19 +156,52 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }));
 
     return new Promise<string | void>((resolve) => {
+      let isDone = false;
+      const chunkQueue: string[] = [];
+      let flushInterval: NodeJS.Timeout | null = null;
+      let hasStartedTyping = false;
+
+      flushInterval = setInterval(() => {
+        if (chunkQueue.length > 0) {
+          if (!hasStartedTyping) {
+            hasStartedTyping = true;
+            set((state) => ({
+              messages: state.messages.map((m) =>
+                m.id === optimisticAiMessageId ? { ...m, isThinking: false } : m
+              )
+            }));
+          }
+
+          // Dynamic speed: if queue is large, type faster. Minimum 2 chars per tick.
+          const flushCount = Math.max(2, Math.floor(chunkQueue.length / 8));
+          let combined = "";
+          for (let i = 0; i < flushCount && chunkQueue.length > 0; i++) {
+            combined += chunkQueue.shift();
+          }
+
+          set((state) => ({
+            messages: state.messages.map((m) => 
+              m.id === optimisticAiMessageId 
+                ? { ...m, content: m.content + combined } 
+                : m
+            )
+          }));
+        } else if (isDone && chunkQueue.length === 0) {
+          if (flushInterval) clearInterval(flushInterval);
+        }
+      }, 15); // 15ms for a very fast and smooth typography effect
+
       chatService.streamMessage({
         sessionId: activeSessionId,
         message: trimmed,
         onChunk: (chunkText) => {
-          set((state) => ({
-            messages: state.messages.map((m) => 
-              m.id === optimisticAiMessageId 
-                ? { ...m, content: m.content + chunkText, isThinking: false } 
-                : m
-            )
-          }));
+          // Push character by character
+          for (const char of chunkText) {
+            chunkQueue.push(char);
+          }
         },
         onDone: async (data) => {
+          isDone = true;
           const responseData = data as { session_id?: string; message_id?: string; data?: { session_id?: string; message_id?: string } };
           let finalSessionId = responseData.session_id || responseData.data?.session_id || activeSessionId;
           const isNewSession = !activeSessionId;
@@ -229,6 +262,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
           resolve(finalSessionId);
         },
         onError: (err) => {
+          isDone = true;
           console.error("Streaming error:", err);
           let errorMessage = "An error occurred while generating the response.";
           

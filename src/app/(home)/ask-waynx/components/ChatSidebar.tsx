@@ -60,7 +60,7 @@ export default function ChatSidebar({
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto custom-scrollbar p-3">
+      <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] p-3">
         <p className="mb-2 px-2 text-[11px] font-medium uppercase tracking-wider text-[#555555]">
           Recent chats
         </p>

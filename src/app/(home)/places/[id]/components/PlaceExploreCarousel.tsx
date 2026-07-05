@@ -9,7 +9,7 @@ import {
   ChevronRight,
   Clock,
   MapPin,
-  Star,
+  Sparkles,
 } from "lucide-react";
 import { SavePlaceButton } from "@/components/SavePlaceButton";
 import type { Place } from "@/types/places";
@@ -26,54 +26,47 @@ interface PlaceExploreCarouselProps {
 
 function ExplorePlaceCard({ place }: { place: Place }) {
   return (
-    <Link
-      href={`/places/${place.id}`}
-      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a] transition-colors hover:border-[#333]"
-    >
-      <div className="relative aspect-[4/3] overflow-hidden bg-[#111]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={
-            place.thumbnail_url ||
-            "https://images.unsplash.com/photo-1539667468225-eebb663053e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-          }
-          alt={place.name}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-
-        <div className="absolute top-3 right-3 z-10">
-          <SavePlaceButton placeId={place.id} className="h-9 w-9" iconSize={16} />
+    <Link href={`/places/${place.id}`} className="group relative w-full h-[380px] block rounded-[2rem] overflow-hidden border border-[#222222] hover:border-[#DFD616]/50 transition-all duration-300 cursor-pointer">
+      {/* Background Image */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img 
+        src={place.thumbnail_url || "https://images.unsplash.com/photo-1539667468225-eebb663053e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"} 
+        alt={place.name}
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      />
+      {/* Dark Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent"></div>
+      
+      {/* Top Badges */}
+      <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
+        <div className="bg-[#DFD616] text-[#0a0a0a] px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-bold shadow-lg">
+          <Sparkles size={12} strokeWidth={2.5} />
+          {place.rating > 0 ? `${place.rating} Rating` : 'New'}
         </div>
-
-        {place.rating > 0 && (
-          <div className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 rounded-lg bg-black/55 px-2.5 py-1 text-sm font-medium text-[#DFD616] backdrop-blur-sm">
-            <Star size={13} fill="currentColor" />
-            {place.rating}
-          </div>
-        )}
+        <SavePlaceButton placeId={place.id} />
       </div>
 
-      <div className="flex flex-1 flex-col gap-2 p-5">
-        <div>
-          <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-white transition-colors group-hover:text-[#DFD616]">
-            {place.name}
-          </h3>
-          <div className="mt-1.5 flex items-center gap-1.5 text-[#777]">
-            <MapPin size={14} className="shrink-0 text-[#DFD616]" />
-            <span className="text-sm">{place.city}</span>
+      {/* Bottom Content */}
+      <div className="absolute bottom-5 left-4 right-4 z-10">
+        <div className="flex items-center gap-3 text-[#DFD616] mb-1.5">
+          <div className="flex items-center gap-1.5">
+            <MapPin size={12} strokeWidth={2.5} />
+            <span className="text-[10px] font-bold tracking-widest uppercase">{place.city}</span>
           </div>
+          {place.duration_needed > 0 && (
+            <div className="flex items-center gap-1.5">
+              <Clock size={12} strokeWidth={2.5} />
+              <span className="text-[10px] font-bold tracking-widest uppercase">{place.duration_needed} {place.duration_needed === 1 ? 'Hour' : 'Hours'}</span>
+            </div>
+          )}
         </div>
-
-        <div className="mt-auto flex flex-wrap items-center gap-2 pt-1 text-sm text-[#666]">
-          <span className="capitalize">{place.category}</span>
-          <span className="text-[#333]">·</span>
-          <span className="capitalize">{place.budget_level}</span>
-          <span className="text-[#333]">·</span>
-          <span className="inline-flex items-center gap-1">
-            <Clock size={13} />
-            {place.duration_needed}h
-          </span>
+        <h3 className="text-xl font-bold text-white mb-3 font-clash">{place.name}</h3>
+        
+        <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-3 flex items-start gap-2">
+          <Sparkles size={14} className="text-[#DFD616] shrink-0 mt-0.5" />
+          <p className="text-xs text-gray-300 leading-relaxed line-clamp-2">
+            {place.description}
+          </p>
         </div>
       </div>
     </Link>

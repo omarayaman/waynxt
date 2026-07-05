@@ -139,7 +139,7 @@ export default function ChatMessageList({
   onReload,
 }: ChatMessageListProps) {
   return (
-    <div className="flex-1 overflow-y-auto custom-scrollbar px-4 py-6 md:px-8">
+    <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-4 py-6 md:px-8">
       <div className="mx-auto flex max-w-3xl flex-col gap-5">
         {messages.map((msg) =>
           msg.role === "user" ? (
@@ -150,7 +150,7 @@ export default function ChatMessageList({
               animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-[#DFD616] px-5 py-3.5 text-sm font-bold text-black shadow-sm">
+              <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-[#DFD616] px-5 py-3.5 text-sm font-medium text-black shadow-sm">
                 {msg.content}
               </div>
             </motion.div>
