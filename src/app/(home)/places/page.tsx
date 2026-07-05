@@ -94,8 +94,18 @@ function PlacesContent() {
     activeAge, setAge,
     sortBy, setSortBy,
     currentPage, setCurrentPage,
-    perPage
+    perPage,
+    resetFilters
   } = usePlacesStore();
+
+  const hasActiveFilters = 
+    activeCities.length > 0 || 
+    activeBudgets.length > 0 || 
+    activeSuitableFor !== "" || 
+    activeSeason !== "" || 
+    activeCrowdLevel !== "" || 
+    activeAge !== "" || 
+    (activeCategory !== "all" && activeCategory !== "");
 
   const { places, meta, isLoading, isFetchingMore, error } = usePlaces();
   const { categories, isLoading: isCategoriesLoading } = useCategories();
@@ -131,7 +141,7 @@ function PlacesContent() {
         <NavbarHome />
       </div>
 
-      <main className="flex-1 w-full max-w-[1600px] mx-auto px-4 pt-24 pb-4 flex flex-col overflow-hidden">
+      <main className="flex-1 w-full max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 pt-24 pb-4 flex flex-col overflow-hidden">
         
         {/* Top Header: Search and Categories */}
         <div className="w-full shrink-0 flex flex-col items-center">
@@ -203,9 +213,22 @@ function PlacesContent() {
         {/* Left: Advanced Filters Sidebar */}
         <div className="hidden lg:block w-[280px] xl:w-[320px] shrink-0 bg-[#0a0a0a] border border-[#222222] rounded-3xl p-6 h-full overflow-y-auto custom-scrollbar">
             {/* Header */}
-            <div className="flex items-center gap-3 mb-6">
-              <SlidersHorizontal size={20} className="text-[#DFD616]" />
-              <h2 className="text-xl font-semibold text-white font-clash">Filters</h2>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <SlidersHorizontal size={20} className="text-[#DFD616]" />
+                <h2 className="text-xl font-semibold text-white font-clash">Filters</h2>
+              </div>
+              <button 
+                onClick={resetFilters}
+                disabled={!hasActiveFilters}
+                className={`text-xs font-medium transition-colors ${
+                  hasActiveFilters 
+                    ? "text-[#DFD616] hover:text-white cursor-pointer" 
+                    : "text-[#444] cursor-not-allowed"
+                }`}
+              >
+                Reset
+              </button>
             </div>
             <div className="w-full h-px bg-[#222222] mb-8"></div>
 
@@ -465,25 +488,36 @@ function PlacesContent() {
 
                     {/* Bottom Content */}
                     <div className="absolute bottom-5 left-4 right-4 z-10">
-                      <div className="flex items-center gap-3 text-[#DFD616] mb-1.5">
-                        <div className="flex items-center gap-1.5">
-                          <MapPin size={12} strokeWidth={2.5} />
-                          <span className="text-[10px] font-bold tracking-widest uppercase">{place.city}</span>
-                        </div>
-                        {place.duration_needed > 0 && (
-                          <div className="flex items-center gap-1.5">
-                            <Clock size={12} strokeWidth={2.5} />
-                            <span className="text-[10px] font-bold tracking-widest uppercase">{place.duration_needed} {place.duration_needed === 1 ? 'Hour' : 'Hours'}</span>
-                          </div>
-                        )}
-                      </div>
-                      <h3 className="text-xl font-bold text-white mb-3 font-clash">{place.name}</h3>
+                      <h3 className="text-xl font-bold text-white mb-2 font-clash">{place.name}</h3>
                       
-                      <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-3 flex items-start gap-2">
-                        <Sparkles size={14} className="text-[#DFD616] shrink-0 mt-0.5" />
-                        <p className="text-xs text-gray-300 leading-relaxed line-clamp-2">
-                          {place.description}
-                        </p>
+                      <div className="flex flex-wrap items-center gap-2 text-[#888] text-xs font-medium">
+                        <span className="flex items-center gap-1.5 text-[#ccc]">
+                          <MapPin size={12} className="text-[#DFD616]" /> {place.city}
+                        </span>
+                        
+                        {place.category && <span>&middot;</span>}
+                        {place.category && (() => {
+                          const CatIcon = CATEGORY_ICONS[place.category.toLowerCase()] || Sparkles;
+                          return (
+                            <span className="flex items-center gap-1.5 capitalize">
+                              <CatIcon size={12} className="text-[#DFD616]" /> {place.category}
+                            </span>
+                          );
+                        })()}
+                        
+                        {place.category && place.budget_level && <span>&middot;</span>}
+                        {place.budget_level && (
+                          <span className="flex items-center gap-1.5 capitalize">
+                            <Diamond size={12} className="text-[#DFD616]" /> {place.budget_level}
+                          </span>
+                        )}
+                        
+                        {(place.category || place.budget_level) && place.duration_needed > 0 && <span>&middot;</span>}
+                        {place.duration_needed > 0 && (
+                          <span className="flex items-center gap-1.5">
+                            <Clock size={12} className="text-[#DFD616]" /> {place.duration_needed}h
+                          </span>
+                        )}
                       </div>
                     </div>
                   </Link>

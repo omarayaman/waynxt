@@ -10,12 +10,37 @@ import {
   Clock,
   MapPin,
   Sparkles,
+  Landmark, 
+  Tent, 
+  Sun, 
+  TreePine, 
+  Building2, 
+  Utensils, 
+  Activity, 
+  Waves, 
+  Diamond, 
+  Moon
 } from "lucide-react";
 import { SavePlaceButton } from "@/components/SavePlaceButton";
 import type { Place } from "@/types/places";
 import { PlaceSection } from "./PlaceSection";
 
 const PAGE_GUTTER = "px-4 sm:px-5 lg:px-6";
+
+const CATEGORY_ICONS: Record<string, React.ElementType> = {
+  history: Landmark,
+  adventure: Tent,
+  beach: Sun,
+  nature: TreePine,
+  religious: Building2,
+  food: Utensils,
+  wellness: Activity,
+  historical: Landmark,
+  coastal: Waves,
+  hidden_gems: Diamond,
+  nightlife: Moon,
+  museums: Building2,
+};
 
 interface PlaceExploreCarouselProps {
   title: string;
@@ -48,25 +73,36 @@ function ExplorePlaceCard({ place }: { place: Place }) {
 
       {/* Bottom Content */}
       <div className="absolute bottom-5 left-4 right-4 z-10">
-        <div className="flex items-center gap-3 text-[#DFD616] mb-1.5">
-          <div className="flex items-center gap-1.5">
-            <MapPin size={12} strokeWidth={2.5} />
-            <span className="text-[10px] font-bold tracking-widest uppercase">{place.city}</span>
-          </div>
-          {place.duration_needed > 0 && (
-            <div className="flex items-center gap-1.5">
-              <Clock size={12} strokeWidth={2.5} />
-              <span className="text-[10px] font-bold tracking-widest uppercase">{place.duration_needed} {place.duration_needed === 1 ? 'Hour' : 'Hours'}</span>
-            </div>
-          )}
-        </div>
-        <h3 className="text-xl font-bold text-white mb-3 font-clash">{place.name}</h3>
+        <h3 className="text-xl font-bold text-white mb-2 font-clash">{place.name}</h3>
         
-        <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-3 flex items-start gap-2">
-          <Sparkles size={14} className="text-[#DFD616] shrink-0 mt-0.5" />
-          <p className="text-xs text-gray-300 leading-relaxed line-clamp-2">
-            {place.description}
-          </p>
+        <div className="flex flex-wrap items-center gap-2 text-[#888] text-xs font-medium">
+          <span className="flex items-center gap-1.5 text-[#ccc]">
+            <MapPin size={12} className="text-[#DFD616]" /> {place.city}
+          </span>
+          
+          {place.category && <span>&middot;</span>}
+          {place.category && (() => {
+            const CatIcon = CATEGORY_ICONS[place.category.toLowerCase()] || Sparkles;
+            return (
+              <span className="flex items-center gap-1.5 capitalize">
+                <CatIcon size={12} className="text-[#DFD616]" /> {place.category}
+              </span>
+            );
+          })()}
+          
+          {place.category && place.budget_level && <span>&middot;</span>}
+          {place.budget_level && (
+            <span className="flex items-center gap-1.5 capitalize">
+              <Diamond size={12} className="text-[#DFD616]" /> {place.budget_level}
+            </span>
+          )}
+          
+          {(place.category || place.budget_level) && place.duration_needed > 0 && <span>&middot;</span>}
+          {place.duration_needed > 0 && (
+            <span className="flex items-center gap-1.5">
+              <Clock size={12} className="text-[#DFD616]" /> {place.duration_needed}h
+            </span>
+          )}
         </div>
       </div>
     </Link>

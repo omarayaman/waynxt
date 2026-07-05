@@ -70,9 +70,9 @@ function MessageActionBar({ msg, onReload }: { msg: ChatMessage, onReload?: () =
 function TypingIndicator() {
   return (
     <div className="flex items-center gap-1.5 py-2 px-1">
-      <div className="h-2 w-2 animate-bounce rounded-full bg-[#DFD616] drop-shadow-[0_0_6px_rgba(223,214,22,0.8)] [animation-delay:-0.3s]"></div>
-      <div className="h-2 w-2 animate-bounce rounded-full bg-[#DFD616] drop-shadow-[0_0_6px_rgba(223,214,22,0.8)] [animation-delay:-0.15s]"></div>
-      <div className="h-2 w-2 animate-bounce rounded-full bg-[#DFD616] drop-shadow-[0_0_6px_rgba(223,214,22,0.8)]"></div>
+      <div className="h-2 w-2 animate-bounce rounded-full bg-[#DFD616] [animation-delay:-0.3s]"></div>
+      <div className="h-2 w-2 animate-bounce rounded-full bg-[#DFD616] [animation-delay:-0.15s]"></div>
+      <div className="h-2 w-2 animate-bounce rounded-full bg-[#DFD616]"></div>
     </div>
   );
 }
@@ -82,7 +82,7 @@ function StreamedMarkdown({ content, animate = true }: { content: string, animat
   const animClass = animate ? "animate-blur-reveal" : "";
   
   return (
-    <div className="drop-shadow-[0_0_10px_rgba(223,214,22,0.25)] transition-all duration-300">
+    <div className="transition-all duration-300">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -95,10 +95,10 @@ function StreamedMarkdown({ content, animate = true }: { content: string, animat
               {children}
             </a>
           ),
-          strong: ({ children }) => <strong className={`font-semibold text-white drop-shadow-[0_0_12px_rgba(223,214,22,0.6)] ${animClass}`}>{children}</strong>,
-          h1: ({ children }) => <h1 className={`mb-3 mt-4 text-xl font-bold text-white drop-shadow-[0_0_15px_rgba(223,214,22,0.5)] ${animClass}`}>{children}</h1>,
-          h2: ({ children }) => <h2 className={`mb-3 mt-4 text-lg font-bold text-white drop-shadow-[0_0_15px_rgba(223,214,22,0.5)] ${animClass}`}>{children}</h2>,
-          h3: ({ children }) => <h3 className={`mb-2 mt-3 text-base font-bold text-white drop-shadow-[0_0_12px_rgba(223,214,22,0.5)] ${animClass}`}>{children}</h3>,
+          strong: ({ children }) => <strong className={`font-semibold text-white ${animClass}`}>{children}</strong>,
+          h1: ({ children }) => <h1 className={`mb-3 mt-4 text-xl font-bold text-white ${animClass}`}>{children}</h1>,
+          h2: ({ children }) => <h2 className={`mb-3 mt-4 text-lg font-bold text-white ${animClass}`}>{children}</h2>,
+          h3: ({ children }) => <h3 className={`mb-2 mt-3 text-base font-bold text-white ${animClass}`}>{children}</h3>,
           blockquote: ({ children }) => <blockquote className={`border-l-2 border-[#DFD616] pl-4 italic text-gray-400 ${animClass}`}>{children}</blockquote>,
           pre: ({ children }) => (
             <pre className={`mb-4 overflow-x-auto rounded-lg bg-[#222222] p-4 text-[#DFD616] ${animClass}`}>
@@ -167,7 +167,7 @@ export default function ChatMessageList({
           ) : (
             <motion.div
               key={msg.id}
-              className="flex w-full flex-col gap-4 rounded-2xl border border-[#222222] bg-[#111111] p-5 md:p-6 shadow-[0_0_15px_rgba(0,0,0,0.5)]"
+              className="flex w-full flex-col gap-4 rounded-2xl border border-[#222222] bg-[#111111] p-5 md:p-6"
               initial={msg.isNew ? { opacity: 0, y: 20, filter: "blur(12px)" } : false}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{ duration: 0.8, ease: "easeOut" }}

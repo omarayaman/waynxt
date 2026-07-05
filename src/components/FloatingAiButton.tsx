@@ -63,7 +63,7 @@ export default function FloatingAiButton() {
         className={`flex items-center h-14 rounded-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
           expanded
             ? "bg-[#111] border border-[#333] pl-5 pr-1.5 shadow-xl translate-y-0"
-            : "bg-[#D4F64D] border border-transparent pl-6 pr-2 shadow-[0_4px_20px_rgba(212,246,77,0.3)] hover:shadow-[0_4px_25px_rgba(212,246,77,0.5)] hover:-translate-y-1 cursor-pointer"
+            : "bg-[#DFD616] border border-transparent px-2 shadow-[0_4px_20px_rgba(223,214,22,0.3)] hover:shadow-[0_4px_25px_rgba(223,214,22,0.5)] hover:-translate-y-1 cursor-pointer"
         }`}
         onClick={() => {
           if (!expanded) {
@@ -88,14 +88,6 @@ export default function FloatingAiButton() {
           />
         </form>
 
-        <div
-          className={`overflow-hidden whitespace-nowrap transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex items-center ${
-            expanded ? "max-w-0 opacity-0" : "max-w-[150px] opacity-100 mr-2"
-          }`}
-        >
-          <span className="text-[15px] font-bold text-black">Ask WAYNX AI</span>
-        </div>
-
         <button
           type="button"
           onClick={(e) => {
@@ -108,7 +100,7 @@ export default function FloatingAiButton() {
           aria-label="Ask Waynx AI"
           className={`shrink-0 flex items-center justify-center rounded-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
             expanded
-              ? "w-11 h-11 bg-[#D4F64D] text-black hover:bg-[#C2E53A]"
+              ? "w-11 h-11 bg-[#DFD616] text-black hover:bg-[#EAE121]"
               : "w-10 h-10 bg-transparent text-black"
           }`}
         >

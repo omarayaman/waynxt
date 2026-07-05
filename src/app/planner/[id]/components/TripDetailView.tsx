@@ -17,10 +17,8 @@ import {
 import { tripService } from "@/services/trip.service";
 import type { Trip, TripStatus } from "@/types/trip";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import NavbarHome from "@/app/(home)/NavbarHome";
 import { ExpensesSection } from "./ExpensesSection";
-import { MiniRoadmap } from "./MiniRoadmap";
-import { CityItinerary } from "./CityItinerary";
+import { RoadmapTimeline } from "./RoadmapTimeline";
 import { ActivityDetailCard } from "./ActivityDetailCard";
 import { buildRoadmapStops } from "@/lib/trip-roadmap";
 
@@ -42,7 +40,7 @@ function statusStyle(status: string): string {
     case "confirmed":
       return "text-blue-400/80 bg-blue-400/10 border-blue-400/20";
     default:
-      return "text-[#DFD616] bg-[#26210F] border-[#DFD616]/30";
+      return "text-[#DFD616] bg-[#111] border-[#DFD616]/30";
   }
 }
 
@@ -58,7 +56,6 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
   const [error, setError] = useState("");
   
   const [activeStopId, setActiveStopId] = useState<string | null>(null);
-  const [activeDayNumber, setActiveDayNumber] = useState<number | null>(null);
 
   // Derive flat list of stops
   const stops = useMemo(() => {
@@ -78,7 +75,6 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
     if (activeStopIndex > 0) {
       const prev = stops[activeStopIndex - 1];
       setActiveStopId(prev.id);
-      setActiveDayNumber(prev.dayNumber);
     }
   }, [activeStopIndex, stops]);
 
@@ -86,25 +82,11 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
     if (activeStopIndex < stops.length - 1) {
       const next = stops[activeStopIndex + 1];
       setActiveStopId(next.id);
-      setActiveDayNumber(next.dayNumber);
     }
   }, [activeStopIndex, stops]);
 
   const handleSelectStop = useCallback((id: string) => {
-    const idx = stops.findIndex(s => s.id === id);
-    if (idx !== -1) {
-      setActiveStopId(id);
-      setActiveDayNumber(stops[idx].dayNumber);
-    }
-  }, [stops]);
-
-  const handleSelectDayFromMini = useCallback((dayNumber: number) => {
-    setActiveDayNumber(dayNumber);
-    const el = document.querySelector(`[data-day="${dayNumber}"]`);
-    if (el) {
-      // Offset slightly to account for fixed headers if any, but scroll into view is fine
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    setActiveStopId(id);
   }, []);
 
   const fetchTrip = useCallback(async () => {
@@ -177,18 +159,16 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
       <div 
         className="min-h-screen text-white relative pb-20"
         style={{
-          background: "radial-gradient(ellipse 900px 500px at 15% -10%, rgba(245,197,24,0.04), transparent 60%), radial-gradient(ellipse 700px 500px at 100% 0%, rgba(255,93,122,0.03), transparent 60%), #0B0A08"
+          background: "radial-gradient(ellipse 900px 500px at 15% -10%, rgba(245,197,24,0.04), transparent 60%), radial-gradient(ellipse 700px 500px at 100% 0%, rgba(255,93,122,0.03), transparent 60%), #000"
         }}
       >
-        <NavbarHome />
-
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 relative z-10">
+        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 md:px-12 py-8 relative z-10">
           <Link
-            href="/profile?tab=trips"
+            href="/planner"
             className="inline-flex items-center gap-1.5 text-sm text-[#666] hover:text-white transition-colors mb-6"
           >
             <ArrowLeft size={16} />
-            Back to trips
+            Back to planner
           </Link>
 
           {isLoading ? (
@@ -208,7 +188,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
           ) : (
             <>
               {/* Trip Header */}
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 bg-linear-to-br from-[#151310] to-[#19170F] border border-[#2C2917] rounded-2xl p-5 mb-5">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 bg-linear-to-br from-[#111] to-black border border-[#1a1a1a] rounded-2xl p-5 mb-5">
                 <div>
                   <h1 className="text-xl sm:text-2xl font-clash font-bold text-white mb-2">
                     {trip.title}
@@ -221,6 +201,12 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                     <span className={`px-2 py-0.5 rounded-full border text-[10.5px] capitalize ${statusStyle(trip.status)}`}>
                       {trip.status}
                     </span>
+                    <span className="text-[#5F5C50]">&bull;</span>
+                    <span className="font-medium text-[#DFD616]">{totalDays} <span className="text-[#9A9585] font-normal">Days</span></span>
+                    <span className="text-[#5F5C50]">&bull;</span>
+                    <span className="font-medium text-[#DFD616]">{totalDestinations} <span className="text-[#9A9585] font-normal">Destinations</span></span>
+                    <span className="text-[#5F5C50]">&bull;</span>
+                    <span className="font-medium text-[#DFD616]">{totalActivities} <span className="text-[#9A9585] font-normal">Activities</span></span>
                   </div>
                 </div>
 
@@ -229,7 +215,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                     type="button"
                     onClick={handleRegenerate}
                     disabled={isRegenerating}
-                    className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-[#9A9585] bg-transparent hover:bg-[#ffffff05] border border-[#2C2917] rounded-xl transition-colors disabled:opacity-50"
+                    className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-[#9A9585] bg-transparent hover:bg-[#ffffff05] border border-[#1a1a1a] rounded-xl transition-colors disabled:opacity-50"
                   >
                     {isRegenerating ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
                     Regenerate
@@ -249,7 +235,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                     type="button"
                     onClick={handleDelete}
                     disabled={isDeleting}
-                    className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-red-400 bg-transparent hover:bg-red-500/10 border border-[#2C2917] rounded-xl transition-colors disabled:opacity-50"
+                    className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-red-400 bg-transparent hover:bg-red-500/10 border border-[#1a1a1a] rounded-xl transition-colors disabled:opacity-50"
                   >
                     {isDeleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
                     Delete
@@ -258,7 +244,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
               </div>
 
               {/* Tabs */}
-              <div className="flex gap-6 border-b border-[#2C2917] mb-5">
+              <div className="flex gap-6 border-b border-[#1a1a1a] mb-5">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
@@ -277,30 +263,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
 
               {activeTab === "plan" && (
                 <>
-                  {/* Stats */}
-                  <div className="grid grid-cols-3 gap-[1px] bg-[#2C2917] border border-[#2C2917] rounded-xl overflow-hidden mb-6">
-                    <div className="bg-[#19170F] p-3.5 sm:p-4 text-center sm:text-left">
-                      <div className="text-[#DFD616] text-xl sm:text-2xl font-extrabold">{totalDays}</div>
-                      <div className="text-[#5F5C50] text-[10.5px] tracking-widest mt-0.5">TOTAL DAYS</div>
-                    </div>
-                    <div className="bg-[#19170F] p-3.5 sm:p-4 text-center sm:text-left">
-                      <div className="text-[#DFD616] text-xl sm:text-2xl font-extrabold">{totalDestinations}</div>
-                      <div className="text-[#5F5C50] text-[10.5px] tracking-widest mt-0.5">DESTINATIONS</div>
-                    </div>
-                    <div className="bg-[#19170F] p-3.5 sm:p-4 text-center sm:text-left">
-                      <div className="text-[#DFD616] text-xl sm:text-2xl font-extrabold">{totalActivities}</div>
-                      <div className="text-[#5F5C50] text-[10.5px] tracking-widest mt-0.5">ACTIVITIES</div>
-                    </div>
-                  </div>
-
-                  <MiniRoadmap 
-                    destinations={trip.destinations ?? []} 
-                    activeDayNumber={activeDayNumber}
-                    onSelectDay={handleSelectDayFromMini}
-                  />
-
-                  <CityItinerary 
-                    destinations={trip.destinations ?? []}
+                  <RoadmapTimeline 
                     stops={stops}
                     activeStopId={activeStopId}
                     onSelectStop={handleSelectStop}
@@ -311,10 +274,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                     totalActivities={totalActivities}
                     onPrev={handlePrevStop}
                     onNext={handleNextStop}
-                    onClose={() => {
-                      setActiveStopId(null);
-                      setActiveDayNumber(null);
-                    }}
+                    onClose={() => setActiveStopId(null)}
                   />
                 </>
               )}
