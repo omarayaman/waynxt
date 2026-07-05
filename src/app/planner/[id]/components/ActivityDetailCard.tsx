@@ -19,8 +19,8 @@ export function ActivityDetailCard({ stop, totalActivities, onPrev, onNext, onCl
   const { activity, city, dayNumber, order } = stop;
 
   return (
-    <div className="sticky bottom-4 mt-6 z-40">
-      <div className="relative flex flex-col sm:flex-row gap-5 bg-linear-to-br from-[#111] to-black border border-[#1a1a1a] rounded-2xl p-5 shadow-[0_20px_40px_-12px_rgba(0,0,0,0.6)]">
+    <div className="shrink-0 mt-4 z-40">
+      <div className="relative flex flex-col sm:flex-row gap-4 bg-linear-to-br from-[#111] to-black border border-[#1a1a1a] rounded-2xl p-4 shadow-[0_20px_40px_-12px_rgba(0,0,0,0.6)]">
         
         {/* Close button */}
         <button 

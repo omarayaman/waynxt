@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Loader2, MapPin, Star } from "lucide-react";
+import { 
+  Loader2, MapPin, Star, Sparkles, Landmark, Waves, 
+  Diamond, Moon, Building2, Tent, TreePine, Utensils, 
+  Activity, Sun, Clock 
+} from "lucide-react";
 import { placesService } from "@/services/places.service";
 import Link from "next/link";
 import { SavePlaceButton } from "@/components/SavePlaceButton";
@@ -11,6 +15,22 @@ import type { Trip } from "@/types/trip";
 interface TripTopPlacesProps {
   trip: Trip;
 }
+
+const CATEGORY_ICONS: Record<string, React.ElementType> = {
+  history: Landmark,
+  adventure: Tent,
+  beach: Sun,
+  nature: TreePine,
+  religious: Building2,
+  food: Utensils,
+  wellness: Activity,
+  // fallbacks
+  historical: Landmark,
+  coastal: Waves,
+  hidden_gems: Diamond,
+  nightlife: Moon,
+  museums: Building2,
+};
 
 export function TripTopPlaces({ trip }: TripTopPlacesProps) {
   const [places, setPlaces] = useState<Place[]>([]);
@@ -24,11 +44,17 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
         setError(null);
         const cities = trip.destinations?.map(d => d.city) || [];
         
-        // Fallback to normal getPlaces since /places/recommend returns 404
-        const response = await placesService.getPlaces({ 
-          city: cities,
-          sort_by: "rating"
-        });
+        const payload = {
+          cities,
+          budget: trip.preferences?.budget,
+          travel_companion: trip.preferences?.travel_companion,
+          interests: trip.preferences?.interests,
+          age_group: trip.preferences?.age_group,
+          season: trip.preferences?.season,
+          crowd_preference: trip.preferences?.crowd_preference,
+        };
+        
+        const response = await placesService.recommendPlaces(payload);
         
         setPlaces(response.data || []);
       } catch (err: any) {
@@ -87,41 +113,64 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {places.map((place) => (
-          <div key={place.id} className="bg-[#151515] rounded-2xl overflow-hidden border border-[#222] hover:border-[#333] transition-colors group relative flex flex-col">
-            <div className="absolute top-3 right-3 z-10">
-              <SavePlaceButton placeId={place.id} />
+        {places.map((place, index) => (
+          <Link href={place.id ? `/places/${place.id}` : '#'} key={place.id || `place-${index}`} className="group relative w-full h-[380px] block rounded-[2rem] overflow-hidden border border-[#222222] hover:border-[#DFD616]/50 transition-all duration-300 cursor-pointer">
+            {/* Background Image */}
+            <img 
+              src={place.thumbnail_url || (place as any).image_url || "https://images.unsplash.com/photo-1539667468225-eebb663053e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"} 
+              alt={place.name}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1539667468225-eebb663053e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+              }}
+            />
+            {/* Dark Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent"></div>
+            
+            {/* Top Badges */}
+            <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
+              <div className="bg-[#DFD616] text-[#0a0a0a] px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-bold shadow-lg">
+                <Sparkles size={12} strokeWidth={2.5} />
+                {place.rating > 0 ? `${place.rating} Rating` : 'New'}
+              </div>
+              {place.id && <SavePlaceButton placeId={place.id} />}
             </div>
-            <Link href={`/places/${place.id}`} className="flex-1 flex flex-col">
-              <div className="aspect-[4/3] bg-[#222] relative overflow-hidden">
-                {place.thumbnail_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={place.thumbnail_url} alt={place.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <MapPin className="text-[#444]" size={32} />
-                  </div>
+
+            {/* Bottom Content */}
+            <div className="absolute bottom-5 left-4 right-4 z-10">
+              <h3 className="text-xl font-bold text-white mb-2 font-clash">{place.name}</h3>
+              
+              <div className="flex flex-wrap items-center gap-2 text-[#888] text-xs font-medium">
+                <span className="flex items-center gap-1.5 text-[#ccc]">
+                  <MapPin size={12} className="text-[#DFD616]" /> {place.city}
+                </span>
+                
+                {place.category && <span>&middot;</span>}
+                {place.category && (() => {
+                  const CatIcon = CATEGORY_ICONS[place.category.toLowerCase()] || Sparkles;
+                  return (
+                    <span className="flex items-center gap-1.5 capitalize">
+                      <CatIcon size={12} className="text-[#DFD616]" /> {place.category}
+                    </span>
+                  );
+                })()}
+                
+                {place.category && place.budget_level && <span>&middot;</span>}
+                {place.budget_level && (
+                  <span className="flex items-center gap-1.5 capitalize">
+                    <Diamond size={12} className="text-[#DFD616]" /> {place.budget_level}
+                  </span>
                 )}
-                {place.rating > 0 && (
-                  <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm text-white px-2 py-1 rounded-md text-xs font-bold flex items-center gap-1">
-                    <Star size={12} className="text-[#DFD616] fill-current" />
-                    {place.rating.toFixed(1)}
-                  </div>
+                
+                {(place.category || place.budget_level) && place.duration_needed > 0 && <span>&middot;</span>}
+                {place.duration_needed > 0 && (
+                  <span className="flex items-center gap-1.5">
+                    <Clock size={12} className="text-[#DFD616]" /> {place.duration_needed}h
+                  </span>
                 )}
               </div>
-              <div className="p-4 flex-1 flex flex-col">
-                <h3 className="text-white font-bold mb-1 truncate">{place.name}</h3>
-                <div className="text-[#888] text-sm mb-3 flex items-center gap-1 truncate">
-                  <MapPin size={14} />
-                  {place.city}
-                </div>
-                <div className="mt-auto flex items-center justify-between text-xs">
-                  <span className="text-[#555] bg-[#222] px-2 py-1 rounded-md">{place.category}</span>
-                  <span className="text-[#DFD616]">{place.budget_level}</span>
-                </div>
-              </div>
-            </Link>
-          </div>
+            </div>
+          </Link>
         ))}
       </div>
     </div>

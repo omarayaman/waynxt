@@ -20,6 +20,9 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 1200, height: 400 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeftState, setScrollLeftState] = useState(0);
 
   useEffect(() => {
     const measure = () => {
@@ -61,6 +64,10 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
 
   if (!stops.length) return null;
 
+  // Vertically center the computed layout within the actual container height
+  // We subtract 40 to shift it up a little bit ("سيكا") so bottom labels don't get too close to the edge
+  const offsetY = Math.max(0, (dimensions.height - layout.height) / 2) - 40;
+
   const handleScrollLeft = () => {
     if (scrollRef.current) {
       scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
@@ -73,10 +80,33 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
     }
   };
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!scrollRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - scrollRef.current.offsetLeft);
+    setScrollLeftState(scrollRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // scroll speed multiplier
+    scrollRef.current.scrollLeft = scrollLeftState - walk;
+  };
+
   return (
-    <div className="relative w-full rounded-2xl border border-[#1a1a1a] bg-black mb-6 shadow-2xl">
+    <div className="relative w-full rounded-2xl border border-[#1a1a1a] bg-black shadow-2xl flex flex-col flex-1 min-h-0">
       {/* Header section matching the mockup */}
-      <div className="flex flex-col items-center pt-8 pb-4">
+      <div className="flex flex-col items-center pt-4 pb-2 shrink-0">
         <h2 className="text-xl font-semibold text-[#DFD616] tracking-wide mb-2 font-clash">
           Your unique journey is ready
         </h2>
@@ -85,8 +115,8 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
         </div>
       </div>
 
-      <div className="relative px-6">
-        <div className="w-full flex items-center justify-between mb-2">
+      {/* Navigation & Controls */}
+      <div className="flex items-center justify-between mb-2 px-6 shrink-0">
           <div className="flex items-center gap-2">
             <button
               onClick={handleScrollLeft}
@@ -111,17 +141,20 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
             {activeIndex + 1} / {stops.length}
           </div>
         </div>
-      </div>
 
       {/* SVG Canvas Container */}
       <div
         ref={containerRef}
-        className="w-full relative h-[450px] overflow-hidden"
+        className="w-full relative flex-1 min-h-0 overflow-hidden"
       >
         <div
           ref={scrollRef}
-          className="w-full h-full overflow-x-auto overflow-y-hidden custom-scrollbar relative"
-          style={{ cursor: "grab" }}
+          className="w-full h-full overflow-x-auto overflow-y-hidden no-scrollbar relative select-none"
+          style={{ cursor: isDragging ? "grabbing" : "grab" }}
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
         >
           <div
             className="relative h-full"
@@ -145,25 +178,27 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
                 </linearGradient>
               </defs>
 
-              {/* Full path (muted dashed) */}
-              <path
-                d={buildCurvedPath(layout.points)}
-                fill="none"
-                stroke="#2a2418"
-                strokeWidth="2"
-                strokeDasharray="6 4"
-              />
-
-              {/* Active filled path */}
-              {activeIndex > 0 && (
+              <g transform={`translate(0, ${offsetY})`}>
+                {/* Full path (muted dashed) */}
                 <path
-                  d={buildPartialPath(layout.points, activeIndex)}
+                  d={buildCurvedPath(layout.points)}
                   fill="none"
-                  stroke="url(#lineGrad)"
-                  strokeWidth="3"
-                  filter="url(#glow)"
+                  stroke="#2a2418"
+                  strokeWidth="2"
+                  strokeDasharray="6 4"
                 />
-              )}
+
+                {/* Active filled path */}
+                {activeIndex > 0 && (
+                  <path
+                    d={buildPartialPath(layout.points, activeIndex)}
+                    fill="none"
+                    stroke="url(#lineGrad)"
+                    strokeWidth="3"
+                    filter="url(#glow)"
+                  />
+                )}
+              </g>
             </svg>
 
             {/* Nodes */}
@@ -177,7 +212,7 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
                 <div
                   key={stop.id}
                   className="absolute transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer"
-                  style={{ left: p.x, top: p.y }}
+                  style={{ left: p.x, top: p.y + offsetY }}
                   onClick={() => onSelectStop(stop.id)}
                 >
                   <div
@@ -189,6 +224,14 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
                         : "border-[#2a2418] w-20 h-20 opacity-60 group-hover:opacity-100 group-hover:border-[#555]"
                     }`}
                   >
+                    {(i === 0 || i === stops.length - 1) && (
+                      <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#DFD616] text-black px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap shadow-[0_4px_15px_rgba(223,214,22,0.5)] flex items-center gap-1 animate-bounce z-20 after:content-[''] after:absolute after:bottom-[-4px] after:left-1/2 after:-translate-x-1/2 after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent after:border-t-[5px] after:border-t-[#DFD616]">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z"/>
+                        </svg>
+                        {i === 0 ? "Start" : "Finish"}
+                      </div>
+                    )}
                     <img
                       src={imgUrl}
                       alt={stop.activity.activity_name}
@@ -227,18 +270,12 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
         </div>
       </div>
       <style dangerouslySetInnerHTML={{ __html: `
-        .custom-scrollbar::-webkit-scrollbar {
-          height: 6px;
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #2a2418;
-          border-radius: 4px;
-        }
-        .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-          background: #C4A265;
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}} />
     </div>

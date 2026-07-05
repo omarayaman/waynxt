@@ -157,15 +157,15 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
   return (
     <ProtectedRoute>
       <div 
-        className="min-h-screen text-white relative pb-20"
+        className="h-screen overflow-hidden text-white relative flex flex-col"
         style={{
           background: "radial-gradient(ellipse 900px 500px at 15% -10%, rgba(245,197,24,0.04), transparent 60%), radial-gradient(ellipse 700px 500px at 100% 0%, rgba(255,93,122,0.03), transparent 60%), #000"
         }}
       >
-        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 md:px-12 py-8 relative z-10">
+        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 md:px-12 py-6 relative z-10 flex flex-col flex-1 min-h-0">
           <Link
             href="/planner"
-            className="inline-flex items-center gap-1.5 text-sm text-[#666] hover:text-white transition-colors mb-6"
+            className="inline-flex shrink-0 items-center gap-1.5 text-sm text-[#666] hover:text-white transition-colors mb-4"
           >
             <ArrowLeft size={16} />
             Back to planner
@@ -188,7 +188,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
           ) : (
             <>
               {/* Trip Header */}
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 bg-linear-to-br from-[#111] to-black border border-[#1a1a1a] rounded-2xl p-5 mb-5">
+              <div className="shrink-0 flex flex-col sm:flex-row sm:items-start justify-between gap-4 bg-linear-to-br from-[#111] to-black border border-[#1a1a1a] rounded-2xl p-5 mb-4">
                 <div>
                   <h1 className="text-xl sm:text-2xl font-clash font-bold text-white mb-2">
                     {trip.title}
@@ -244,7 +244,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
               </div>
 
               {/* Tabs */}
-              <div className="flex gap-6 border-b border-[#1a1a1a] mb-5">
+              <div className="shrink-0 flex gap-6 border-b border-[#1a1a1a] mb-2">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
@@ -261,29 +261,31 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                 ))}
               </div>
 
-              {activeTab === "plan" && (
-                <>
-                  <RoadmapTimeline 
-                    stops={stops}
-                    activeStopId={activeStopId}
-                    onSelectStop={handleSelectStop}
-                  />
+              <div className="flex flex-col flex-1 min-h-0 relative">
+                {activeTab === "plan" && (
+                  <>
+                    <RoadmapTimeline 
+                      stops={stops}
+                      activeStopId={activeStopId}
+                      onSelectStop={handleSelectStop}
+                    />
 
-                  <ActivityDetailCard 
-                    stop={activeStop}
-                    totalActivities={totalActivities}
-                    onPrev={handlePrevStop}
-                    onNext={handleNextStop}
-                    onClose={() => setActiveStopId(null)}
-                  />
-                </>
-              )}
+                    <ActivityDetailCard 
+                      stop={activeStop}
+                      totalActivities={totalActivities}
+                      onPrev={handlePrevStop}
+                      onNext={handleNextStop}
+                      onClose={() => setActiveStopId(null)}
+                    />
+                  </>
+                )}
 
-              {activeTab === "top-places" && (
-                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                  <TripTopPlaces trip={trip} />
-                </div>
-              )}
+                {activeTab === "top-places" && (
+                  <div className="flex-1 min-h-0 overflow-y-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pr-2 pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    <TripTopPlaces trip={trip} />
+                  </div>
+                )}
+              </div>
             </>
           )}
         </div>
