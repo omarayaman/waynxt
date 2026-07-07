@@ -137,11 +137,9 @@ function PlacesContent() {
 
   return (
     <div className="h-[100dvh] bg-[#050505] text-white font-poppins flex flex-col overflow-hidden">
-      <div className="shrink-0">
-        <NavbarHome />
-      </div>
+      <NavbarHome />
 
-      <main className="flex-1 w-full max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 pt-24 pb-4 flex flex-col overflow-hidden">
+      <main className="flex-1 w-full max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 pt-20 pb-4 flex flex-col overflow-hidden">
         
         {/* Top Header: Search and Categories */}
         <div className="w-full shrink-0 flex flex-col items-center">

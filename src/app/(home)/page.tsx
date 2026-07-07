@@ -11,6 +11,8 @@ export default function Home() {
   return (
     <>
     <div className="relative bg-[#050505] text-white font-sans overflow-x-hidden">
+      <NavbarHome />
+
       {/* Hero Section */}
       <section className="relative min-h-screen">
         {/* Background Image */}
@@ -25,9 +27,6 @@ export default function Home() {
             priority
           />
         </div>
-
-        {/* Navbar Component */}
-        <NavbarHome />
 
         {/* Main Content Area */}
         <main className="relative z-10 flex items-center min-h-screen px-6 lg:px-16 xl:px-[10%]">
