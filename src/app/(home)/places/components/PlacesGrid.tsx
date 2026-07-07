@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { Loader2 } from "lucide-react";
-import { PlaceCard } from "./PlaceCard";
-import type { Place } from "@/types/places";
+import {useEffect, useRef} from "react";
+import {motion} from "framer-motion";
+import {Loader2} from "lucide-react";
+import {PlaceCard} from "./PlaceCard";
+import type {Place} from "@/types/places";
 
 interface PlacesGridProps {
   places: Place[];
@@ -12,12 +12,13 @@ interface PlacesGridProps {
   isLoadingMore?: boolean;
   hasMore?: boolean;
   onLoadMore: () => void;
+  sidebarOpen?: boolean;
 }
 
 function PlaceCardSkeleton() {
   return (
-    <div className="rounded-[2rem] border border-[#222222] overflow-hidden animate-pulse">
-      <div className="h-[380px] bg-[#111]" />
+    <div className="rounded-2xl border border-[#222222] overflow-hidden animate-pulse">
+      <div className="h-[280px] bg-[#111]" />
     </div>
   );
 }
@@ -28,6 +29,7 @@ export function PlacesGrid({
   isLoadingMore,
   hasMore,
   onLoadMore,
+  sidebarOpen = true,
 }: PlacesGridProps) {
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -41,7 +43,7 @@ export function PlacesGrid({
           onLoadMore();
         }
       },
-      { rootMargin: "240px", threshold: 0.1 }
+      {rootMargin: "240px", threshold: 0.1},
     );
 
     observer.observe(sentinel);
@@ -50,7 +52,12 @@ export function PlacesGrid({
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
+      <div
+        className={`grid gap-4 ${
+          sidebarOpen
+            ? "grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
+            : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+        }`}>
         {places.map((place, index) => {
           const shouldAnimate = index >= animateFromIndex;
           const staggerIndex = shouldAnimate ? index - animateFromIndex : 0;
@@ -58,14 +65,13 @@ export function PlacesGrid({
           return (
             <motion.div
               key={place.id}
-              initial={shouldAnimate ? { opacity: 0, y: 14, filter: "blur(4px)" } : false}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              initial={shouldAnimate ? {opacity: 0, y: 14, filter: "blur(4px)"} : false}
+              animate={{opacity: 1, y: 0, filter: "blur(0px)"}}
               transition={{
                 duration: 0.45,
                 delay: Math.min(staggerIndex * 0.05, 0.4),
                 ease: [0.22, 1, 0.36, 1],
-              }}
-            >
+              }}>
               <PlaceCard place={place} />
             </motion.div>
           );
@@ -75,10 +81,9 @@ export function PlacesGrid({
           [...Array(3)].map((_, i) => (
             <motion.div
               key={`skeleton-${i}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: i * 0.06 }}
-            >
+              initial={{opacity: 0}}
+              animate={{opacity: 1}}
+              transition={{duration: 0.3, delay: i * 0.06}}>
               <PlaceCardSkeleton />
             </motion.div>
           ))}
@@ -86,9 +91,7 @@ export function PlacesGrid({
 
       {hasMore && (
         <div ref={sentinelRef} className="w-full h-10 flex items-center justify-center mt-4">
-          {isLoadingMore && (
-            <Loader2 size={24} className="animate-spin text-[#DFD616]" />
-          )}
+          {isLoadingMore && <Loader2 size={24} className="animate-spin text-[#DFD616]" />}
         </div>
       )}
     </>

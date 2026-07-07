@@ -1,16 +1,17 @@
 "use client";
 
-import React, { Suspense, useEffect, useRef, useState } from "react";
-import NavbarHome, { NAVBAR_HEIGHT } from "../NavbarHome";
-import { usePlacesStore } from "@/store/usePlacesStore";
-import { usePlaces } from "@/hooks/usePlaces";
-import { useCategories } from "@/hooks/useCategories";
-import { useCities } from "@/hooks/useCities";
-import { PlacesGrid } from "./components/PlacesGrid";
-import { Modal } from "@/components/Modal";
-import { PlacesFilterPanel } from "./components/PlacesFilterPanel";
-import { PlacesActiveFilters } from "./components/PlacesActiveFilters";
-import { ALL_EXPERIENCES, CATEGORY_ICONS, SORT_OPTIONS } from "./constants";
+import React, {Suspense, useEffect, useRef, useState} from "react";
+import NavbarHome, {NAVBAR_HEIGHT} from "../NavbarHome";
+import {usePlacesStore} from "@/store/usePlacesStore";
+import {usePlaces} from "@/hooks/usePlaces";
+import {useCategories} from "@/hooks/useCategories";
+import {useCities} from "@/hooks/useCities";
+import {PlacesGrid} from "./components/PlacesGrid";
+import {Modal} from "@/components/Modal";
+import {PlacesFilterPanel} from "./components/PlacesFilterPanel";
+import {PlacesFilterCollapsed} from "./components/PlacesFilterCollapsed";
+import {PlacesActiveFilters} from "./components/PlacesActiveFilters";
+import {ALL_EXPERIENCES, CATEGORY_ICONS, SORT_OPTIONS} from "./constants";
 import {
   Search,
   SlidersHorizontal,
@@ -19,6 +20,8 @@ import {
   ChevronDown,
   RotateCcw,
   Diamond,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 
 function getCategoryIcon(category: string) {
@@ -43,20 +46,13 @@ function PlacesContent() {
     resetFilters,
   } = usePlacesStore();
 
-  const {
-    places,
-    meta,
-    isLoading,
-    isLoadingMore,
-    error,
-    hasMore,
-    loadMore,
-    animateFromIndex,
-  } = usePlaces();
-  const { categories, isLoading: isCategoriesLoading } = useCategories();
-  const { cities, isLoading: isCitiesLoading } = useCities();
+  const {places, meta, isLoading, isLoadingMore, error, hasMore, loadMore, animateFromIndex} =
+    usePlaces();
+  const {categories, isLoading: isCategoriesLoading} = useCategories();
+  const {cities, isLoading: isCitiesLoading} = useCities();
 
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const [stickyOffset, setStickyOffset] = useState(NAVBAR_HEIGHT + 100);
@@ -89,14 +85,13 @@ function PlacesContent() {
     <div className="min-h-screen bg-[#050505] text-white">
       <NavbarHome className="bg-[#050505]/95 backdrop-blur-xl" />
 
-      <div style={{ paddingTop: NAVBAR_HEIGHT }}>
+      <div style={{paddingTop: NAVBAR_HEIGHT}}>
         {/* Sticky toolbar — pins below fixed navbar on scroll */}
         <div
           ref={toolbarRef}
           className="sticky z-40 bg-[#050505]/95 backdrop-blur-md border-b border-[#141414]"
-          style={{ top: NAVBAR_HEIGHT }}
-        >
-          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 space-y-2.5">
+          style={{top: NAVBAR_HEIGHT}}>
+          <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-10 py-2.5 space-y-2.5">
             {/* Row 1: title + search + actions */}
             <div className="flex items-center gap-3">
               <div className="hidden sm:block shrink-0">
@@ -125,8 +120,7 @@ function PlacesContent() {
                     type="button"
                     onClick={() => setSearch("")}
                     className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 text-[#555] hover:text-white"
-                    aria-label="Clear search"
-                  >
+                    aria-label="Clear search">
                     <X size={14} />
                   </button>
                 )}
@@ -135,11 +129,15 @@ function PlacesContent() {
               <button
                 type="button"
                 onClick={() => setIsFiltersOpen(true)}
-                className="lg:hidden flex items-center gap-1.5 px-2.5 py-2 rounded-lg border border-[#1a1a1a] text-xs text-[#888] hover:text-white hover:border-[#333] transition-colors shrink-0"
-              >
+                className={`lg:hidden flex items-center gap-1.5 px-2.5 py-2 rounded-lg border text-xs transition-colors shrink-0 ${
+                  activeFilterCount > 0
+                    ? "border-[#DFD616]/30 text-[#DFD616] hover:border-[#DFD616]/50"
+                    : "border-[#1a1a1a] text-[#888] hover:text-white hover:border-[#333]"
+                }`}
+                aria-label="Open filters">
                 <SlidersHorizontal size={13} />
                 {activeFilterCount > 0 && (
-                  <span className="text-[10px] text-[#DFD616]">{activeFilterCount}</span>
+                  <span className="text-[10px] tabular-nums">{activeFilterCount}</span>
                 )}
               </button>
 
@@ -147,8 +145,7 @@ function PlacesContent() {
                 <button
                   type="button"
                   onClick={() => setIsSortOpen(!isSortOpen)}
-                  className="flex items-center gap-1 px-2.5 py-2 rounded-lg border border-[#1a1a1a] text-xs text-[#888] hover:text-white hover:border-[#333] transition-colors"
-                >
+                  className="flex items-center gap-1 px-2.5 py-2 rounded-lg border border-[#1a1a1a] text-xs text-[#888] hover:text-white hover:border-[#333] transition-colors">
                   {SORT_OPTIONS.find((s) => s.id === sortBy)?.label ?? "Sort"}
                   <ChevronDown size={12} />
                 </button>
@@ -165,11 +162,8 @@ function PlacesContent() {
                             setIsSortOpen(false);
                           }}
                           className={`w-full text-left px-3 py-2 text-xs transition-colors ${
-                            sortBy === opt.id
-                              ? "text-[#DFD616]"
-                              : "text-[#777] hover:text-white"
-                          }`}
-                        >
+                            sortBy === opt.id ? "text-[#DFD616]" : "text-[#777] hover:text-white"
+                          }`}>
                           {opt.label}
                         </button>
                       ))}
@@ -188,14 +182,16 @@ function PlacesContent() {
                   activeCategory === "all" || !activeCategory
                     ? "bg-[#1A1805] border border-[#DFD616] text-[#DFD616]"
                     : "border border-[#222] text-[#777] hover:text-white hover:border-[#444]"
-                }`}
-              >
+                }`}>
                 <ALL_EXPERIENCES.icon size={14} strokeWidth={1.5} />
                 {ALL_EXPERIENCES.label}
               </button>
               {isCategoriesLoading
                 ? [...Array(5)].map((_, i) => (
-                    <div key={i} className="shrink-0 w-24 h-8 rounded-full bg-[#111] animate-pulse" />
+                    <div
+                      key={i}
+                      className="shrink-0 w-24 h-8 rounded-full bg-[#111] animate-pulse"
+                    />
                   ))
                 : categories.map((cat) => {
                     const isActive = activeCategory === cat.category;
@@ -209,8 +205,7 @@ function PlacesContent() {
                           isActive
                             ? "bg-[#1A1805] border border-[#DFD616] text-[#DFD616]"
                             : "border border-[#222] text-[#777] hover:text-white hover:border-[#444]"
-                        }`}
-                      >
+                        }`}>
                         <Icon size={14} strokeWidth={1.5} />
                         {cat.category}
                       </button>
@@ -223,29 +218,57 @@ function PlacesContent() {
         </div>
 
         {/* Main */}
-        <main className="max-w-[1400px] mx-auto px-4 py-5">
-          <div className="flex gap-6">
-            {/* Sidebar */}
-            <aside className="hidden lg:block w-52 shrink-0">
-              <div className="sticky" style={{ top: stickyOffset }}>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs text-[#666]">Filters</span>
-                  <button
-                    type="button"
-                    onClick={resetFilters}
-                    disabled={activeFilterCount === 0}
-                    className="flex items-center gap-1 text-[11px] text-[#555] hover:text-[#aaa] disabled:opacity-30 disabled:pointer-events-none transition-colors"
-                  >
-                    <RotateCcw size={11} />
-                    Reset
-                  </button>
-                </div>
-                <div
-                  className="filters-scroll overflow-y-auto pr-1"
-                  style={{ maxHeight: `calc(100vh - ${stickyOffset + 16}px)` }}
-                >
-                  <PlacesFilterPanel cities={cities} citiesLoading={isCitiesLoading} />
-                </div>
+        <main className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-10 py-5">
+          <div className="flex gap-5 lg:gap-6">
+            {/* Sidebar — always visible on desktop, expanded or compact */}
+            <aside
+              className={`hidden lg:block shrink-0 transition-[width] duration-300 ease-out ${
+                isSidebarOpen ? "w-52" : "w-28"
+              }`}>
+              <div
+                className="sticky flex flex-col rounded-xl border border-[#1a1a1a] bg-[#080808]/80 overflow-hidden"
+                style={{
+                  top: stickyOffset,
+                  height: `calc(100vh - ${stickyOffset + 16}px)`,
+                }}>
+                {isSidebarOpen ? (
+                  <>
+                    <div className="flex items-center justify-between px-3 pt-3 pb-2 shrink-0">
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setIsSidebarOpen(false)}
+                          className="p-1 rounded-md text-[#555] hover:text-white hover:bg-[#1a1a1a] transition-colors"
+                          aria-label="Collapse filters">
+                          <PanelLeftClose size={14} />
+                        </button>
+                        <span className="text-xs text-[#666]">Filters</span>
+                        {activeFilterCount > 0 && (
+                          <span className="text-[10px] text-[#DFD616] tabular-nums">
+                            {activeFilterCount}
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={resetFilters}
+                        disabled={activeFilterCount === 0}
+                        className="flex items-center gap-1 text-[11px] text-[#555] hover:text-[#aaa] disabled:opacity-30 disabled:pointer-events-none transition-colors">
+                        <RotateCcw size={11} />
+                        Reset
+                      </button>
+                    </div>
+                    <div className="filters-scroll overflow-y-auto px-2 pb-3 flex-1 min-h-0">
+                      <PlacesFilterPanel cities={cities} citiesLoading={isCitiesLoading} />
+                    </div>
+                  </>
+                ) : (
+                  <PlacesFilterCollapsed
+                    onExpand={() => setIsSidebarOpen(true)}
+                    onReset={resetFilters}
+                    activeFilterCount={activeFilterCount}
+                  />
+                )}
               </div>
             </aside>
 
@@ -258,10 +281,17 @@ function PlacesContent() {
               )}
 
               {isLoading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
-                  {[...Array(6)].map((_, i) => (
-                    <div key={i} className="rounded-[2rem] border border-[#222222] overflow-hidden animate-pulse">
-                      <div className="h-[380px] bg-[#111]" />
+                <div
+                  className={`grid gap-4 ${
+                    isSidebarOpen
+                      ? "grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
+                      : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+                  }`}>
+                  {[...Array(8)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="rounded-2xl border border-[#222222] overflow-hidden animate-pulse">
+                      <div className="h-[280px] bg-[#111]" />
                     </div>
                   ))}
                 </div>
@@ -271,8 +301,7 @@ function PlacesContent() {
                   <button
                     type="button"
                     onClick={resetFilters}
-                    className="text-xs text-[#DFD616] hover:underline"
-                  >
+                    className="text-xs text-[#DFD616] hover:underline">
                     Clear filters
                   </button>
                 </div>
@@ -283,6 +312,7 @@ function PlacesContent() {
                   isLoadingMore={isLoadingMore}
                   hasMore={hasMore}
                   onLoadMore={loadMore}
+                  sidebarOpen={isSidebarOpen}
                 />
               )}
             </section>
@@ -291,14 +321,17 @@ function PlacesContent() {
       </div>
 
       {/* Mobile filters */}
-      <Modal isOpen={isFiltersOpen} onClose={() => setIsFiltersOpen(false)} title="Filters" size="md">
+      <Modal
+        isOpen={isFiltersOpen}
+        onClose={() => setIsFiltersOpen(false)}
+        title="Filters"
+        size="md">
         <div className="flex items-center justify-end -mt-2 mb-3">
           <button
             type="button"
             onClick={resetFilters}
             disabled={activeFilterCount === 0}
-            className="flex items-center gap-1 text-xs text-[#666] hover:text-white disabled:opacity-30 transition-colors"
-          >
+            className="flex items-center gap-1 text-xs text-[#666] hover:text-white disabled:opacity-30 transition-colors">
             <RotateCcw size={12} />
             Reset
           </button>
@@ -311,7 +344,9 @@ function PlacesContent() {
         />
       </Modal>
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         .filters-scroll { scrollbar-width: thin; scrollbar-color: transparent transparent; }
@@ -320,7 +355,9 @@ function PlacesContent() {
         .filters-scroll::-webkit-scrollbar-track { background: transparent; }
         .filters-scroll::-webkit-scrollbar-thumb { background: transparent; border-radius: 4px; }
         .filters-scroll:hover::-webkit-scrollbar-thumb { background: #222; }
-      `}} />
+      `,
+        }}
+      />
     </div>
   );
 }
@@ -332,8 +369,7 @@ export default function ExplorePlacesPage() {
         <div className="min-h-screen bg-[#050505] flex items-center justify-center">
           <Loader2 size={24} className="animate-spin text-[#555]" />
         </div>
-      }
-    >
+      }>
       <PlacesContent />
     </Suspense>
   );
