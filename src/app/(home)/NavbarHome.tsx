@@ -21,7 +21,8 @@ export default function NavbarHome() {
   ];
 
   return (
-    <nav className="absolute top-0 w-full h-[110px] flex justify-between items-center px-6 lg:px-12 z-50 bg-gradient-to-b from-black via-black/70 to-transparent">
+    <nav className="fixed top-0 w-full h-[60px] bg-green-500 flex justify-between items-center px-6 lg:px-12 
+    z-50 bg-linear-to-b from-black via-black/70 to-transparent">
       <div className="flex items-center -ml-2 lg:-ml-4">
         <Link href="/" className="shrink-0 outline-none focus:outline-none">
           <Image

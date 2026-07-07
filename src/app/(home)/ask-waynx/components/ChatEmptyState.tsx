@@ -1,13 +1,15 @@
 "use client";
 
-import React from "react";
-import { MapPin, Sparkles, Route } from "lucide-react";
+import React, { RefObject } from "react";
+import { MapPin, Route, Sparkles } from "lucide-react";
+import ChatInput from "./ChatInput";
 
 const SUGGESTED_PROMPTS = [
   {
     icon: MapPin,
     label: "Tell me about the Pyramids of Giza",
-    prompt: "Tell me about the Pyramids of Giza and what I should know before visiting",
+    prompt:
+      "Tell me about the Pyramids of Giza and what I should know before visiting",
   },
   {
     icon: Route,
@@ -22,7 +24,8 @@ const SUGGESTED_PROMPTS = [
   {
     icon: Route,
     label: "Family-friendly activities",
-    prompt: "What are the best family-friendly activities and places in Egypt?",
+    prompt:
+      "What are the best family-friendly activities and places in Egypt?",
   },
   {
     icon: MapPin,
@@ -37,39 +40,70 @@ const SUGGESTED_PROMPTS = [
 ];
 
 interface ChatEmptyStateProps {
+  value: string;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
   onSelectPrompt: (prompt: string) => void;
-  disabled?: boolean;
+  isLoading?: boolean;
+  inputRef?: RefObject<HTMLInputElement | null>;
 }
 
-export default function ChatEmptyState({ onSelectPrompt, disabled }: ChatEmptyStateProps) {
+export default function ChatEmptyState({
+  value,
+  onChange,
+  onSubmit,
+  onSelectPrompt,
+  isLoading,
+  inputRef,
+}: ChatEmptyStateProps) {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center px-4 py-8">
-      <div className="mb-8 flex flex-col items-center text-center">
-        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#1A1809] text-[#DFD616]">
-          <Sparkles size={24} />
-        </div>
-        <h2 className="mb-2 text-xl font-medium text-white md:text-2xl">
-          Ask WAYNX about Egypt
-        </h2>
-        <p className="max-w-md text-sm text-[#888888]">
-          Get help with places, trips, itineraries, and travel tips — all inside your WAYNX experience.
-        </p>
+    <div className="relative flex min-h-full flex-col items-center justify-center overflow-hidden px-4 py-10">
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div className="absolute left-1/2 top-[38%] h-[400px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DFD616]/5 blur-[100px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size-[56px_56px] mask-[radial-gradient(ellipse_at_center,black_15%,transparent_72%)]" />
       </div>
 
-      <div className="w-full max-w-2xl">
-        <p className="mb-3 text-xs text-[#666666]">Try asking about:</p>
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          {SUGGESTED_PROMPTS.map(({ icon: Icon, label, prompt }) => (
-            <button
-              key={label}
-              onClick={() => onSelectPrompt(prompt)}
-              disabled={disabled}
-              className="flex items-start gap-3 rounded-xl border border-[#222222] bg-[#111111] px-4 py-3 text-left transition-colors hover:border-[#DFD616]/30 hover:bg-[#1A1A1A] disabled:opacity-50"
-            >
-              <Icon size={16} className="mt-0.5 shrink-0 text-[#DFD616]" />
-              <span className="text-[13px] text-[#B0B0B0]">{label}</span>
-            </button>
-          ))}
+      <div className="relative z-10 flex w-full max-w-3xl flex-col items-center">
+        <div className="mb-8 flex flex-col items-center text-center">
+          <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-[#DFD616]/15 bg-[#DFD616]/8 text-[#DFD616]">
+            <Sparkles size={24} />
+          </div>
+          <h2 className="mb-2 text-2xl font-semibold tracking-tight text-white md:text-3xl">
+            Where to next?
+          </h2>
+          <p className="max-w-md text-sm leading-relaxed text-[#888888] md:text-base">
+            Ask WAYNX about places, trips, and hidden gems across Egypt — powered
+            by AI.
+          </p>
+        </div>
+
+        <ChatInput
+          variant="centered"
+          inputRef={inputRef}
+          value={value}
+          onChange={onChange}
+          onSubmit={onSubmit}
+          isLoading={isLoading}
+          placeholder="Ask anything about Egypt..."
+        />
+
+        <div className="mt-10 w-full max-w-2xl">
+          <p className="mb-3 text-center text-xs text-[#555555]">
+            Or try one of these
+          </p>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {SUGGESTED_PROMPTS.map(({ icon: Icon, label, prompt }) => (
+              <button
+                key={label}
+                onClick={() => onSelectPrompt(prompt)}
+                disabled={isLoading}
+                className="flex items-start gap-3 rounded-xl border border-white/6 bg-white/3 px-4 py-3 text-left transition-colors hover:border-[#DFD616]/20 hover:bg-[#DFD616]/5 disabled:opacity-50"
+              >
+                <Icon size={16} className="mt-0.5 shrink-0 text-[#DFD616]" />
+                <span className="text-[13px] text-[#B0B0B0]">{label}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -2,21 +2,24 @@
 
 import React, { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import NavbarHome from "../NavbarHome";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ChatMessage } from "@/types/chat";
 import ChatSidebar from "./components/ChatSidebar";
 import ChatEmptyState from "./components/ChatEmptyState";
 import ChatMessageList from "./components/ChatMessageList";
 import ChatInput from "./components/ChatInput";
-import { AlertCircle, Loader2, PanelLeft, Sparkles } from "lucide-react";
+import AskWaynxNavbar from "./components/AskWaynxNavbar";
+import { AlertCircle, Loader2 } from "lucide-react";
 import { useChatStore } from "@/store/chatStore";
 
 function AskWaynxContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const hasAutoSentRef = useRef(false);
+  const skipUrlSyncRef = useRef(false);
   const handleSendRef = useRef<(text: string) => Promise<void>>(async () => {});
 
   const sessionFromUrl = searchParams.get("session");
@@ -42,12 +45,23 @@ function AskWaynxContent() {
   const startNewChatStore = useChatStore((state) => state.startNewChat);
 
   const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const container = messagesContainerRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
   }, []);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages, isLoading, scrollToBottom]);
+
+  useEffect(() => {
+    if (!isLoading && !isLoadingSession) {
+      requestAnimationFrame(() => {
+        inputRef.current?.focus({ preventScroll: true });
+      });
+    }
+  }, [isLoading, isLoadingSession]);
 
   // Initial history load
   useEffect(() => {
@@ -56,6 +70,13 @@ function AskWaynxContent() {
 
   // URL syncing logic
   useEffect(() => {
+    if (skipUrlSyncRef.current) {
+      if (!sessionFromUrl) {
+        skipUrlSyncRef.current = false;
+      }
+      return;
+    }
+
     if (!sessionFromUrl || sessionFromUrl === sessionId) {
       return;
     }
@@ -71,10 +92,16 @@ function AskWaynxContent() {
   }, [sessionFromUrl, sessionId, loadSessionStore, router]);
 
   const handleNewChat = useCallback(() => {
-    router.replace("/ask-waynx", { scroll: false });
+    if (!sessionId && !sessionFromUrl && messages.length === 0) {
+      if (window.innerWidth < 1024) setIsSidebarOpen(false);
+      return;
+    }
+
+    skipUrlSyncRef.current = true;
     startNewChatStore();
+    router.replace("/ask-waynx", { scroll: false });
     if (window.innerWidth < 1024) setIsSidebarOpen(false);
-  }, [router, startNewChatStore]);
+  }, [router, startNewChatStore, sessionId, sessionFromUrl, messages.length]);
 
   const handleSelectSession = useCallback(
     (id: string) => {
@@ -139,11 +166,23 @@ function AskWaynxContent() {
     }
   };
 
+  const chatTitle =
+    activeTitle ||
+    sessions.find((s) => s.id === sessionId)?.title ||
+    "New chat";
+
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-[#050505] text-white">
-      <NavbarHome />
+      <AskWaynxNavbar
+        title={chatTitle}
+        isDesktopSidebarOpen={isDesktopSidebarOpen}
+        onOpenMobileSidebar={() => setIsSidebarOpen(true)}
+        onToggleDesktopSidebar={() =>
+          setIsDesktopSidebarOpen((prev) => !prev)
+        }
+      />
 
-      <div className="flex flex-1 overflow-hidden pt-[110px]">
+      <div className="flex flex-1 overflow-hidden">
         <div 
           className={`relative z-[60] hidden shrink-0 border-[#222222] transition-all duration-300 ease-in-out lg:block ${isDesktopSidebarOpen ? "w-[280px] border-r opacity-100" : "w-0 border-r-0 opacity-0 overflow-hidden"}`}
         >
@@ -167,7 +206,7 @@ function AskWaynxContent() {
               onClick={() => setIsSidebarOpen(false)}
               aria-label="Close sidebar overlay"
             />
-            <div className="absolute bottom-0 left-0 top-[110px] w-[min(100%,280px)] border-r border-[#222222]">
+            <div className="absolute bottom-0 left-0 top-0 w-[min(100%,280px)] border-r border-[#222222]">
               <ChatSidebar
                 sessions={sessions}
                 activeSessionId={sessionId}
@@ -182,47 +221,9 @@ function AskWaynxContent() {
           </div>
         )}
 
-        <main className="flex min-w-0 flex-1 flex-col">
-          <div className="relative z-[60] flex shrink-0 items-center gap-3 border-b border-[#1A1A1A] px-4 py-3 md:px-6">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setIsSidebarOpen(true);
-              }}
-              className="relative z-[9999] rounded-lg p-2 text-[#888888] hover:bg-[#1A1A1A] hover:text-white lg:hidden cursor-pointer"
-              aria-label="Open chat history"
-            >
-              <PanelLeft size={20} />
-            </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setIsDesktopSidebarOpen((prev) => !prev);
-              }}
-              className="relative z-[9999] hidden rounded-lg p-2 text-[#888888] hover:bg-[#1A1A1A] hover:text-white lg:block transition-colors cursor-pointer"
-              aria-label="Toggle chat history"
-              title={isDesktopSidebarOpen ? "Hide sidebar" : "Show sidebar"}
-            >
-              <PanelLeft size={20} />
-            </button>
-
-            <div className="flex min-w-0 flex-1 items-center gap-2">
-              <Sparkles size={18} className="text-[#DFD616] shrink-0" />
-              <div className="min-w-0">
-                <h1 className="truncate text-sm font-medium text-white md:text-base">
-                  {activeTitle || sessions.find((s) => s.id === sessionId)?.title || "New chat"}
-                </h1>
-                <p className="truncate text-[11px] text-[#666666]">
-                  Ask about places, trips, and travel in Egypt
-                </p>
-              </div>
-            </div>
-          </div>
-
+        <main className="relative flex min-w-0 flex-1 flex-col overflow-hidden">
           {error && (
-            <div className="mx-4 mt-3 flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300 md:mx-6">
+            <div className="relative z-10 mx-4 mt-3 flex shrink-0 items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300 md:mx-6">
               <AlertCircle size={16} className="shrink-0" />
               <span>{error}</span>
             </div>
@@ -234,29 +235,36 @@ function AskWaynxContent() {
             </div>
           ) : showEmptyState ? (
             <ChatEmptyState
+              inputRef={inputRef}
+              value={query}
+              onChange={setQuery}
+              onSubmit={() => handleSend(query)}
               onSelectPrompt={handleSend}
-              disabled={isLoading}
+              isLoading={isLoading}
             />
           ) : (
-            <ChatMessageList
-              messages={messages}
-              isLoading={isLoading}
-              messagesEndRef={messagesEndRef}
-              onReload={handleRegenerate}
-            />
-          )}
+            <>
+              <div
+                ref={messagesContainerRef}
+                className="chat-scroll min-h-0 flex-1 overflow-y-auto"
+              >
+                <ChatMessageList
+                  messages={messages}
+                  messagesEndRef={messagesEndRef}
+                  onReload={handleRegenerate}
+                />
+              </div>
 
-          <div className="mt-auto p-4 md:p-6">
-            <div className="mx-auto max-w-3xl">
               <ChatInput
+                variant="floating"
+                inputRef={inputRef}
                 value={query}
                 onChange={setQuery}
                 onSubmit={() => handleSend(query)}
-                disabled={isLoading}
                 isLoading={isLoading}
               />
-            </div>
-          </div>
+            </>
+          )}
         </main>
       </div>
     </div>

@@ -44,7 +44,7 @@ export default function ChatSidebar({
       <div className="flex items-center justify-between border-b border-[#222222] p-4">
         <button
           onClick={onNewChat}
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#DFD616] px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#EAE121]"
+          className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#DFD616] px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#EAE121]"
         >
           <MessageSquarePlus size={16} />
           New chat
