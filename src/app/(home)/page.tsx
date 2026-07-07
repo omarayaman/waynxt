@@ -1,9 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
 import NavbarHome from "./NavbarHome";
+import HeroBackgroundSlider from "./HeroBackgroundSlider";
 import AiSearchSection from "./AiSearchSection";
 import InterestsSection from "./InterestsSection";
-import CuratedForYou from "./CuratedForYou";
+import EgyptTourismSection from "./EgyptTourismSection";
+import InteractiveMapSection from "./InteractiveMapSection";
+import FeaturedPlacesSection from "./FeaturedPlacesSection";
 import UpcomingEvents from "./UpcomingEvents";
 import Footer from "./Footer";
 
@@ -15,18 +17,7 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative min-h-screen">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/heropage.png"
-            alt="Egyptian pharaoh background"
-            width={1512}
-            height={847}
-            quality={100}
-            className="w-full h-full object-cover object-center"
-            priority
-          />
-        </div>
+        <HeroBackgroundSlider />
 
         {/* Main Content Area */}
         <main className="relative z-10 flex items-center min-h-screen px-6 lg:px-16 xl:px-[10%]">
@@ -68,8 +59,15 @@ export default function Home() {
       {/* Interests Section */}
       <InterestsSection />
 
-      {/* Curated Recommendations */}
-      <CuratedForYou />
+      {/* Featured Places */}
+      <FeaturedPlacesSection />
+
+      {/* Why Egypt — Tourism Excellence */}
+      <EgyptTourismSection />
+
+      {/* Interactive Map */}
+      <InteractiveMapSection />
+
 
       {/* Upcoming Events */}
       <UpcomingEvents />
