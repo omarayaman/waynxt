@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Sparkles, X } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 
-export const NAVBAR_HEIGHT = 68;
+export const NAVBAR_HEIGHT = 60;
 
 const NAV_LINKS = [
   { name: "Home", href: "/" },
@@ -32,7 +32,7 @@ function getInitials(name: string): string {
     .join("");
 }
 
-export default function NavbarHome() {
+export default function NavbarHome({className}: {className?: string}) {
   const pathname = usePathname();
   const { user, isAuthenticated, isLoading } = useAuthStore();
   const [mounted, setMounted] = useState(false);
@@ -69,13 +69,13 @@ export default function NavbarHome() {
   const navbar = (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-[200] transition-[background-color,backdrop-filter] duration-300 ${
+        className={`fixed inset-x-0 top-0 z-[200] transition-[background-color,backdrop-filter] duration-300 ${className} ${
           showSolidBg
             ? "bg-[#050505]/70 backdrop-blur-xl"
             : "bg-linear-to-b from-black/75 via-black/35 to-transparent"
         }`}
       >
-        <div className="mx-auto flex h-[68px] max-w-[1440px] items-center justify-between gap-6 px-6 lg:px-12">
+        <div className="mx-auto flex h-[60px] max-w-[1440px] items-center justify-between gap-6 px-6 lg:px-12">
           <Link
             href="/"
             className="shrink-0 outline-none focus:outline-none"

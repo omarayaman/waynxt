@@ -245,7 +245,7 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
                     )}
 
                     {/* Rating Badge */}
-                    {stop.activity.rating > 0 && (
+                    {stop.activity.rating != null && stop.activity.rating > 0 && (
                       <div className="absolute -bottom-2 -right-2 bg-[#111] border border-[#333] rounded-full px-2 py-0.5 flex items-center gap-1 shadow-xl">
                         <Star size={10} className="text-[#DFD616]" fill="currentColor" />
                         <span className="text-[10px] text-white font-bold">{stop.activity.rating}</span>

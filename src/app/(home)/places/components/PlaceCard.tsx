@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Clock, MapPin, Star } from "lucide-react";
+import { Clock, Diamond, MapPin, Sparkles } from "lucide-react";
 import { SavePlaceButton } from "@/components/SavePlaceButton";
+import { CATEGORY_ICONS } from "../constants";
 import type { Place } from "@/types/places";
 
 interface PlaceCardProps {
@@ -8,55 +9,64 @@ interface PlaceCardProps {
 }
 
 export function PlaceCard({ place }: PlaceCardProps) {
+  const CatIcon = place.category
+    ? CATEGORY_ICONS[place.category.toLowerCase().replace(/\s+/g, "_")] || Sparkles
+    : null;
+
   return (
     <Link
       href={`/places/${place.id}`}
-      className="group flex flex-col rounded-xl border border-[#1a1a1a] bg-[#0a0a0a] overflow-hidden hover:border-[#333] transition-colors"
+      className="group relative w-full h-[380px] block rounded-[2rem] overflow-hidden border border-[#222222] hover:border-[#DFD616]/50 transition-all duration-300 cursor-pointer"
     >
-      <div className="relative aspect-[16/10] overflow-hidden bg-[#111]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={
-            place.thumbnail_url ||
-            "https://images.unsplash.com/photo-1539667468225-eebb663053e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-          }
-          alt={place.name}
-          className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={
+          place.thumbnail_url ||
+          "https://images.unsplash.com/photo-1539667468225-eebb663053e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+        }
+        alt={place.name}
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent" />
 
-        <div className="absolute top-2.5 right-2.5 z-10">
-          <SavePlaceButton placeId={place.id} className="w-8 h-8" iconSize={14} />
+      <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
+        <div className="bg-[#DFD616] text-[#0a0a0a] px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-bold shadow-lg">
+          <Sparkles size={12} strokeWidth={2.5} />
+          {place.rating > 0 ? `${place.rating} Rating` : "New"}
         </div>
-
-        {place.rating > 0 && (
-          <div className="absolute top-2.5 left-2.5 z-10 inline-flex items-center gap-1 px-2 py-1 rounded-md bg-black/60 backdrop-blur-sm text-[#DFD616] text-xs font-medium">
-            <Star size={11} fill="currentColor" />
-            {place.rating}
-          </div>
-        )}
+        <SavePlaceButton placeId={place.id} />
       </div>
 
-      <div className="p-3.5 flex flex-col gap-1.5">
-        <div>
-          <h3 className="text-[15px] font-medium text-white leading-snug line-clamp-1 group-hover:text-[#DFD616] transition-colors">
-            {place.name}
-          </h3>
-          <div className="flex items-center gap-1 mt-1 text-[#777]">
-            <MapPin size={12} />
-            <span className="text-xs truncate">{place.city}</span>
-          </div>
-        </div>
+      <div className="absolute bottom-5 left-4 right-4 z-10">
+        <h3 className="text-xl font-bold text-white mb-2 font-clash">{place.name}</h3>
 
-        <div className="flex items-center gap-2 text-xs text-[#666]">
-          <span className="capitalize">{place.category}</span>
-          <span>·</span>
-          <span className="capitalize">{place.budget_level}</span>
-          <span>·</span>
-          <span className="inline-flex items-center gap-0.5">
-            <Clock size={11} />
-            {place.duration_needed}h
+        <div className="flex flex-wrap items-center gap-2 text-[#888] text-xs font-medium">
+          <span className="flex items-center gap-1.5 text-[#ccc]">
+            <MapPin size={12} className="text-[#DFD616]" /> {place.city}
           </span>
+
+          {place.category && <span>&middot;</span>}
+          {place.category && CatIcon && (
+            <span className="flex items-center gap-1.5 capitalize">
+              <CatIcon size={12} className="text-[#DFD616]" /> {place.category}
+            </span>
+          )}
+
+          {place.category && place.budget_level && <span>&middot;</span>}
+          {place.budget_level && (
+            <span className="flex items-center gap-1.5 capitalize">
+              <Diamond size={12} className="text-[#DFD616]" /> {place.budget_level}
+            </span>
+          )}
+
+          {(place.category || place.budget_level) && place.duration_needed > 0 && (
+            <span>&middot;</span>
+          )}
+          {place.duration_needed > 0 && (
+            <span className="flex items-center gap-1.5">
+              <Clock size={12} className="text-[#DFD616]" /> {place.duration_needed}h
+            </span>
+          )}
         </div>
       </div>
     </Link>

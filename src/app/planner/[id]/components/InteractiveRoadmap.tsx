@@ -396,6 +396,7 @@ function JourneyNode({
   onSelect: () => void;
 }) {
   const { activity } = stop;
+  const ActivityIcon = getActivityIcon(activity.activity_type);
 
   return (
     <button
@@ -433,8 +434,8 @@ function JourneyNode({
                 className="object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-[#141010] text-xl">
-                {getActivityIcon(activity.activity_type)}
+              <div className="w-full h-full flex items-center justify-center bg-[#141010] text-[#C4A265]">
+                <ActivityIcon size={Math.max(18, nodeSize * 0.35)} />
               </div>
             )}
             <div className="absolute inset-0 bg-linear-to-br from-white/10 via-transparent to-black/40 pointer-events-none" />

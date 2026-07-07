@@ -1,7 +1,7 @@
 "use client";
 
-import React, { Suspense, useState } from "react";
-import NavbarHome from "../NavbarHome";
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import NavbarHome, { NAVBAR_HEIGHT } from "../NavbarHome";
 import { usePlacesStore } from "@/store/usePlacesStore";
 import { usePlaces } from "@/hooks/usePlaces";
 import { useCategories } from "@/hooks/useCategories";
@@ -58,6 +58,22 @@ function PlacesContent() {
 
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
+  const toolbarRef = useRef<HTMLDivElement>(null);
+  const [stickyOffset, setStickyOffset] = useState(NAVBAR_HEIGHT + 100);
+
+  useEffect(() => {
+    const el = toolbarRef.current;
+    if (!el) return;
+
+    const updateOffset = () => {
+      setStickyOffset(NAVBAR_HEIGHT + el.offsetHeight);
+    };
+
+    updateOffset();
+    const observer = new ResizeObserver(updateOffset);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const activeFilterCount =
     (search.trim() ? 1 : 0) +
@@ -71,11 +87,15 @@ function PlacesContent() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white">
-      <NavbarHome />
+      <NavbarHome className="bg-[#050505]/95 backdrop-blur-xl" />
 
-      <div className="pt-[88px]">
-        {/* Sticky toolbar — pins to very top on scroll */}
-        <div className="sticky top-0 z-40 bg-[#050505]/95 backdrop-blur-md border-b border-[#141414]">
+      <div style={{ paddingTop: NAVBAR_HEIGHT }}>
+        {/* Sticky toolbar — pins below fixed navbar on scroll */}
+        <div
+          ref={toolbarRef}
+          className="sticky z-40 bg-[#050505]/95 backdrop-blur-md border-b border-[#141414]"
+          style={{ top: NAVBAR_HEIGHT }}
+        >
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 space-y-2.5">
             {/* Row 1: title + search + actions */}
             <div className="flex items-center gap-3">
@@ -203,11 +223,11 @@ function PlacesContent() {
         </div>
 
         {/* Main */}
-        <main className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-5">
+        <main className="max-w-[1400px] mx-auto px-4 py-5">
           <div className="flex gap-6">
             {/* Sidebar */}
             <aside className="hidden lg:block w-52 shrink-0">
-              <div className="sticky top-[108px]">
+              <div className="sticky" style={{ top: stickyOffset }}>
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs text-[#666]">Filters</span>
                   <button
@@ -220,7 +240,10 @@ function PlacesContent() {
                     Reset
                   </button>
                 </div>
-                <div className="filters-scroll max-h-[calc(100vh-140px)] overflow-y-auto pr-1">
+                <div
+                  className="filters-scroll overflow-y-auto pr-1"
+                  style={{ maxHeight: `calc(100vh - ${stickyOffset + 16}px)` }}
+                >
                   <PlacesFilterPanel cities={cities} citiesLoading={isCitiesLoading} />
                 </div>
               </div>

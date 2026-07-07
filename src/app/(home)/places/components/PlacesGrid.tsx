@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
 import { PlaceCard } from "./PlaceCard";
 import type { Place } from "@/types/places";
 
@@ -15,12 +16,8 @@ interface PlacesGridProps {
 
 function PlaceCardSkeleton() {
   return (
-    <div className="rounded-xl border border-[#141414] overflow-hidden">
-      <div className="aspect-[16/10] bg-[#111] animate-pulse" />
-      <div className="p-3.5 space-y-2">
-        <div className="h-4 w-3/4 bg-[#111] rounded animate-pulse" />
-        <div className="h-3 w-1/2 bg-[#111] rounded animate-pulse" />
-      </div>
+    <div className="rounded-[2rem] border border-[#222222] overflow-hidden animate-pulse">
+      <div className="h-[380px] bg-[#111]" />
     </div>
   );
 }
@@ -87,7 +84,13 @@ export function PlacesGrid({
           ))}
       </div>
 
-      {hasMore && <div ref={sentinelRef} className="h-1 w-full" aria-hidden />}
+      {hasMore && (
+        <div ref={sentinelRef} className="w-full h-10 flex items-center justify-center mt-4">
+          {isLoadingMore && (
+            <Loader2 size={24} className="animate-spin text-[#DFD616]" />
+          )}
+        </div>
+      )}
     </>
   );
 }

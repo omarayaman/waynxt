@@ -145,7 +145,7 @@ export function PlacesFilterPanel({
   } = usePlacesStore();
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col px-1">
       <div>
         <FilterSection title="City">
           <CityList cities={cities} loading={citiesLoading} />
