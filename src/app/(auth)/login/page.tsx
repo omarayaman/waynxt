@@ -3,12 +3,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { authService } from "@/services/auth.service";
 import Navbar from "@/app/(auth)/login/Navbar";
 import { z } from "zod";
 import { GoogleLoginButton } from "@/components/GoogleLoginButton";
 import { isGoogleOAuthConfigured } from "@/lib/google-oauth";
+import { getPostAuthRedirect } from "@/lib/auth-redirect";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email("Please enter a valid email address."),
@@ -17,6 +18,8 @@ const loginSchema = z.object({
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const postAuthRedirect = getPostAuthRedirect(searchParams);
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -50,7 +53,7 @@ export default function LoginPage() {
       const { useAuthStore } = await import('@/store/useAuthStore');
       await useAuthStore.getState().fetchCurrentUser();
       
-      router.push("/"); // Redirect to dashboard
+      router.push(postAuthRedirect);
     } catch (error: unknown) {
       const err = error as { response?: { status?: number, data?: { message?: string } } };
       const msg = err.response?.data?.message || "An error occurred during login. Please try again.";
@@ -64,22 +67,44 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-background text-foreground font-sans">
+    <div className="relative min-h-screen bg-surface-card text-foreground font-sans overflow-hidden">
+      {/* Full-screen Background Image */}
+      <div className="absolute inset-0 z-0 dark:opacity-80">
+        <Image
+          src="/images/white/(3).jpeg"
+          alt="Green pyramids illustration on a light background"
+          fill
+          className="object-cover object-center dark:hidden"
+          priority
+        />
+        <Image
+          src="/bg-pharaoh.png"
+          alt="Ancient Egyptian pharaoh statue in a modern museum"
+          fill
+          className="hidden object-cover object-center dark:block"
+          priority
+        />
+      </div>
+
+      {/* Theme-aware gradient overlay */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-surface-card/95 from-40% via-surface-card/40 to-transparent dark:hidden" />
+      <div className="absolute inset-0 z-[1] hidden bg-gradient-to-r from-black/90 from-40% via-black/65 to-transparent dark:block" />
+
       <Navbar />
 
-      {/* Left Section - Form */}
-      <div className="w-full lg:w-[45%] xl:w-[40%] flex flex-col justify-center px-8 sm:px-16 relative z-0 pt-36 pb-12 lg:pt-[120px]">
-        <div className="max-w-[600px] w-full ml-[10%]">
+      {/* Form Content */}
+      <div className="relative z-10 flex items-center min-h-[calc(100vh-40px)]">
+        <div className="w-full max-w-[600px] px-8 lg:px-10 ml-[10%]">
           <h1 className="text-[42px] font-bold text-accent mb-3 tracking-tight">
             Welcome back
           </h1>
-          <p className="text-gray-300 mb-10 text-[15px] leading-relaxed pr-8">
+          <p className="text-muted mb-10 text-[15px] leading-relaxed pr-8">
             Your saved places, conversations, and discoveries are waiting.
           </p>
 
           {errorMessage && (
             <div className="mb-6 flex flex-col gap-3">
-              <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+              <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm">
                 {errorMessage}
               </div>
               {isAccountNotFound && (
@@ -97,13 +122,13 @@ export default function LoginPage() {
             {/* Email Field */}
             <div className="space-y-2">
               <label
-                className="text-[13px] text-gray-300 block ml-1"
+                className="text-[13px] text-muted block ml-1"
                 htmlFor="email"
               >
                 Email
               </label>
-              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-accent focus-within:bg-[#1a1a1a] transition-all duration-300 shadow-sm">
-                <div className="absolute left-4 text-gray-400">
+              <div className="relative flex items-center bg-[var(--input-bg)] rounded-xl border border-border focus-within:border-accent focus-within:bg-surface transition-all duration-300 shadow-sm">
+                <div className="absolute left-4 text-muted">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
@@ -127,8 +152,8 @@ export default function LoginPage() {
                     setEmail(e.target.value);
                     if (fieldErrors.email) setFieldErrors({ ...fieldErrors, email: undefined });
                   }}
-                  placeholder="Jhonsmith@gmail.com"
-                  className={`w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-4 py-4 outline-none text-sm rounded-xl ${fieldErrors.email ? 'border border-red-500' : ''}`}
+                  placeholder="name@example.com"
+                  className={`w-full bg-transparent text-foreground placeholder:text-muted/50 pl-12 pr-4 py-4 outline-none text-sm rounded-xl ${fieldErrors.email ? 'border border-red-500' : ''}`}
                   
                 />
               </div>
@@ -140,13 +165,13 @@ export default function LoginPage() {
             {/* Password Field */}
             <div className="space-y-2">
               <label
-                className="text-[13px] text-gray-300 block ml-1"
+                className="text-[13px] text-muted block ml-1"
                 htmlFor="password"
               >
                 Password
               </label>
-              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-accent focus-within:bg-[#1a1a1a] transition-all duration-300 shadow-sm">
-                <div className="absolute left-4 text-gray-400">
+              <div className="relative flex items-center bg-[var(--input-bg)] rounded-xl border border-border focus-within:border-accent focus-within:bg-surface transition-all duration-300 shadow-sm">
+                <div className="absolute left-4 text-muted">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
@@ -170,14 +195,14 @@ export default function LoginPage() {
                     setPassword(e.target.value);
                     if (fieldErrors.password) setFieldErrors({ ...fieldErrors, password: undefined });
                   }}
-                  placeholder="Password"
-                  className={`w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-12 py-4 outline-none text-sm rounded-xl ${fieldErrors.password ? 'border border-red-500' : ''}`}
+                  placeholder="Enter your password"
+                  className={`w-full bg-transparent text-foreground placeholder:text-muted/50 pl-12 pr-12 py-4 outline-none text-sm rounded-xl ${fieldErrors.password ? 'border border-red-500' : ''}`}
                   
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 text-gray-400 hover:text-accent transition-all duration-300 hover:scale-110 active:scale-90"
+                  className="absolute right-4 text-muted hover:text-accent transition-all duration-300 hover:scale-110 active:scale-90"
                 >
                   {showPassword ? (
                     <svg
@@ -217,26 +242,6 @@ export default function LoginPage() {
               {fieldErrors.password && (
                 <p className="text-red-500 text-xs mt-1 ml-1">{fieldErrors.password}</p>
               )}
-            </div>
-
-            {/* Options */}
-            <div className="flex justify-between items-center pt-1 px-1">
-              <label className="flex items-center gap-2 cursor-pointer group">
-                <div className="w-4 h-4 rounded-[4px] border border-gray-600 bg-[#181818] flex items-center justify-center group-hover:border-accent transition-colors">
-                  {/* checked icon could go here */}
-                </div>
-                <span className="text-[13px] text-gray-400 select-none group-hover:text-gray-200 transition-colors">
-                  Remember me
-                </span>
-                {/* Hidden actual checkbox */}
-                <input type="checkbox" className="hidden" />
-              </label>
-              <Link
-                href="/forgot-password"
-                className="text-[13px] text-gray-400 hover:text-white transition-colors"
-              >
-                Forget Password?
-              </Link>
             </div>
 
             {/* Login Button */}
@@ -279,12 +284,13 @@ export default function LoginPage() {
               <>
                 <div className="flex items-center gap-4 my-8">
                   <div className="flex-1 border-t border-border"></div>
-                  <span className="text-gray-500 text-sm font-medium pb-1">or</span>
+                  <span className="text-muted text-sm font-medium pb-1">or</span>
                   <div className="flex-1 border-t border-border"></div>
                 </div>
 
                 <GoogleLoginButton
                   disabled={isLoading}
+                  redirectTo={postAuthRedirect}
                   onError={(message) => {
                     setErrorMessage(message);
                     setIsAccountNotFound(false);
@@ -292,21 +298,19 @@ export default function LoginPage() {
                 />
               </>
             )}
+
+            {/* Sign up link */}
+            <p className="text-center text-[14px] text-muted pt-6">
+              Don&apos;t have an account?{" "}
+              <Link
+                href="/register"
+                className="text-accent hover:text-accent-hover font-bold transition-colors underline underline-offset-4"
+              >
+                Sign up
+              </Link>
+            </p>
           </form>
         </div>
-      </div>
-
-      {/* Right Section - Image Background */}
-      <div className="hidden lg:block lg:w-[55%] xl:w-[60%] relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/70 to-transparent z-10"></div>
-        <Image
-          src="/bg-pharaoh.png"
-          alt="Ancient Egyptian pharaoh statue in a modern museum"
-          fill
-          sizes="(min-width: 1280px) 60vw, 55vw"
-          className="object-cover object-center"
-          priority
-        />
       </div>
     </div>
   );

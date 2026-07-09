@@ -2,7 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
-import { X, MapPin } from "lucide-react";
+import Link from "next/link";
+import { X, MapPin, ArrowUpRight } from "lucide-react";
 import type { RoadmapStop } from "@/lib/trip-roadmap";
 
 interface ActivityDetailCardProps {
@@ -25,8 +26,50 @@ export function ActivityDetailCard({
   if (!stop) return null;
 
   const { activity, city, dayNumber, order } = stop;
+  const placeId = activity.place?.id ?? activity.place_id;
+  const placeHref = placeId ? `/places/${placeId}` : null;
   const imageUrl =
     activity.place?.thumbnail_url || activity.thumbnail_url || activity.image_url;
+
+  const content = (
+    <>
+      {imageUrl && (
+        <div className="relative h-36 w-full shrink-0 overflow-hidden border-b border-border dark:border-white/10">
+          <Image
+            src={imageUrl}
+            alt={activity.activity_name}
+            fill
+            sizes="360px"
+            className={`object-cover ${placeHref ? "transition-transform duration-300 group-hover:scale-105" : ""}`}
+          />
+        </div>
+      )}
+
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-3">
+        <h3 className="mb-2 flex items-start gap-2 text-base font-bold leading-snug text-accent lg:text-lg">
+          <span>{activity.activity_name}</span>
+          {placeHref && (
+            <ArrowUpRight
+              size={16}
+              className="mt-1 shrink-0 opacity-70 transition-opacity group-hover:opacity-100"
+            />
+          )}
+        </h3>
+        <div className="mb-3 flex items-center gap-1.5 text-xs text-muted">
+          <MapPin size={13} className="shrink-0" />
+          <span>{city} &middot; {activity.activity_type || "Activity"}</span>
+        </div>
+        <p className="text-[13px] leading-relaxed text-muted">
+          {activity.description || "Explore this amazing destination."}
+        </p>
+        {placeHref && (
+          <p className="mt-3 text-[12px] font-semibold text-accent">
+            View place details
+          </p>
+        )}
+      </div>
+    </>
+  );
 
   return (
     <aside
@@ -51,30 +94,16 @@ export function ActivityDetailCard({
         </button>
       </div>
 
-      {imageUrl && (
-        <div className="relative h-36 w-full shrink-0 overflow-hidden border-b border-border dark:border-white/10">
-          <Image
-            src={imageUrl}
-            alt={activity.activity_name}
-            fill
-            sizes="360px"
-            className="object-cover"
-          />
-        </div>
+      {placeHref ? (
+        <Link
+          href={placeHref}
+          className="group flex min-h-0 flex-1 flex-col overflow-hidden transition-colors hover:bg-surface-elevated/20 dark:hover:bg-white/5"
+        >
+          {content}
+        </Link>
+      ) : (
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{content}</div>
       )}
-
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-3">
-        <h3 className="mb-2 text-base font-bold leading-snug text-accent lg:text-lg">
-          {activity.activity_name}
-        </h3>
-        <div className="mb-3 flex items-center gap-1.5 text-xs text-muted">
-          <MapPin size={13} className="shrink-0" />
-          <span>{city} &middot; {activity.activity_type || "Activity"}</span>
-        </div>
-        <p className="text-[13px] leading-relaxed text-muted">
-          {activity.description || "Explore this amazing destination."}
-        </p>
-      </div>
 
       <div className="flex shrink-0 gap-2 border-t border-border p-3 dark:border-white/10">
         <button

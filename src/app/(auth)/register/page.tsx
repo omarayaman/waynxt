@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { authService } from "@/services/auth.service";
 import NavbarRegister from "./NavbarRegister";
 import { z } from "zod";
 import { GoogleLoginButton } from "@/components/GoogleLoginButton";
 import { isGoogleOAuthConfigured } from "@/lib/google-oauth";
+import { getPostAuthRedirect } from "@/lib/auth-redirect";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -17,11 +19,12 @@ const registerSchema = z.object({
 
 export default function RegisterPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const postAuthRedirect = getPostAuthRedirect(searchParams);
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [termsAccepted, setTermsAccepted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{name?: string, email?: string, password?: string}>({});
@@ -42,11 +45,6 @@ export default function RegisterPage() {
       return;
     }
 
-    if (!termsAccepted) {
-      setErrorMessage("Please agree to the Terms & Privacy Policy");
-      return;
-    }
-    
     setIsLoading(true);
 
     try {
@@ -58,7 +56,7 @@ export default function RegisterPage() {
       const { useAuthStore } = await import('@/store/useAuthStore');
       await useAuthStore.getState().fetchCurrentUser();
       
-      router.push("/");
+      router.push(postAuthRedirect);
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };
       setErrorMessage(
@@ -70,20 +68,28 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground font-sans overflow-hidden">
+    <div className="relative min-h-screen bg-surface-card text-foreground font-sans overflow-hidden">
       {/* Full-screen Background Image */}
-      <div className="absolute inset-0 z-0 opacity-80">
+      <div className="absolute inset-0 z-0 dark:opacity-80">
+        <Image
+          src="/images/white/(3).jpeg"
+          alt="Green pyramids illustration on a light background"
+          fill
+          className="object-cover object-center dark:hidden"
+          priority
+        />
         <Image
           src="/bg-register.png"
           alt="Ancient Egyptian ruins background"
           fill
-          className="object-cover object-center"
+          className="hidden object-cover object-center dark:block"
           priority
         />
       </div>
 
-      {/* Dark gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#050505] from-40% via-[#050505]/80 to-transparent z-[1]"></div>
+      {/* Theme-aware gradient overlay */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-surface-card/95 from-40% via-surface-card/40 to-transparent dark:hidden" />
+      <div className="absolute inset-0 z-[1] hidden bg-gradient-to-r from-black/90 from-40% via-black/65 to-transparent dark:block" />
       {/* Top Navigation */}
       <NavbarRegister step={1} />
       {/* Form Content */}
@@ -92,12 +98,12 @@ export default function RegisterPage() {
           <h1 className="text-[42px] font-bold  text-accent mb-3 tracking-tight">
             Create your account
           </h1>
-          <p className="text-gray-300 mb-10 text-[15px] leading-relaxed">
+          <p className="text-muted mb-10 text-[15px] leading-relaxed">
             Start exploring with a personalized experience.
           </p>
 
           {errorMessage && (
-            <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+            <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm">
               {errorMessage}
             </div>
           )}
@@ -106,13 +112,13 @@ export default function RegisterPage() {
             {/* Name Field */}
             <div className="space-y-2">
               <label
-                className="text-[13px] text-gray-300 block ml-1"
+                className="text-[13px] text-muted block ml-1"
                 htmlFor="name"
               >
                 Name
               </label>
-              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-accent transition-all duration-300">
-                <div className="absolute left-4 text-gray-400">
+              <div className="relative flex items-center bg-[var(--input-bg)] rounded-xl border border-border focus-within:border-accent transition-all duration-300">
+                <div className="absolute left-4 text-muted">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
@@ -136,8 +142,8 @@ export default function RegisterPage() {
                     setName(e.target.value);
                     if (fieldErrors.name) setFieldErrors({ ...fieldErrors, name: undefined });
                   }}
-                  placeholder="Ziad emad"
-                  className={`w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-4 py-4 outline-none text-sm rounded-xl ${fieldErrors.name ? 'border border-red-500' : ''}`}
+                  placeholder="Enter your full name"
+                  className={`w-full bg-transparent text-foreground placeholder:text-muted/50 pl-12 pr-4 py-4 outline-none text-sm rounded-xl ${fieldErrors.name ? 'border border-red-500' : ''}`}
                   
                 />
               </div>
@@ -149,13 +155,13 @@ export default function RegisterPage() {
             {/* Email Field */}
             <div className="space-y-2">
               <label
-                className="text-[13px] text-gray-300 block ml-1"
+                className="text-[13px] text-muted block ml-1"
                 htmlFor="email"
               >
                 Email
               </label>
-              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-accent transition-all duration-300">
-                <div className="absolute left-4 text-gray-400">
+              <div className="relative flex items-center bg-[var(--input-bg)] rounded-xl border border-border focus-within:border-accent transition-all duration-300">
+                <div className="absolute left-4 text-muted">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
@@ -179,8 +185,8 @@ export default function RegisterPage() {
                     setEmail(e.target.value);
                     if (fieldErrors.email) setFieldErrors({ ...fieldErrors, email: undefined });
                   }}
-                  placeholder="Jhonsmith@gmail.com"
-                  className={`w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-4 py-4 outline-none text-sm rounded-xl ${fieldErrors.email ? 'border border-red-500' : ''}`}
+                  placeholder="name@example.com"
+                  className={`w-full bg-transparent text-foreground placeholder:text-muted/50 pl-12 pr-4 py-4 outline-none text-sm rounded-xl ${fieldErrors.email ? 'border border-red-500' : ''}`}
                   
                 />
               </div>
@@ -192,13 +198,13 @@ export default function RegisterPage() {
             {/* Password Field */}
             <div className="space-y-2">
               <label
-                className="text-[13px] text-gray-300 block ml-1"
+                className="text-[13px] text-muted block ml-1"
                 htmlFor="password"
               >
                 Password
               </label>
-              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-accent transition-all duration-300">
-                <div className="absolute left-4 text-gray-400">
+              <div className="relative flex items-center bg-[var(--input-bg)] rounded-xl border border-border focus-within:border-accent transition-all duration-300">
+                <div className="absolute left-4 text-muted">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
@@ -222,14 +228,14 @@ export default function RegisterPage() {
                     setPassword(e.target.value);
                     if (fieldErrors.password) setFieldErrors({ ...fieldErrors, password: undefined });
                   }}
-                  placeholder="Password"
-                  className={`w-full bg-transparent text-white placeholder-gray-500 pl-12 pr-12 py-4 outline-none text-sm rounded-xl ${fieldErrors.password ? 'border border-red-500' : ''}`}
+                  placeholder="At least 6 characters"
+                  className={`w-full bg-transparent text-foreground placeholder:text-muted/50 pl-12 pr-12 py-4 outline-none text-sm rounded-xl ${fieldErrors.password ? 'border border-red-500' : ''}`}
                   
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 text-gray-400 hover:text-accent transition-all duration-300 hover:scale-110 active:scale-90"
+                  className="absolute right-4 text-muted hover:text-accent transition-all duration-300 hover:scale-110 active:scale-90"
                 >
                   {showPassword ? (
                     <svg
@@ -271,28 +277,6 @@ export default function RegisterPage() {
               )}
             </div>
 
-            {/* Terms Checkbox */}
-            <div className="flex items-center pt-1 px-1">
-              <label className="flex items-center gap-2 cursor-pointer group">
-                <div className={`w-4 h-4 rounded-[4px] border ${termsAccepted ? 'border-accent bg-accent' : 'border-gray-600 bg-[#181818]'} flex items-center justify-center group-hover:border-accent transition-colors`}>
-                  {termsAccepted && (
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                  )}
-                </div>
-                <span className="text-[13px] text-gray-400 select-none group-hover:text-gray-200 transition-colors">
-                  I agree to the Terms & Privacy Policy
-                </span>
-                <input 
-                  type="checkbox" 
-                  className="hidden" 
-                  checked={termsAccepted}
-                  onChange={(e) => setTermsAccepted(e.target.checked)}
-                />
-              </label>
-            </div>
-
             {/* Continue Button */}
             <button
               type="submit"
@@ -332,18 +316,30 @@ export default function RegisterPage() {
             {isGoogleOAuthConfigured && (
               <>
                 <div className="flex items-center gap-4 my-6">
-                  <div className="flex-1 border-t border-[#333]"></div>
-                  <span className="text-gray-500 text-sm font-medium">or</span>
-                  <div className="flex-1 border-t border-[#333]"></div>
+                  <div className="flex-1 border-t border-border"></div>
+                  <span className="text-muted text-sm font-medium">or</span>
+                  <div className="flex-1 border-t border-border"></div>
                 </div>
 
                 <GoogleLoginButton
                   disabled={isLoading}
-                  className="w-full flex items-center justify-center gap-3 bg-transparent border border-[#333] hover:border-gray-500 hover:bg-[#111]/50 text-gray-200 py-3.5 rounded-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+                  redirectTo={postAuthRedirect}
+                  label="Sign up With Google"
                   onError={setErrorMessage}
                 />
               </>
             )}
+
+            {/* Log in link */}
+            <p className="text-center text-[14px] text-muted pt-6">
+              Already have an account?{" "}
+              <Link
+                href="/login"
+                className="text-accent hover:text-accent-hover font-bold transition-colors underline underline-offset-4"
+              >
+                Log in
+              </Link>
+            </p>
           </form>
         </div>
       </div>

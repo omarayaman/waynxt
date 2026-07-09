@@ -10,7 +10,7 @@ import {useAuthStore} from "@/store/useAuthStore";
 import {ThemeToggle} from "@/components/ThemeToggle";
 import {useIsDark} from "@/store/useThemeStore";
 
-export const NAVBAR_HEIGHT = 60;
+export const NAVBAR_HEIGHT = 65;
 
 const NAV_LINKS = [
   {name: "Home", href: "/"},
@@ -104,10 +104,10 @@ export default function NavbarHome({className}: {className?: string}) {
             ? "bg-[var(--navbar-solid)] backdrop-blur-xl"
             : "bg-transparent"
         }`}>
-        <div className="mx-auto flex h-[60px] max-w-[1440px] items-center justify-between gap-6 px-6 lg:px-12">
+        <div className="mx-auto flex h-[65px] max-w-[1440px] items-center justify-between gap-6 px-6 lg:px-12">
           <Link
             href="/"
-            className="shrink-0 outline-none focus:outline-none"
+            className="shrink-0 outline-none focus:outline-none flex items-center gap-2 mt-1"
             aria-label="WAYNX home">
             <Image
               src="/icons/rr.jpeg"
@@ -133,7 +133,7 @@ export default function NavbarHome({className}: {className?: string}) {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`relative py-1 text-[15px] font-medium transition-colors ${
+                  className={`relative py-1 text-[18px] font-medium transition-colors ${
                     isActive ? navLinkActive : navLinkInactive
                   }`}>
                   {link.name}
@@ -150,7 +150,7 @@ export default function NavbarHome({className}: {className?: string}) {
 
             <Link
               href="/ask-waynx"
-              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[15px] font-medium transition-colors ${
+              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[18px] font-medium transition-colors ${
                 askActive
                   ? useGreenNavbar
                     ? "bg-white/15 text-[var(--navbar-foreground)]"
@@ -160,7 +160,7 @@ export default function NavbarHome({className}: {className?: string}) {
                     : "text-muted hover:bg-accent-subtle hover:text-foreground"
               }`}>
               <Sparkles
-                size={15}
+                size={18}
                 className={
                   useGreenNavbar || onHero ? "text-[var(--navbar-foreground)]" : "text-accent"
                 }
@@ -222,7 +222,7 @@ export default function NavbarHome({className}: {className?: string}) {
                   href="/register"
                   className={`rounded-xl px-6 py-2.5 text-[15px] font-bold transition-colors ${
                     useGreenNavbar
-                      ? "bg-white text-brand-green-strong hover:bg-white/90"
+                      ? "bg-white/60 hover:bg-white/90"
                       : "bg-accent text-accent-foreground hover:bg-accent-hover"
                   }`}>
                   Sign up

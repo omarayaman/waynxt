@@ -5,17 +5,22 @@ import { useRouter } from "next/navigation";
 import { useGoogleLogin } from "@react-oauth/google";
 import { authService } from "@/services/auth.service";
 
+const DEFAULT_GOOGLE_BUTTON_CLASS =
+  "w-full flex items-center justify-center gap-3 bg-transparent border border-border hover:border-accent/50 hover:bg-surface-elevated text-foreground py-3.5 rounded-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed";
+
 interface GoogleLoginButtonProps {
   disabled?: boolean;
   label?: string;
   className?: string;
+  redirectTo?: string;
   onError?: (message: string) => void;
 }
 
 export function GoogleLoginButton({
   disabled = false,
   label = "Log in With Google",
-  className = "w-full flex items-center justify-center gap-3 bg-transparent border border-[#333] hover:border-gray-500 hover:bg-[#111] text-gray-200 py-3.5 rounded-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed",
+  className = DEFAULT_GOOGLE_BUTTON_CLASS,
+  redirectTo = "/planner",
   onError,
 }: GoogleLoginButtonProps) {
   const router = useRouter();
@@ -40,7 +45,7 @@ export function GoogleLoginButton({
 
         const { useAuthStore } = await import("@/store/useAuthStore");
         await useAuthStore.getState().fetchCurrentUser();
-        router.push("/");
+        router.push(redirectTo);
       } catch (error: unknown) {
         console.error("Backend auth error:", error);
         const err = error as { response?: { data?: { message?: string } } };
@@ -66,7 +71,7 @@ export function GoogleLoginButton({
     >
       {isGoogleLoading ? (
         <svg
-          className="animate-spin h-5 w-5 text-gray-200"
+          className="animate-spin h-5 w-5 text-foreground"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
