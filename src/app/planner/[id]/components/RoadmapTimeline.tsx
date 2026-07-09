@@ -2,13 +2,20 @@
 
 import React, { useRef, useEffect, useState, useMemo } from "react";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
-import type { RoadmapStop } from "@/lib/trip-roadmap";
+import type { RoadmapStop, RoadmapPoint } from "@/lib/trip-roadmap";
 import {
   computeRoadmapLayout,
   buildCurvedPath,
   buildPartialPath,
-  EGYPT_ROADMAP_THEME,
 } from "@/lib/trip-roadmap";
+
+const ROADMAP_CANVAS_PAD = { top: 64, bottom: 96, x: 80 } as const;
+
+interface CanvasDimensions {
+  width: number;
+  height: number;
+  innerWidth: number;
+}
 
 interface RoadmapTimelineProps {
   stops: RoadmapStop[];
@@ -19,34 +26,66 @@ interface RoadmapTimelineProps {
 export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTimelineProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 1200, height: 400 });
+  const [dimensions, setDimensions] = useState<CanvasDimensions>({
+    width: 1200,
+    height: 400,
+    innerWidth: 1056,
+  });
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeftState, setScrollLeftState] = useState(0);
 
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
     const measure = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      // Ensure a minimum width so nodes don't overlap too much if there are many
-      const minWidth = Math.max(rect.width, stops.length * 150);
-      setDimensions({ width: minWidth, height: rect.height || 400 });
+      const rect = container.getBoundingClientRect();
+      const innerWidth = Math.max(
+        rect.width - ROADMAP_CANVAS_PAD.x * 2,
+        stops.length * 150
+      );
+
+      setDimensions({
+        width: innerWidth + ROADMAP_CANVAS_PAD.x * 2,
+        height: Math.max(rect.height, 320),
+        innerWidth,
+      });
     };
 
     measure();
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(container);
     window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+    };
   }, [stops.length]);
 
   const layout = useMemo(
     () =>
       computeRoadmapLayout({
         count: stops.length,
-        width: dimensions.width,
+        width: dimensions.innerWidth,
         seed: "waynx-roadmap",
       }),
-    [stops.length, dimensions.width]
+    [stops.length, dimensions.innerWidth]
   );
+
+  const displayPoints = useMemo((): RoadmapPoint[] => {
+    const layoutBand =
+      dimensions.height - ROADMAP_CANVAS_PAD.top - ROADMAP_CANVAS_PAD.bottom;
+
+    return layout.points.map((p) => ({
+      x: p.x + ROADMAP_CANVAS_PAD.x,
+      y:
+        ROADMAP_CANVAS_PAD.top +
+        (layout.height > 0 ? (p.y / layout.height) * layoutBand : layoutBand / 2),
+    }));
+  }, [layout.points, layout.height, dimensions.height]);
 
   const activeIndex = activeStopId
     ? stops.findIndex((s) => s.id === activeStopId)
@@ -54,19 +93,15 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
 
   // Scroll to active node
   useEffect(() => {
-    if (scrollRef.current && layout.points[activeIndex]) {
-      const p = layout.points[activeIndex];
+    if (scrollRef.current && displayPoints[activeIndex]) {
+      const p = displayPoints[activeIndex];
       const scrollEl = scrollRef.current;
       const scrollLeft = p.x - scrollEl.clientWidth / 2;
       scrollEl.scrollTo({ left: scrollLeft, behavior: "smooth" });
     }
-  }, [activeIndex, layout.points]);
+  }, [activeIndex, displayPoints]);
 
   if (!stops.length) return null;
-
-  // Vertically center the computed layout within the actual container height
-  // We subtract 40 to shift it up a little bit ("سيكا") so bottom labels don't get too close to the edge
-  const offsetY = Math.max(0, (dimensions.height - layout.height) / 2) - 40;
 
   const handleScrollLeft = () => {
     if (scrollRef.current) {
@@ -104,40 +139,41 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
   };
 
   return (
-    <div className="relative w-full rounded-2xl border border-border bg-black shadow-2xl flex flex-col flex-1 min-h-0">
+    <div className="relative flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border border-border 
+    bg-white/80 backdrop-blur-md shadow-[0_12px_48px_color-mix(in_srgb,var(--foreground)_8%,transparent)] dark:border-white/10 dark:bg-black/40 dark:backdrop-blur-md dark:shadow-2xl">
       {/* Header section matching the mockup */}
-      <div className="flex flex-col items-center pt-4 pb-2 shrink-0">
-        <h2 className="text-xl font-semibold text-accent tracking-wide mb-2 font-clash">
+      <div className="flex shrink-0 flex-col items-center px-4 pb-2 pt-4">
+        <h2 className="mb-2 text-center font-clash text-xl font-semibold tracking-wide text-accent">
           Your unique journey is ready
         </h2>
-        <div className="text-[12px] text-[#A67B5B]">
+        <div className="text-[12px] text-muted">
           {stops.length} stops from start to finish
         </div>
       </div>
 
       {/* Navigation & Controls */}
-      <div className="flex items-center justify-between mb-2 px-6 shrink-0">
+      <div className="mb-2 flex shrink-0 items-center justify-between px-6">
           <div className="flex items-center gap-2">
             <button
               onClick={handleScrollLeft}
-              className="w-8 h-8 flex items-center justify-center rounded-full border border-[#2C2917] text-[#9A9585] hover:text-white hover:bg-[#ffffff10] transition-colors"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted transition-colors hover:bg-surface-elevated hover:text-foreground dark:border-white/10 dark:hover:bg-white/10 dark:hover:text-white"
             >
               <ChevronLeft size={16} />
             </button>
             <button
               onClick={handleScrollRight}
-              className="w-8 h-8 flex items-center justify-center rounded-full border border-[#2C2917] text-[#9A9585] hover:text-white hover:bg-[#ffffff10] transition-colors"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted transition-colors hover:bg-surface-elevated hover:text-foreground dark:border-white/10 dark:hover:bg-white/10 dark:hover:text-white"
             >
               <ChevronRight size={16} />
             </button>
           </div>
-          <div className="h-[2px] flex-1 bg-[#2C2917] mx-4 relative rounded-full">
+          <div className="relative mx-4 h-[2px] flex-1 rounded-full bg-border dark:bg-white/10">
             <div 
-              className="absolute left-0 top-0 h-full bg-accent rounded-full transition-all duration-500" 
+              className="absolute left-0 top-0 h-full rounded-full bg-accent transition-all duration-500" 
               style={{ width: `${((activeIndex + 1) / stops.length) * 100}%` }}
             />
           </div>
-          <div className="text-[#9A9585] text-xs font-semibold whitespace-nowrap">
+          <div className="whitespace-nowrap text-xs font-semibold text-muted">
             {activeIndex + 1} / {stops.length}
           </div>
         </div>
@@ -145,20 +181,22 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
       {/* SVG Canvas Container */}
       <div
         ref={containerRef}
-        className="w-full relative flex-1 min-h-0 overflow-hidden"
+        className="relative min-h-0 w-full flex-1"
       >
         <div
           ref={scrollRef}
-          className="w-full h-full overflow-x-auto overflow-y-hidden no-scrollbar relative select-none"
-          style={{ cursor: isDragging ? "grabbing" : "grab" }}
+          className="no-scrollbar relative h-full w-full overflow-x-auto overflow-y-hidden select-none"
+          style={{
+            cursor: isDragging ? "grabbing" : "grab",
+          }}
           onMouseDown={handleMouseDown}
           onMouseLeave={handleMouseLeave}
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}
         >
           <div
-            className="relative h-full"
-            style={{ width: dimensions.width }}
+            className="relative"
+            style={{ width: dimensions.width, height: dimensions.height }}
           >
             {/* Background Map lines */}
             <svg
@@ -178,12 +216,13 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
                 </linearGradient>
               </defs>
 
-              <g transform={`translate(0, ${offsetY})`}>
+              <g>
                 {/* Full path (muted dashed) */}
                 <path
-                  d={buildCurvedPath(layout.points)}
+                  d={buildCurvedPath(displayPoints)}
                   fill="none"
-                  stroke="#2a2418"
+                  stroke="currentColor"
+                  className="text-border dark:text-[#2a2418]"
                   strokeWidth="2"
                   strokeDasharray="6 4"
                 />
@@ -191,7 +230,7 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
                 {/* Active filled path */}
                 {activeIndex > 0 && (
                   <path
-                    d={buildPartialPath(layout.points, activeIndex)}
+                    d={buildPartialPath(displayPoints, activeIndex)}
                     fill="none"
                     stroke="url(#lineGrad)"
                     strokeWidth="3"
@@ -202,7 +241,7 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
             </svg>
 
             {/* Nodes */}
-            {layout.points.map((p, i) => {
+            {displayPoints.map((p, i) => {
               const stop = stops[i];
               const isActive = stop.id === activeStopId || (!activeStopId && i === stops.length - 1 && activeStopId === null);
               const isPast = i <= activeIndex;
@@ -211,8 +250,8 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
               return (
                 <div
                   key={stop.id}
-                  className="absolute transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer"
-                  style={{ left: p.x, top: p.y + offsetY }}
+                  className="absolute flex -translate-x-1/2 -translate-y-1/2 transform cursor-pointer flex-col items-center group"
+                  style={{ left: p.x, top: p.y }}
                   onClick={() => onSelectStop(stop.id)}
                 >
                   <div
@@ -220,8 +259,8 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
                       isActive
                         ? "border-accent w-24 h-24 shadow-[0_0_25px_color-mix(in srgb, var(--accent) %, transparent)] scale-110"
                         : isPast
-                        ? "border-[#C4A265] w-20 h-20 group-hover:border-accent"
-                        : "border-[#2a2418] w-20 h-20 opacity-60 group-hover:opacity-100 group-hover:border-[#555]"
+                        ? "border-accent/60 w-20 h-20 group-hover:border-accent dark:border-[#C4A265]"
+                        : "border-border w-20 h-20 opacity-60 group-hover:opacity-100 group-hover:border-muted dark:border-[#2a2418] dark:group-hover:border-[#555]"
                     }`}
                   >
                     {(i === 0 || i === stops.length - 1) && (
@@ -241,25 +280,25 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
                       }}
                     />
                     {!isActive && !isPast && (
-                      <div className="absolute inset-0 bg-black/50 rounded-full group-hover:bg-black/20 transition-colors" />
+                      <div className="absolute inset-0 rounded-full bg-foreground/20 transition-colors group-hover:bg-foreground/10 dark:bg-black/50 dark:group-hover:bg-black/20" />
                     )}
 
                     {/* Rating Badge */}
                     {stop.activity.rating != null && stop.activity.rating > 0 && (
-                      <div className="absolute -bottom-2 -right-2 bg-[#111] border border-[#333] rounded-full px-2 py-0.5 flex items-center gap-1 shadow-xl">
+                      <div className="absolute -bottom-2 -right-2 flex items-center gap-1 rounded-full border border-border bg-surface px-2 py-0.5 shadow-xl dark:border-white/10 dark:bg-black/80">
                         <Star size={10} className="text-accent" fill="currentColor" />
-                        <span className="text-[10px] text-white font-bold">{stop.activity.rating}</span>
+                        <span className="text-[10px] font-bold text-foreground dark:text-white">{stop.activity.rating}</span>
                       </div>
                     )}
                   </div>
 
-                  <div className={`mt-4 flex flex-col items-center text-center w-36 transition-all ${
-                    isActive ? "opacity-100 scale-105" : "opacity-70 group-hover:opacity-100"
+                  <div className={`mt-4 flex max-w-[11rem] flex-col items-center px-1 text-center transition-all ${
+                    isActive ? "scale-105 opacity-100" : "opacity-90 group-hover:opacity-100 dark:opacity-70"
                   }`}>
-                    <span className="text-[13px] font-bold text-white line-clamp-2 leading-snug">
+                    <span className="break-words text-[13px] font-bold leading-snug text-foreground dark:text-white">
                       {stop.activity.activity_name}
                     </span>
-                    <span className="text-[11px] text-[#A67B5B] mt-1 font-medium">
+                    <span className="mt-1 text-[11px] font-medium text-muted">
                       {stop.city} &middot; Day {stop.dayNumber}
                     </span>
                   </div>

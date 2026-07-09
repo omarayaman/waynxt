@@ -82,7 +82,7 @@ export function PlacesActiveFilters() {
           key={filter.key}
           type="button"
           onClick={filter.onRemove}
-          className="inline-flex items-center gap-1 pl-2 pr-1.5 py-0.5 rounded-md bg-accent-subtle text-[10px] text-muted hover:text-foreground transition-colors capitalize border border-border"
+          className="inline-flex items-center gap-1 pl-2 pr-1.5 py-0.5 rounded-md dark:bg-accent-subtle bg-white/70 text-[10px] text-muted hover:text-foreground transition-colors capitalize border border-border"
         >
           {filter.label}
           <X size={10} className="text-muted" />

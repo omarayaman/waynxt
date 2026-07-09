@@ -27,8 +27,8 @@ export function SettingsSection({ fullName, city, onProfileUpdate }: SettingsSec
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-base font-medium text-white">Settings</h2>
-        <p className="text-sm text-[#666] mt-1">Manage your profile, security, and account.</p>
+        <h2 className="text-base font-medium text-foreground">Settings</h2>
+        <p className="text-sm text-muted mt-1">Manage your profile, security, and account.</p>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
@@ -40,14 +40,14 @@ export function SettingsSection({ fullName, city, onProfileUpdate }: SettingsSec
               onClick={() => setActiveTab(id)}
               className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left transition-colors whitespace-nowrap lg:whitespace-normal ${
                 activeTab === id
-                  ? "bg-[#161616] text-white"
-                  : "text-[#777] hover:text-[#bbb] hover:bg-[#111]"
+                  ? "bg-surface-elevated text-foreground font-medium"
+                  : "text-muted hover:text-foreground hover:bg-surface-elevated/60"
               }`}
             >
               <Icon size={15} className="shrink-0" />
               <span>
                 <span className="block text-sm">{label}</span>
-                <span className="hidden lg:block text-[11px] text-[#555] mt-0.5">{desc}</span>
+                <span className="hidden lg:block text-[11px] text-muted mt-0.5">{desc}</span>
               </span>
             </button>
           ))}

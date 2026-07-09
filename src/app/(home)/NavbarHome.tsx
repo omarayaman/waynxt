@@ -1,23 +1,23 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import React, {useEffect, useState} from "react";
+import {createPortal} from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
-import { Menu, Sparkles, X } from "lucide-react";
-import { useAuthStore } from "@/store/useAuthStore";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { resolveTheme, useThemeStore } from "@/store/useThemeStore";
+import {usePathname} from "next/navigation";
+import {AnimatePresence, motion} from "framer-motion";
+import {Menu, Sparkles, X} from "lucide-react";
+import {useAuthStore} from "@/store/useAuthStore";
+import {ThemeToggle} from "@/components/ThemeToggle";
+import {resolveTheme, useThemeStore} from "@/store/useThemeStore";
 
 export const NAVBAR_HEIGHT = 60;
 
 const NAV_LINKS = [
-  { name: "Home", href: "/" },
-  { name: "Planner", href: "/planner" },
-  { name: "Places", href: "/places" },
-  { name: "About", href: "/about" },
+  {name: "Home", href: "/"},
+  {name: "Planner", href: "/planner"},
+  {name: "Places", href: "/places"},
+  {name: "About", href: "/about"},
 ];
 
 function isLinkActive(pathname: string, href: string): boolean {
@@ -36,7 +36,7 @@ function getInitials(name: string): string {
 
 export default function NavbarHome({className}: {className?: string}) {
   const pathname = usePathname();
-  const { user, isAuthenticated, isLoading } = useAuthStore();
+  const {user, isAuthenticated, isLoading} = useAuthStore();
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -60,7 +60,7 @@ export default function NavbarHome({className}: {className?: string}) {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, {passive: true});
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -82,9 +82,7 @@ export default function NavbarHome({className}: {className?: string}) {
       : "text-muted hover:text-foreground";
   const navLinkActive =
     useGreenNavbar || onHero ? "text-[var(--navbar-foreground)]" : "text-accent";
-  const navIndicator = useGreenNavbar
-    ? "bg-[var(--navbar-foreground)]"
-    : "bg-accent";
+  const navIndicator = useGreenNavbar ? "bg-[var(--navbar-foreground)]" : "bg-accent";
 
   const navbar = (
     <>
@@ -93,14 +91,12 @@ export default function NavbarHome({className}: {className?: string}) {
           useGreenNavbar || showSolidBg || !isHome
             ? "bg-[var(--navbar-solid)] backdrop-blur-xl"
             : "bg-transparent"
-        }`}
-      >
+        }`}>
         <div className="mx-auto flex h-[60px] max-w-[1440px] items-center justify-between gap-6 px-6 lg:px-12">
           <Link
             href="/"
             className="shrink-0 outline-none focus:outline-none"
-            aria-label="WAYNX home"
-          >
+            aria-label="WAYNX home">
             <Image
               src="/icons/full_Logo.svg"
               alt="WAYNX"
@@ -120,14 +116,13 @@ export default function NavbarHome({className}: {className?: string}) {
                   href={link.href}
                   className={`relative py-1 text-[15px] font-medium transition-colors ${
                     isActive ? navLinkActive : navLinkInactive
-                  }`}
-                >
+                  }`}>
                   {link.name}
                   {isActive && (
                     <motion.span
                       layoutId="navbar-indicator"
                       className={`absolute -bottom-1 left-0 right-0 mx-auto h-[2px] w-full rounded-full ${navIndicator}`}
-                      transition={{ type: "spring", bounce: 0.15, duration: 0.45 }}
+                      transition={{type: "spring", bounce: 0.15, duration: 0.45}}
                     />
                   )}
                 </Link>
@@ -144,11 +139,12 @@ export default function NavbarHome({className}: {className?: string}) {
                   : useGreenNavbar || onHero
                     ? "text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]"
                     : "text-muted hover:bg-accent-subtle hover:text-foreground"
-              }`}
-            >
+              }`}>
               <Sparkles
                 size={15}
-                className={useGreenNavbar || onHero ? "text-[var(--navbar-foreground)]" : "text-accent"}
+                className={
+                  useGreenNavbar || onHero ? "text-[var(--navbar-foreground)]" : "text-accent"
+                }
               />
               Ask Waynx
             </Link>
@@ -172,8 +168,7 @@ export default function NavbarHome({className}: {className?: string}) {
                     : useGreenNavbar || onHero
                       ? "ring-2 ring-white/25 hover:ring-white/50"
                       : "ring-2 ring-border hover:ring-accent/45"
-                }`}
-              >
+                }`}>
                 {user.avatar_url ? (
                   <Image
                     src={user.avatar_url}
@@ -188,8 +183,7 @@ export default function NavbarHome({className}: {className?: string}) {
                       useGreenNavbar || onHero
                         ? "bg-white/15 text-[var(--navbar-foreground)]"
                         : "bg-linear-to-br from-accent-subtle to-surface-elevated text-accent"
-                    }`}
-                  >
+                    }`}>
                     {getInitials(user.full_name) || "U"}
                   </div>
                 )}
@@ -202,8 +196,7 @@ export default function NavbarHome({className}: {className?: string}) {
                     useGreenNavbar || onHero
                       ? "text-[var(--navbar-muted)] hover:text-[var(--navbar-foreground)]"
                       : "text-muted hover:text-foreground"
-                  }`}
-                >
+                  }`}>
                   Log in
                 </Link>
                 <Link
@@ -212,8 +205,7 @@ export default function NavbarHome({className}: {className?: string}) {
                     useGreenNavbar
                       ? "bg-white text-brand-green-strong hover:bg-white/90"
                       : "bg-accent text-accent-foreground hover:bg-accent-hover"
-                  }`}
-                >
+                  }`}>
                   Sign up
                 </Link>
               </div>
@@ -228,8 +220,7 @@ export default function NavbarHome({className}: {className?: string}) {
                   : "text-muted hover:bg-foreground/5 hover:text-foreground"
               }`}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
-              aria-expanded={mobileOpen}
-            >
+              aria-expanded={mobileOpen}>
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
@@ -241,20 +232,19 @@ export default function NavbarHome({className}: {className?: string}) {
           <>
             <motion.button
               type="button"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{opacity: 0}}
+              animate={{opacity: 1}}
+              exit={{opacity: 0}}
               className="fixed inset-0 z-[190] bg-[var(--overlay)] lg:hidden"
               onClick={() => setMobileOpen(false)}
               aria-label="Close menu overlay"
             />
             <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-x-0 top-[68px] z-[195] bg-[var(--navbar-mobile)] px-6 py-5 backdrop-blur-xl lg:hidden"
-            >
+              initial={{opacity: 0, y: -8}}
+              animate={{opacity: 1, y: 0}}
+              exit={{opacity: 0, y: -8}}
+              transition={{duration: 0.2}}
+              className="fixed inset-x-0 top-[68px] z-[195] bg-[var(--navbar-mobile)] px-6 py-5 backdrop-blur-xl lg:hidden">
               <nav className="flex flex-col gap-1">
                 {NAV_LINKS.map((link) => {
                   const isActive = isLinkActive(pathname, link.href);
@@ -266,8 +256,7 @@ export default function NavbarHome({className}: {className?: string}) {
                         isActive
                           ? "bg-white/15 text-[var(--navbar-foreground)]"
                           : "text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]"
-                      }`}
-                    >
+                      }`}>
                       {link.name}
                     </Link>
                   );
@@ -279,8 +268,7 @@ export default function NavbarHome({className}: {className?: string}) {
                     askActive
                       ? "bg-white/15 text-[var(--navbar-foreground)]"
                       : "text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]"
-                  }`}
-                >
+                  }`}>
                   <Sparkles size={16} className="text-[var(--navbar-foreground)]" />
                   Ask Waynx
                 </Link>
@@ -289,14 +277,12 @@ export default function NavbarHome({className}: {className?: string}) {
                   <div className="mt-4 flex flex-col gap-2 border-t border-[var(--navbar-border)] pt-4">
                     <Link
                       href="/login"
-                      className="rounded-xl px-4 py-3 text-center text-base font-medium text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]"
-                    >
+                      className="rounded-xl px-4 py-3 text-center text-base font-medium text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]">
                       Log in
                     </Link>
                     <Link
                       href="/register"
-                      className="rounded-xl bg-white px-4 py-3 text-center text-base font-bold text-brand-green-strong hover:bg-white/90"
-                    >
+                      className="rounded-xl bg-white px-4 py-3 text-center text-base font-bold text-brand-green-strong hover:bg-white/90">
                       Sign up
                     </Link>
                   </div>

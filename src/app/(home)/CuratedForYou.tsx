@@ -29,10 +29,10 @@ export default function CuratedForYou() {
   return (
     <section className="w-full bg-background py-20 px-4 flex flex-col items-center overflow-hidden">
       <div className="max-w-[1200px] w-full flex flex-col items-center">
-        <h2 className="text-4xl md:text-[44px] font-bold text-white mb-4 text-center">
+        <h2 className="text-4xl md:text-[44px] font-bold text-foreground mb-4 text-center">
           Curated for You
         </h2>
-        <p className="text-gray-400 text-base md:text-lg text-center mb-12 max-w-[600px]">
+        <p className="text-muted text-base md:text-lg text-center mb-12 max-w-[600px]">
           AI-powered recommendations based on your interests and travel history.
         </p>
 

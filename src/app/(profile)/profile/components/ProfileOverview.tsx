@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { MapPin, Target, Bookmark, MessageSquare, ChevronRight } from "lucide-react";
+import { Target, Bookmark, MessageSquare, ChevronRight } from "lucide-react";
 import type { UserStats } from "@/types/user";
 import type { ProfileSection } from "./ProfileNav";
 
@@ -21,7 +21,7 @@ export function ProfileOverview({ stats, isLoading, onNavigate }: ProfileOvervie
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-sm font-medium text-[#888] mb-4">Activity summary</h2>
+        <h2 className="text-sm font-medium text-muted mb-4">Activity summary</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {statCards.map(({ key, label, icon: Icon, section }) => {
             const value = stats?.[key] ?? 0;
@@ -30,18 +30,18 @@ export function ProfileOverview({ stats, isLoading, onNavigate }: ProfileOvervie
             const content = (
               <>
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#161616] flex items-center justify-center">
-                    <Icon size={16} className="text-[#666]" />
+                  <div className="w-9 h-9 rounded-lg bg-surface-elevated flex items-center justify-center">
+                    <Icon size={16} className="text-muted" />
                   </div>
                   <div>
-                    <p className="text-2xl font-semibold text-white tabular-nums">
+                    <p className="text-2xl font-semibold text-foreground tabular-nums">
                       {isLoading ? "—" : value}
                     </p>
-                    <p className="text-xs text-[#666] mt-0.5">{label}</p>
+                    <p className="text-xs text-muted mt-0.5">{label}</p>
                   </div>
                 </div>
                 {isClickable && (
-                  <ChevronRight size={16} className="text-[#444] group-hover:text-[#777] transition-colors" />
+                  <ChevronRight size={16} className="text-muted group-hover:text-foreground transition-colors" />
                 )}
               </>
             );
@@ -52,7 +52,7 @@ export function ProfileOverview({ stats, isLoading, onNavigate }: ProfileOvervie
                   key={key}
                   type="button"
                   onClick={() => onNavigate(section!)}
-                  className="group flex items-center justify-between p-4 rounded-xl border border-border bg-[#0d0d0d] hover:border-[#2a2a2a] hover:bg-[#111] transition-colors text-left w-full"
+                  className="group flex items-center justify-between p-4 rounded-xl border border-border bg-surface hover:border-accent/30 hover:bg-surface-elevated/50 transition-colors text-left w-full"
                 >
                   {content}
                 </button>
@@ -62,7 +62,7 @@ export function ProfileOverview({ stats, isLoading, onNavigate }: ProfileOvervie
             return (
               <div
                 key={key}
-                className="flex items-center justify-between p-4 rounded-xl border border-border bg-[#0d0d0d]"
+                className="flex items-center justify-between p-4 rounded-xl border border-border bg-surface"
               >
                 {content}
               </div>
@@ -72,9 +72,9 @@ export function ProfileOverview({ stats, isLoading, onNavigate }: ProfileOvervie
       </div>
 
       {stats && stats.explorer_points > 0 && (
-        <div className="p-4 rounded-xl border border-border bg-[#0d0d0d]">
-          <p className="text-xs text-[#666] mb-1">Explorer points</p>
-          <p className="text-2xl font-semibold text-white tabular-nums">
+        <div className="p-4 rounded-xl border border-border bg-surface">
+          <p className="text-xs text-muted mb-1">Explorer points</p>
+          <p className="text-2xl font-semibold text-foreground tabular-nums">
             {stats.explorer_points.toLocaleString()}
           </p>
         </div>

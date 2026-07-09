@@ -17,21 +17,22 @@ html {
 
   /* Light mode — rich green + white */
   --background: #ffffff;
-  --foreground: #0a0a0a;
+  --foreground: #000000;
   --surface: #ffffff;
   --surface-elevated: #dff5cf;
-  --muted: #2f4a28;
+  --muted: #1a2616;
+  --muted-foreground: #1a2616;
   --border: #6fbf40;
   --border-subtle: #b8e090;
   --footer: #c8eca8;
   --accent: #6fbf40;
   --accent-hover: #5aad38;
-  --accent-foreground: #0a0a0a;
+  --accent-foreground: #000000;
   --accent-subtle: rgb(111 191 64 / 0.22);
   --navbar-solid: #9ede73;
   --navbar-mobile: #9ede73;
   --navbar-foreground: #000000;
-  --navbar-muted: rgb(0 0 0 / 0.55);
+  --navbar-muted: rgb(0 0 0 / 0.78);
   --navbar-border: rgb(0 0 0 / 0.12);
   --navbar-control-bg: rgb(0 0 0 / 0.06);
   --navbar-control-border: rgb(0 0 0 / 0.15);
@@ -52,6 +53,7 @@ html {
   --surface: #0a0a0a;
   --surface-elevated: #141414;
   --muted: #a0a0a0;
+  --muted-foreground: #a0a0a0;
   --border: #222222;
   --border-subtle: #1a1a1a;
   --footer: #0a0a0a;
@@ -82,6 +84,7 @@ html {
   --color-surface: var(--surface);
   --color-surface-elevated: var(--surface-elevated);
   --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --color-border-subtle: var(--border-subtle);
   --color-footer: var(--footer);

@@ -34,11 +34,11 @@ export function ProfileHeader({
   return (
     <div className="flex items-center gap-5 pb-8 border-b border-border">
       <div className="relative shrink-0">
-        <div className="relative w-16 h-16 rounded-full overflow-hidden bg-[#161616] group">
+        <div className="relative w-16 h-16 rounded-full overflow-hidden bg-surface-elevated group">
           {avatarUrl ? (
             <Image src={avatarUrl} alt={fullName} fill className="object-cover" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-xl font-medium text-[#666]">
+            <div className="w-full h-full flex items-center justify-center text-xl font-medium text-muted">
               {fullName.charAt(0).toUpperCase()}
             </div>
           )}
@@ -66,9 +66,9 @@ export function ProfileHeader({
       </div>
 
       <div className="min-w-0 flex-1">
-        <h1 className="text-xl font-semibold text-white truncate">{fullName}</h1>
-        <p className="text-sm text-[#777] truncate mt-0.5">{email}</p>
-        <p className="text-xs text-[#555] mt-1.5">
+        <h1 className="text-xl font-semibold text-foreground truncate">{fullName}</h1>
+        <p className="text-sm text-muted truncate mt-0.5">{email}</p>
+        <p className="text-xs text-muted mt-1.5">
           {[city, `Member since ${joinedDate}`].filter(Boolean).join(" · ")}
         </p>
       </div>

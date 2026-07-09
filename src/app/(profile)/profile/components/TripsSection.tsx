@@ -28,7 +28,7 @@ function statusStyle(status: string): string {
     case "completed":
       return "text-green-400/80 bg-green-400/10";
     case "draft":
-      return "text-[#888] bg-[#1a1a1a]";
+      return "text-muted bg-surface-elevated";
     default:
       return "text-blue-400/80 bg-blue-400/10";
   }
@@ -94,8 +94,8 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
     <div>
       <div className="flex items-end justify-between mb-6">
         <div>
-          <h2 className="text-base font-medium text-white">Generated trips</h2>
-          <p className="text-sm text-[#666] mt-1">
+          <h2 className="text-base font-medium text-foreground">Generated trips</h2>
+          <p className="text-sm text-muted mt-1">
             {total > 0
               ? `${total} AI-generated itinerar${total === 1 ? "y" : "ies"}`
               : "Trips created with the AI planner"}
@@ -103,7 +103,7 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
         </div>
         <Link
           href="/planner"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs text-white bg-[#1a1a1a] hover:bg-[#222] rounded-lg transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-accent text-accent-foreground hover:bg-accent-hover rounded-lg transition-colors"
         >
           <Plus size={13} />
           New trip
@@ -118,18 +118,18 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
 
       {isLoading ? (
         <div className="flex justify-center py-24">
-          <Loader2 size={24} className="animate-spin text-[#555]" />
+          <Loader2 size={24} className="animate-spin text-muted" />
         </div>
       ) : trips.length === 0 ? (
-        <div className="rounded-xl border border-border bg-[#0d0d0d] py-16 text-center">
-          <Map size={24} className="text-[#444] mx-auto mb-3" />
-          <p className="text-sm text-[#888]">No trips yet</p>
-          <p className="text-xs text-[#555] mt-1 mb-5">
+        <div className="rounded-xl border border-border bg-surface py-16 text-center">
+          <Map size={24} className="text-muted mx-auto mb-3" />
+          <p className="text-sm text-muted">No trips yet</p>
+          <p className="text-xs text-muted mt-1 mb-5">
             Use the AI planner to generate a personalized itinerary.
           </p>
           <Link
             href="/planner"
-            className="inline-flex px-4 py-2 text-sm text-white bg-[#1a1a1a] hover:bg-[#222] rounded-lg transition-colors"
+            className="inline-flex px-4 py-2 text-sm bg-accent text-accent-foreground hover:bg-accent-hover rounded-lg transition-colors"
           >
             Create a trip
           </Link>
@@ -139,15 +139,15 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
           <div className="rounded-xl border border-border overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border bg-[#0d0d0d]">
-                  <th className="text-left px-4 py-3 text-xs font-medium text-[#666]">Trip</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-[#666] hidden md:table-cell">
+                <tr className="border-b border-border bg-surface">
+                  <th className="text-left px-4 py-3 text-xs font-medium text-muted">Trip</th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-muted hidden md:table-cell">
                     Destinations
                   </th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-[#666] hidden sm:table-cell">
+                  <th className="text-left px-4 py-3 text-xs font-medium text-muted hidden sm:table-cell">
                     Dates
                   </th>
-                  <th className="text-right px-4 py-3 text-xs font-medium text-[#666]">Status</th>
+                  <th className="text-right px-4 py-3 text-xs font-medium text-muted">Status</th>
                   <th className="w-10" />
                 </tr>
               </thead>
@@ -157,7 +157,7 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
                   return (
                     <tr
                       key={trip.id}
-                      className="group border-b border-border last:border-0 hover:bg-[#111] transition-colors cursor-pointer"
+                      className="group border-b border-border last:border-0 hover:bg-surface-elevated/50 transition-colors cursor-pointer"
                       onClick={() => router.push(`/planner/${trip.id}`)}
                     >
                       <td className="px-4 py-3.5">
@@ -166,23 +166,23 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
                           className="flex items-center gap-3"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          <div className="w-8 h-8 rounded-lg bg-[#161616] flex items-center justify-center shrink-0">
-                            <Map size={14} className="text-[#555]" />
+                          <div className="w-8 h-8 rounded-lg bg-surface-elevated flex items-center justify-center shrink-0">
+                            <Map size={14} className="text-muted" />
                           </div>
                           <div className="min-w-0">
-                            <p className="text-white font-medium truncate group-hover:text-[#F7EA00] transition-colors">
+                            <p className="text-foreground font-medium truncate group-hover:text-accent transition-colors">
                               {trip.title}
                             </p>
-                            <p className="text-xs text-[#555] mt-0.5 md:hidden">
+                            <p className="text-xs text-muted mt-0.5 md:hidden">
                               {getDestinationsLabel(trip)}
                             </p>
                           </div>
                         </Link>
                       </td>
-                      <td className="px-4 py-3.5 text-[#777] hidden md:table-cell truncate max-w-[180px]">
+                      <td className="px-4 py-3.5 text-muted hidden md:table-cell truncate max-w-[180px]">
                         {getDestinationsLabel(trip)}
                       </td>
-                      <td className="px-4 py-3.5 text-[#555] text-xs hidden sm:table-cell whitespace-nowrap">
+                      <td className="px-4 py-3.5 text-muted text-xs hidden sm:table-cell whitespace-nowrap">
                         <span className="inline-flex items-center gap-1">
                           <Calendar size={12} />
                           {formatDateRange(trip.start_date, trip.end_date)}
@@ -199,7 +199,7 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
                         <div className="flex items-center justify-end gap-1">
                           <Link
                             href={`/planner/${trip.id}`}
-                            className="p-2 rounded-lg text-[#444] hover:text-[#F7EA00] hover:bg-[#F7EA00]/10 opacity-0 group-hover:opacity-100 transition-all"
+                            className="p-2 rounded-lg text-muted hover:text-accent hover:bg-accent/10 opacity-0 group-hover:opacity-100 transition-all"
                             aria-label="View trip"
                             onClick={(e) => e.stopPropagation()}
                           >
@@ -212,7 +212,7 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
                               handleDelete(trip.id);
                             }}
                             disabled={isDeleting}
-                            className="p-2 rounded-lg text-[#444] hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all disabled:opacity-50"
+                            className="p-2 rounded-lg text-muted hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all disabled:opacity-50"
                             aria-label="Delete trip"
                           >
                             {isDeleting ? (

@@ -13,8 +13,8 @@ export function PreferencesSection({ preferences, onPreferencesUpdate }: Prefere
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-base font-medium text-white">Travel preferences</h2>
-        <p className="text-sm text-[#666] mt-1">
+        <h2 className="text-base font-medium text-foreground">Travel preferences</h2>
+        <p className="text-sm text-muted mt-1">
           Customize how Waynx recommends places and builds your itineraries.
         </p>
       </div>

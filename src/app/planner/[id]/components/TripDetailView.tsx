@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { isAxiosError } from "axios";
 import {
-  ArrowLeft,
   Calendar,
   CheckCircle2,
   Loader2,
@@ -17,6 +16,8 @@ import {
 import { tripService } from "@/services/trip.service";
 import type { Trip, TripStatus } from "@/types/trip";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import NavbarHome, { NAVBAR_HEIGHT } from "@/app/(home)/NavbarHome";
+import PlannerBackground from "@/app/planner/components/PlannerBackground";
 import { TripTopPlaces } from "./TripTopPlaces";
 import { RoadmapTimeline } from "./RoadmapTimeline";
 import { ActivityDetailCard } from "./ActivityDetailCard";
@@ -36,11 +37,11 @@ function formatDateRange(start: string, end: string): string {
 function statusStyle(status: string): string {
   switch (status) {
     case "completed":
-      return "text-green-400/80 bg-green-400/10 border-green-400/20";
+      return "text-green-700 bg-green-500/10 border-green-500/25 dark:text-green-400/80 dark:bg-green-400/10 dark:border-green-400/20";
     case "confirmed":
-      return "text-blue-400/80 bg-blue-400/10 border-blue-400/20";
+      return "text-blue-700 bg-blue-500/10 border-blue-500/25 dark:text-blue-400/80 dark:bg-blue-400/10 dark:border-blue-400/20";
     default:
-      return "text-accent bg-[#111] border-accent/30";
+      return "text-accent bg-accent/10 border-accent/30 dark:bg-black/40";
   }
 }
 
@@ -156,31 +157,32 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
 
   return (
     <ProtectedRoute>
-      <div 
-        className="h-screen overflow-hidden text-white relative flex flex-col"
-        style={{
-          background: "radial-gradient(ellipse 900px 500px at 15% -10%, rgba(245,197,24,0.04), transparent 60%), radial-gradient(ellipse 700px 500px at 100% 0%, rgba(255,93,122,0.03), transparent 60%), #000"
-        }}
-      >
-        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 md:px-12 py-6 relative z-10 flex flex-col flex-1 min-h-0">
-          <Link
-            href="/planner"
-            className="inline-flex shrink-0 items-center gap-1.5 text-sm text-[#666] hover:text-white transition-colors mb-4"
-          >
-            <ArrowLeft size={16} />
-            Back to planner
-          </Link>
+      <div className="flex h-dvh flex-col overflow-hidden bg-background text-foreground font-poppins dark:bg-black">
+        <NavbarHome
+          className="dark:bg-transparent dark:backdrop-blur-none"
+          // backLink={{ href: "/planner", label: "Back to planner" }}
+        />
 
+        <div
+          className="relative flex min-h-0 flex-1 flex-col overflow-hidden px-4 sm:px-6"
+          style={{
+            paddingTop: NAVBAR_HEIGHT + 20,
+            paddingBottom: 24,
+          }}
+        >
+          <PlannerBackground />
+
+          <div className="relative z-10 mx-auto flex min-h-0 w-full max-w-[1600px] flex-1 flex-col overflow-hidden">
           {isLoading ? (
             <div className="flex justify-center py-32">
-              <Loader2 size={28} className="animate-spin text-[#555]" />
+              <Loader2 size={28} className="animate-spin text-muted" />
             </div>
           ) : error || !trip ? (
             <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-6 text-center">
-              <p className="text-red-400">{error || "Trip not found"}</p>
+              <p className="text-red-600 dark:text-red-400">{error || "Trip not found"}</p>
               <Link
                 href="/planner"
-                className="inline-block mt-4 text-sm text-accent hover:underline"
+                className="mt-4 inline-block text-sm text-accent hover:underline"
               >
                 Create a new trip
               </Link>
@@ -188,34 +190,34 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
           ) : (
             <>
               {/* Trip Header */}
-              <div className="shrink-0 flex flex-col sm:flex-row sm:items-start justify-between gap-4 bg-linear-to-br from-[#111] to-black border border-border rounded-2xl p-5 mb-4">
+              <div className="mb-3 flex shrink-0 flex-col justify-between gap-4 rounded-2xl border border-border bg-white/80 backdrop-blur-md p-4 shadow-[0_12px_48px_color-mix(in_srgb,var(--foreground)_8%,transparent)] sm:flex-row sm:items-start sm:p-5 dark:border-white/10 dark:bg-black/40 dark:backdrop-blur-md dark:shadow-[0_8px_60px_rgba(0,0,0,0.55)]">
                 <div>
-                  <h1 className="text-xl sm:text-2xl font-clash font-bold text-white mb-2">
+                  <h1 className="mb-2 font-clash text-xl font-bold text-foreground sm:text-2xl dark:text-white">
                     {trip.title}
                   </h1>
-                  <div className="flex flex-wrap items-center gap-2.5 text-[12.5px] text-[#9A9585]">
+                  <div className="flex flex-wrap items-center gap-2.5 text-[12.5px] text-muted">
                     <span className="inline-flex items-center gap-1.5"><Calendar size={13} /> {formatDateRange(trip.start_date, trip.end_date)}</span>
-                    <span className="text-[#5F5C50]">&bull;</span>
+                    <span className="text-border">&bull;</span>
                     <span className="inline-flex items-center gap-1.5"><Users size={13} /> {trip.travelers_count} traveler{trip.travelers_count !== 1 ? "s" : ""}</span>
-                    <span className="text-[#5F5C50]">&bull;</span>
-                    <span className={`px-2 py-0.5 rounded-full border text-[10.5px] capitalize ${statusStyle(trip.status)}`}>
+                    <span className="text-border">&bull;</span>
+                    <span className={`rounded-full border px-2 py-0.5 text-[10.5px] capitalize ${statusStyle(trip.status)}`}>
                       {trip.status}
                     </span>
-                    <span className="text-[#5F5C50]">&bull;</span>
-                    <span className="font-medium text-accent">{totalDays} <span className="text-[#9A9585] font-normal">Days</span></span>
-                    <span className="text-[#5F5C50]">&bull;</span>
-                    <span className="font-medium text-accent">{totalDestinations} <span className="text-[#9A9585] font-normal">Destinations</span></span>
-                    <span className="text-[#5F5C50]">&bull;</span>
-                    <span className="font-medium text-accent">{totalActivities} <span className="text-[#9A9585] font-normal">Activities</span></span>
+                    <span className="text-border">&bull;</span>
+                    <span className="font-medium text-accent">{totalDays} <span className="font-normal text-muted">Days</span></span>
+                    <span className="text-border">&bull;</span>
+                    <span className="font-medium text-accent">{totalDestinations} <span className="font-normal text-muted">Destinations</span></span>
+                    <span className="text-border">&bull;</span>
+                    <span className="font-medium text-accent">{totalActivities} <span className="font-normal text-muted">Activities</span></span>
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2 shrink-0">
+                <div className="flex shrink-0 flex-wrap gap-2">
                   <button
                     type="button"
                     onClick={handleRegenerate}
                     disabled={isRegenerating}
-                    className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-[#9A9585] bg-transparent hover:bg-[#ffffff05] border border-border rounded-xl transition-colors disabled:opacity-50"
+                    className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-border bg-transparent px-3.5 py-2 text-[12.5px] font-semibold text-muted transition-colors hover:bg-surface-elevated disabled:opacity-50 sm:flex-none dark:border-white/10 dark:hover:bg-white/5 dark:hover:text-white"
                   >
                     {isRegenerating ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
                     Regenerate
@@ -225,7 +227,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                       type="button"
                       onClick={handleConfirm}
                       disabled={isUpdatingStatus}
-                      className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-[#1a1608] bg-accent hover:bg-accent-hover rounded-xl transition-colors disabled:opacity-50"
+                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-accent px-3.5 py-2 text-[12.5px] font-semibold text-accent-foreground transition-colors hover:bg-accent-hover disabled:opacity-50 sm:flex-none"
                     >
                       {isUpdatingStatus ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
                       Confirm Trip
@@ -235,7 +237,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                     type="button"
                     onClick={handleDelete}
                     disabled={isDeleting}
-                    className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-red-400 bg-transparent hover:bg-red-500/10 border border-border rounded-xl transition-colors disabled:opacity-50"
+                    className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-border bg-transparent px-3.5 py-2 text-[12.5px] font-semibold text-red-600 transition-colors hover:bg-red-500/10 disabled:opacity-50 sm:flex-none dark:text-red-400"
                   >
                     {isDeleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
                     Delete
@@ -244,16 +246,16 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
               </div>
 
               {/* Tabs */}
-              <div className="shrink-0 flex gap-6 border-b border-border mb-2">
+              <div className="mb-2 flex shrink-0 gap-6 border-b border-border">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    className={`py-2.5 px-1 text-[13px] font-semibold transition-colors border-b-2 -mb-[1px] ${
+                    className={`-mb-px border-b-2 px-1 py-2.5 text-[13px] font-semibold transition-colors ${
                       activeTab === tab.id
                         ? "border-accent text-accent"
-                        : "border-transparent text-[#5F5C50] hover:text-[#9A9585]"
+                        : "border-transparent text-muted hover:text-foreground dark:hover:text-gray-300"
                     }`}
                   >
                     {tab.label}
@@ -261,23 +263,27 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                 ))}
               </div>
 
-              <div className="flex flex-col flex-1 min-h-0 relative">
+              <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
                 {activeTab === "plan" && (
-                  <>
-                    <RoadmapTimeline 
-                      stops={stops}
-                      activeStopId={activeStopId}
-                      onSelectStop={handleSelectStop}
-                    />
+                  <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden lg:flex-row lg:items-stretch">
+                    <div className="flex min-h-[220px] min-w-0 flex-1 flex-col overflow-hidden">
+                      <RoadmapTimeline
+                        stops={stops}
+                        activeStopId={activeStopId}
+                        onSelectStop={handleSelectStop}
+                      />
+                    </div>
 
-                    <ActivityDetailCard 
-                      stop={activeStop}
-                      totalActivities={totalActivities}
-                      onPrev={handlePrevStop}
-                      onNext={handleNextStop}
-                      onClose={() => setActiveStopId(null)}
-                    />
-                  </>
+                    {activeStop && (
+                      <ActivityDetailCard
+                        stop={activeStop}
+                        totalActivities={totalActivities}
+                        onPrev={handlePrevStop}
+                        onNext={handleNextStop}
+                        onClose={() => setActiveStopId(null)}
+                      />
+                    )}
+                  </div>
                 )}
 
                 {activeTab === "top-places" && (
@@ -288,6 +294,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
               </div>
             </>
           )}
+          </div>
         </div>
       </div>
     </ProtectedRoute>

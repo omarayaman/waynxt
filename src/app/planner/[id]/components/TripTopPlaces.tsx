@@ -73,15 +73,15 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <Loader2 size={32} className="animate-spin text-accent mb-4" />
-        <p className="text-[#888]">Finding the best spots for your trip...</p>
+        <Loader2 size={32} className="mb-4 animate-spin text-accent" />
+        <p className="text-muted">Finding the best spots for your trip...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-6 rounded-xl flex items-center justify-center">
+      <div className="flex items-center justify-center rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-red-600 dark:text-red-400">
         <p>{error}</p>
       </div>
     );
@@ -90,11 +90,11 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
   if (places.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
-        <div className="w-16 h-16 bg-[#1a1a1a] rounded-full flex items-center justify-center mb-4">
-          <MapPin className="w-8 h-8 text-[#555]" />
+        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface-elevated dark:bg-[#1a1a1a]">
+          <MapPin className="h-8 w-8 text-muted" />
         </div>
-        <p className="text-white font-medium mb-1">No places found</p>
-        <p className="text-[#666] text-sm max-w-sm">
+        <p className="mb-1 font-medium text-foreground dark:text-white">No places found</p>
+        <p className="max-w-sm text-sm text-muted">
           We couldn't find any AI recommendations for this trip at the moment.
         </p>
       </div>
@@ -105,8 +105,8 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-white mb-1">Top Recommended Places</h2>
-          <p className="text-[#888] text-sm">
+          <h2 className="mb-1 text-xl font-bold text-foreground dark:text-white">Top Recommended Places</h2>
+          <p className="text-sm text-muted">
             AI-powered suggestions perfectly suited for your trip destinations.
           </p>
         </div>

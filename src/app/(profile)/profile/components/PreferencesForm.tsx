@@ -73,7 +73,7 @@ export function PreferencesForm({ initialPreferences, onSuccess }: PreferencesFo
       )}
 
       <div>
-        <p className="text-sm text-gray-300 mb-3">Interests</p>
+        <p className="text-sm text-foreground mb-3 font-medium">Interests</p>
         <div className="flex flex-wrap gap-2">
           {INTEREST_OPTIONS.map((opt) => (
             <OptionChip
@@ -88,7 +88,7 @@ export function PreferencesForm({ initialPreferences, onSuccess }: PreferencesFo
       </div>
 
       <div>
-        <p className="text-sm text-gray-300 mb-3">Travel Companion</p>
+        <p className="text-sm text-foreground mb-3 font-medium">Travel Companion</p>
         <div className="grid grid-cols-2 gap-2">
           {COMPANION_OPTIONS.map((opt) => (
             <OptionChip
@@ -104,7 +104,7 @@ export function PreferencesForm({ initialPreferences, onSuccess }: PreferencesFo
       </div>
 
       <div>
-        <p className="text-sm text-gray-300 mb-3">Budget</p>
+        <p className="text-sm text-foreground mb-3 font-medium">Budget</p>
         <div className="grid grid-cols-3 gap-2">
           {BUDGET_OPTIONS.map((opt) => (
             <OptionChip
@@ -120,7 +120,7 @@ export function PreferencesForm({ initialPreferences, onSuccess }: PreferencesFo
       </div>
 
       <div>
-        <p className="text-sm text-gray-300 mb-3">Age Group</p>
+        <p className="text-sm text-foreground mb-3 font-medium">Age Group</p>
         <div className="grid grid-cols-3 gap-2">
           {AGE_OPTIONS.map((opt) => (
             <OptionChip
@@ -136,7 +136,7 @@ export function PreferencesForm({ initialPreferences, onSuccess }: PreferencesFo
       </div>
 
       <div>
-        <p className="text-sm text-gray-300 mb-3">Crowd Preference</p>
+        <p className="text-sm text-foreground mb-3 font-medium">Crowd Preference</p>
         <div className="grid grid-cols-3 gap-2">
           {CROWD_OPTIONS.map((opt) => (
             <OptionChip
@@ -152,7 +152,7 @@ export function PreferencesForm({ initialPreferences, onSuccess }: PreferencesFo
       </div>
 
       <div>
-        <p className="text-sm text-gray-300 mb-3">Preferred Season</p>
+        <p className="text-sm text-foreground mb-3 font-medium">Preferred Season</p>
         <div className="flex flex-wrap gap-2">
           {SEASON_OPTIONS.map((opt) => (
             <OptionChip

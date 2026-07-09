@@ -39,8 +39,8 @@ export function SavedPlacesSection({
     <div>
       <div className="flex items-end justify-between mb-6">
         <div>
-          <h2 className="text-base font-medium text-white">Saved places</h2>
-          <p className="text-sm text-[#666] mt-1">
+          <h2 className="text-base font-medium text-foreground">Saved places</h2>
+          <p className="text-sm text-muted mt-1">
             {totalCount > 0
               ? `${totalCount} place${totalCount === 1 ? "" : "s"} saved`
               : "Places you've bookmarked for later"}
@@ -48,7 +48,7 @@ export function SavedPlacesSection({
         </div>
         <Link
           href="/places"
-          className="text-xs text-[#777] hover:text-[#bbb] transition-colors flex items-center gap-1"
+          className="text-xs text-muted hover:text-foreground transition-colors flex items-center gap-1"
         >
           Browse places <ExternalLink size={12} />
         </Link>
@@ -56,16 +56,16 @@ export function SavedPlacesSection({
 
       {isLoading ? (
         <div className="flex justify-center py-24">
-          <Loader2 size={24} className="animate-spin text-[#555]" />
+          <Loader2 size={24} className="animate-spin text-muted" />
         </div>
       ) : places.length === 0 ? (
-        <div className="rounded-xl border border-border bg-[#0d0d0d] py-16 text-center">
-          <Heart size={24} className="text-[#444] mx-auto mb-3" />
-          <p className="text-sm text-[#888]">No saved places yet</p>
-          <p className="text-xs text-[#555] mt-1 mb-5">Explore destinations and save your favorites.</p>
+        <div className="rounded-xl border border-border bg-surface py-16 text-center">
+          <Heart size={24} className="text-muted mx-auto mb-3" />
+          <p className="text-sm text-muted">No saved places yet</p>
+          <p className="text-xs text-muted mt-1 mb-5">Explore destinations and save your favorites.</p>
           <Link
             href="/places"
-            className="inline-flex px-4 py-2 text-sm text-white bg-[#1a1a1a] hover:bg-[#222] rounded-lg transition-colors"
+            className="inline-flex px-4 py-2 text-sm bg-accent text-accent-foreground hover:bg-accent-hover rounded-lg transition-colors"
           >
             Explore places
           </Link>
@@ -75,14 +75,14 @@ export function SavedPlacesSection({
           <div className="rounded-xl border border-border overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border bg-[#0d0d0d]">
-                  <th className="text-left px-4 py-3 text-xs font-medium text-[#666]">Place</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-[#666] hidden sm:table-cell">
+                <tr className="border-b border-border bg-surface">
+                  <th className="text-left px-4 py-3 text-xs font-medium text-muted">Place</th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-muted hidden sm:table-cell">
                     Location
                   </th>
-                  <th className="text-right px-4 py-3 text-xs font-medium text-[#666]">Saved</th>
+                  <th className="text-right px-4 py-3 text-xs font-medium text-muted">Saved</th>
                   {onUnsave && (
-                    <th className="text-right px-4 py-3 text-xs font-medium text-[#666] w-12" />
+                    <th className="text-right px-4 py-3 text-xs font-medium text-muted w-12" />
                   )}
                 </tr>
               </thead>
@@ -90,14 +90,14 @@ export function SavedPlacesSection({
                 {places.map((place) => (
                   <tr
                     key={place.id}
-                    className="border-b border-border last:border-0 hover:bg-[#111] transition-colors"
+                    className="border-b border-border last:border-0 hover:bg-surface-elevated/50 transition-colors"
                   >
                     <td className="px-4 py-3.5">
                       <Link
                         href={`/places/${place.place_id}`}
                         className="flex items-center gap-3 group"
                       >
-                        <div className="w-8 h-8 rounded-lg bg-[#161616] overflow-hidden flex items-center justify-center shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-surface-elevated overflow-hidden flex items-center justify-center shrink-0">
                           {place.thumbnail_url ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
@@ -106,21 +106,21 @@ export function SavedPlacesSection({
                               className="w-full h-full object-cover"
                             />
                           ) : (
-                            <MapPin size={14} className="text-[#555]" />
+                            <MapPin size={14} className="text-muted" />
                           )}
                         </div>
                         <div className="min-w-0">
-                          <span className="text-white font-medium truncate block group-hover:text-accent transition-colors">
+                          <span className="text-foreground font-medium truncate block group-hover:text-accent transition-colors">
                             {place.place_name}
                           </span>
                           {place.category && (
-                            <span className="text-xs text-[#555] truncate block">{place.category}</span>
+                            <span className="text-xs text-muted truncate block">{place.category}</span>
                           )}
                         </div>
                       </Link>
                     </td>
-                    <td className="px-4 py-3.5 text-[#777] hidden sm:table-cell">{place.location}</td>
-                    <td className="px-4 py-3.5 text-[#555] text-right text-xs tabular-nums">
+                    <td className="px-4 py-3.5 text-muted hidden sm:table-cell">{place.location}</td>
+                    <td className="px-4 py-3.5 text-muted text-right text-xs tabular-nums">
                       {formatDate(place.saved_at)}
                     </td>
                     {onUnsave && (
@@ -130,7 +130,7 @@ export function SavedPlacesSection({
                           onClick={() => onUnsave({ placeId: place.place_id })}
                           disabled={unsavingIds[place.place_id]}
                           aria-label={`Remove ${place.place_name} from saved`}
-                          className="p-1.5 rounded-lg text-[#555] hover:text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-50"
+                          className="p-1.5 rounded-lg text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-50"
                         >
                           {unsavingIds[place.place_id] ? (
                             <Loader2 size={14} className="animate-spin" />

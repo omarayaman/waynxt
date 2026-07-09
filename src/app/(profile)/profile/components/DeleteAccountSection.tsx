@@ -37,7 +37,7 @@ export function DeleteAccountSection() {
         <AlertTriangle className="text-red-400 shrink-0 mt-0.5" size={18} />
         <div>
           <p className="text-red-400 font-medium text-sm">Delete Account</p>
-          <p className="text-gray-500 text-xs mt-1">
+          <p className="text-muted text-xs mt-1">
             This action is permanent. Your account will be soft-deleted and you will be logged out.
           </p>
         </div>
@@ -50,14 +50,14 @@ export function DeleteAccountSection() {
       )}
 
       <div className="space-y-2">
-        <label className="text-sm text-gray-400">
+        <label className="text-sm text-foreground">
           Type <span className="text-red-400 font-mono">DELETE</span> to confirm
         </label>
         <input
           type="text"
           value={confirmText}
           onChange={(e) => setConfirmText(e.target.value)}
-          className="w-full px-4 py-3 bg-[#181818] rounded-xl border border-red-500/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-red-500/50 transition-colors text-sm"
+          className="w-full px-4 py-3 bg-surface rounded-xl border border-red-500/20 text-foreground placeholder:text-muted focus:outline-none focus:border-red-500/50 transition-colors text-sm"
           placeholder="DELETE"
         />
       </div>

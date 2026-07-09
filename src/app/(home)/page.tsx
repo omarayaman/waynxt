@@ -25,7 +25,7 @@ export default function Home() {
             <h1 className="text-[56px] lg:text-[72px] font-bold text-foreground dark:text-white mb-6 leading-[1.05] tracking-tight">
               Explore Egypt with clarity.
             </h1>
-            <p className="text-muted-foreground dark:text-white/75 text-lg lg:text-[20px] leading-relaxed mb-12 max-w-[480px]">
+            <p className="text-muted dark:text-white/75 text-lg lg:text-[20px] leading-relaxed mb-12 max-w-[480px]">
               Explore Egypt through immersive storytelling and real-time AI answers — in one place.
             </p>
             <Link

@@ -18,8 +18,8 @@ export default function TripDetailPage({ params }: TripDetailPageProps) {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <Loader2 size={24} className="animate-spin text-[#555]" />
+        <div className="flex min-h-screen items-center justify-center bg-background overflow-y-auto">
+          <Loader2 size={24} className="animate-spin text-muted" />
         </div>
       }
     >

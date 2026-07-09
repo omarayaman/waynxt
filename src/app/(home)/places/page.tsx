@@ -180,7 +180,7 @@ function PlacesContent() {
                 onClick={() => setCategory("all")}
                 className={`shrink-0 px-3.5 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-medium transition-colors ${
                   activeCategory === "all" || !activeCategory
-                    ? "bg-accent-subtle border border-accent text-accent"
+                    ? "bg-white/70 dark:bg-accent-subtle border border-accent dark:text-accent"
                     : "border border-border text-muted hover:text-foreground hover:border-border"
                 }`}>
                 <ALL_EXPERIENCES.icon size={14} strokeWidth={1.5} />
@@ -203,7 +203,7 @@ function PlacesContent() {
                         onClick={() => setCategory(cat.category)}
                         className={`shrink-0 px-3.5 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-medium capitalize transition-colors ${
                           isActive
-                            ? "bg-accent-subtle border border-accent text-accent"
+                            ? "bg-white/70 dark:bg-accent-subtle border border-accent dark:text-accent"
                             : "border border-border text-muted hover:text-foreground hover:border-border"
                         }`}>
                         <Icon size={14} strokeWidth={1.5} />

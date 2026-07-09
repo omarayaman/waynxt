@@ -92,8 +92,8 @@ export function ChatHistorySection({ totalCount }: ChatHistorySectionProps) {
     <div>
       <div className="flex items-end justify-between mb-6">
         <div>
-          <h2 className="text-base font-medium text-white">Chat history</h2>
-          <p className="text-sm text-[#666] mt-1">
+          <h2 className="text-base font-medium text-foreground">Chat history</h2>
+          <p className="text-sm text-muted mt-1">
             {total > 0
               ? `${total} conversation${total === 1 ? "" : "s"} with Waynx AI`
               : "Your AI travel conversations"}
@@ -101,7 +101,7 @@ export function ChatHistorySection({ totalCount }: ChatHistorySectionProps) {
         </div>
         <Link
           href="/ask-waynx"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs text-white bg-[#1a1a1a] hover:bg-[#222] rounded-lg transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-accent text-accent-foreground hover:bg-accent-hover rounded-lg transition-colors"
         >
           <Plus size={13} />
           New chat
@@ -116,23 +116,23 @@ export function ChatHistorySection({ totalCount }: ChatHistorySectionProps) {
 
       {isLoading ? (
         <div className="flex justify-center py-24">
-          <Loader2 size={24} className="animate-spin text-[#555]" />
+          <Loader2 size={24} className="animate-spin text-muted" />
         </div>
       ) : sessions.length === 0 ? (
-        <div className="rounded-xl border border-border bg-[#0d0d0d] py-16 text-center">
-          <MessageSquare size={24} className="text-[#444] mx-auto mb-3" />
-          <p className="text-sm text-[#888]">No conversations yet</p>
-          <p className="text-xs text-[#555] mt-1 mb-5">Ask Waynx about places, trips, and travel tips.</p>
+        <div className="rounded-xl border border-border bg-surface py-16 text-center">
+          <MessageSquare size={24} className="text-muted mx-auto mb-3" />
+          <p className="text-sm text-muted">No conversations yet</p>
+          <p className="text-xs text-muted mt-1 mb-5">Ask Waynx about places, trips, and travel tips.</p>
           <Link
             href="/ask-waynx"
-            className="inline-flex px-4 py-2 text-sm text-white bg-[#1a1a1a] hover:bg-[#222] rounded-lg transition-colors"
+            className="inline-flex px-4 py-2 text-sm bg-accent text-accent-foreground hover:bg-accent-hover rounded-lg transition-colors"
           >
             Start a chat
           </Link>
         </div>
       ) : (
         <>
-          <div className="rounded-xl border border-border overflow-hidden divide-y divide-[#1a1a1a]">
+          <div className="rounded-xl border border-border overflow-hidden divide-y divide-border">
             {sessions.map((session) => {
               const messageCount = session.messages?.length ?? 0;
               const isDeleting = deletingId === session.id;
@@ -140,35 +140,35 @@ export function ChatHistorySection({ totalCount }: ChatHistorySectionProps) {
               return (
                 <div
                   key={session.id}
-                  className="group flex items-center gap-3 px-4 py-3.5 hover:bg-[#111] transition-colors"
+                  className="group flex items-center gap-3 px-4 py-3.5 hover:bg-surface-elevated/50 transition-colors"
                 >
                   <button
                     type="button"
                     onClick={() => router.push(`/ask-waynx?session=${session.id}`)}
                     className="flex min-w-0 flex-1 items-center gap-3 text-left"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-[#161616] flex items-center justify-center shrink-0">
-                      <MessageSquare size={14} className="text-[#555]" />
+                    <div className="w-8 h-8 rounded-lg bg-surface-elevated flex items-center justify-center shrink-0">
+                      <MessageSquare size={14} className="text-muted" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm text-white truncate group-hover:text-[#ddd] transition-colors">
+                      <p className="text-sm text-foreground truncate group-hover:text-foreground transition-colors">
                         {session.title || "Untitled chat"}
                       </p>
-                      <p className="text-xs text-[#555] mt-0.5">
+                      <p className="text-xs text-muted mt-0.5">
                         {formatSessionDate(session.updated_at)}
                         {messageCount > 0 && ` · ${messageCount} message${messageCount === 1 ? "" : "s"}`}
                       </p>
                     </div>
                     <ExternalLink
                       size={14}
-                      className="text-[#333] group-hover:text-[#666] shrink-0 transition-colors"
+                      className="text-muted group-hover:text-foreground shrink-0 transition-colors"
                     />
                   </button>
                   <button
                     type="button"
                     onClick={() => handleDelete(session.id)}
                     disabled={isDeleting}
-                    className="p-2 rounded-lg text-[#444] hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all disabled:opacity-50"
+                    className="p-2 rounded-lg text-muted hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all disabled:opacity-50"
                     aria-label="Delete chat"
                   >
                     {isDeleting ? (
