@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { PUBLIC_ASSETS } from "@/lib/public-assets";
 
 export default function Footer() {
   return (
@@ -10,7 +11,7 @@ export default function Footer() {
         {/* Column 1 - Logo */}
         <div className="flex flex-col max-w-[250px]">
           <Image
-            src="/icons/full_Logo.svg"
+            src={PUBLIC_ASSETS.icons.fullLogo}
             alt="Waynx Logo"
             width={160}
             height={50}

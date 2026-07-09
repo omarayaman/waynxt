@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, MapPin } from "lucide-react";
+import { PUBLIC_ASSETS } from "@/lib/public-assets";
 
 interface MapRegion {
   id: string;
@@ -116,7 +117,7 @@ export default function InteractiveMapSection() {
           <div className="relative overflow-hidden rounded-3xl border border-border bg-surface-elevated shadow-lg dark:bg-[#0a0a0a] dark:border-white/10 dark:shadow-2xl">
             <div className="relative aspect-[4/3] w-full lg:aspect-auto lg:min-h-[480px]">
               <Image
-                src="/images/worldmap.png"
+                src={PUBLIC_ASSETS.images.worldmap}
                 alt="Interactive map of Egypt"
                 fill
                 className="object-cover object-[54%_46%] scale-110 opacity-70 dark:opacity-70"

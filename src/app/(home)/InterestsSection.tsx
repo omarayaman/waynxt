@@ -6,6 +6,7 @@ import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
+import { getCategoryImageUrl } from "@/lib/public-assets";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 
 const AUTOPLAY_DELAY = 4500;
@@ -110,7 +111,10 @@ export default function InterestsSection() {
                       className="group/card relative h-[380px] w-full rounded-2xl overflow-hidden cursor-pointer block shadow-lg transition-shadow duration-500 hover:shadow-[0_20px_50px_rgba(227,208,16,0.15)]"
                     >
                       <Image
-                        src={interest.image_url || "/images/history.png"}
+                        src={getCategoryImageUrl({
+                          category: interest.category,
+                          imageUrl: interest.image_url,
+                        })}
                         alt={interest.category}
                         fill
                         sizes="(max-width: 768px) 280px, 300px"

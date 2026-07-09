@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { PanelLeft, User } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { PUBLIC_ASSETS } from "@/lib/public-assets";
 
 interface AskWaynxNavbarProps {
   title: string;
@@ -39,7 +40,7 @@ export default function AskWaynxNavbar({
           aria-label="Back to home"
         >
           <Image
-            src="/icons/waynxt.svg"
+            src={PUBLIC_ASSETS.icons.waynxt}
             alt="Waynx"
             width={130}
             height={34}

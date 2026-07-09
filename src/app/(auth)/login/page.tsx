@@ -10,6 +10,7 @@ import { z } from "zod";
 import { GoogleLoginButton } from "@/components/GoogleLoginButton";
 import { isGoogleOAuthConfigured } from "@/lib/google-oauth";
 import { getPostAuthRedirect } from "@/lib/auth-redirect";
+import { PUBLIC_ASSETS } from "@/lib/public-assets";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email("Please enter a valid email address."),
@@ -71,14 +72,14 @@ function LoginPageContent() {
       {/* Full-screen Background Image */}
       <div className="absolute inset-0 z-0 dark:opacity-80">
         <Image
-          src="/images/white/(3).jpeg"
+          src={PUBLIC_ASSETS.images.heroLight.three}
           alt="Green pyramids illustration on a light background"
           fill
           className="object-cover object-center dark:hidden"
           priority
         />
         <Image
-          src="/bg-pharaoh.png"
+          src={PUBLIC_ASSETS.backgrounds.pharaoh}
           alt="Ancient Egyptian pharaoh statue in a modern museum"
           fill
           className="hidden object-cover object-center dark:block"
