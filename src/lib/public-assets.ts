@@ -35,6 +35,7 @@ export const PUBLIC_ASSETS = {
   },
 } as const;
 
+
 const CATEGORY_IMAGE_MAP: Record<string, string> = {
   history: PUBLIC_ASSETS.images.history,
   beach: PUBLIC_ASSETS.images.beaches,
