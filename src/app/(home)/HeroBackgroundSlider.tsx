@@ -5,10 +5,20 @@ import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { resolveTheme, useThemeStore } from "@/store/useThemeStore";
 
-const LIGHT_HERO = {
-  src: "/images/1 light.png",
-  alt: "Nefertiti bust on a light background — Egyptian heritage",
-} as const;
+const LIGHT_SLIDES = [
+  {
+    src: "/images/white/1.jpeg",
+    alt: "Nefertiti bust — Egyptian heritage",
+  },
+  {
+    src: "/images/white/(2).jpeg",
+    alt: "Pharaoh statue — Ancient Egypt",
+  },
+  {
+    src: "/images/white/(3).jpeg",
+    alt: "Egyptian landscape through an archway at golden hour",
+  },
+] as const;
 
 const DARK_SLIDES = [
   {
@@ -47,12 +57,18 @@ export default function HeroBackgroundSlider() {
     return () => media.removeEventListener("change", apply);
   }, [themeMode]);
 
+  const slides = isDark ? DARK_SLIDES : LIGHT_SLIDES;
+
   const goToNext = useCallback(() => {
-    setCurrent((prev) => (prev + 1) % DARK_SLIDES.length);
-  }, []);
+    setCurrent((prev) => (prev + 1) % slides.length);
+  }, [slides.length]);
 
   useEffect(() => {
-    if (!isDark || isPaused) {
+    setCurrent(0);
+  }, [isDark]);
+
+  useEffect(() => {
+    if (isPaused) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
@@ -67,39 +83,24 @@ export default function HeroBackgroundSlider() {
         clearInterval(intervalRef.current);
       }
     };
-  }, [current, goToNext, isDark, isPaused]);
+  }, [current, goToNext, isPaused]);
 
   const slideDurationS = SLIDE_DURATION_MS / 1000;
   const fadeDuration = prefersReducedMotion ? 0.4 : FADE_DURATION_S;
-
-  if (!isDark) {
-    return (
-      <div className="absolute inset-0 z-0 overflow-hidden bg-white" aria-hidden>
-        <Image
-          src={LIGHT_HERO.src}
-          alt={LIGHT_HERO.alt}
-          fill
-          priority
-          quality={100}
-          sizes="100vw"
-          className="object-cover object-right mt-12"
-        />
-      </div>
-    );
-  }
+  const activeSlide = slides[current];
 
   return (
     <div
-      className="absolute inset-0 z-0 overflow-hidden"
+      className={`absolute inset-0 z-0 overflow-hidden ${isDark ? "" : "bg-white"}`}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       aria-hidden
     >
-      <div className="absolute inset-0 bg-background" />
+      {isDark && <div className="absolute inset-0 bg-background" />}
 
       <AnimatePresence initial={false}>
         <motion.div
-          key={current}
+          key={`${isDark ? "dark" : "light"}-${current}`}
           className="absolute inset-0"
           initial={
             prefersReducedMotion
@@ -133,18 +134,22 @@ export default function HeroBackgroundSlider() {
           }}
         >
           <Image
-            src={DARK_SLIDES[current].src}
-            alt={DARK_SLIDES[current].alt}
+            src={activeSlide.src}
+            alt={activeSlide.alt}
             fill
             priority={current === 0}
             quality={100}
             sizes="100vw"
-            className="object-cover object-center"
+            className={
+              isDark
+                ? "object-cover object-center"
+                : "mt-12 object-cover object-right opacity-50"
+            }
           />
         </motion.div>
       </AnimatePresence>
 
-      {!prefersReducedMotion && (
+      {isDark && !prefersReducedMotion && (
         <AnimatePresence mode="wait">
           <motion.div
             key={`sweep-${current}`}
@@ -161,8 +166,12 @@ export default function HeroBackgroundSlider() {
         </AnimatePresence>
       )}
 
-      <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-r from-[#050505]/95 via-[#050505]/55 to-[#050505]/20" />
-      <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-[#050505]/80 via-transparent to-[#050505]/30" />
+      {isDark && (
+        <>
+          <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-r from-[#050505]/95 via-[#050505]/55 to-[#050505]/20" />
+          <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-[#050505]/80 via-transparent to-[#050505]/30" />
+        </>
+      )}
     </div>
   );
 }

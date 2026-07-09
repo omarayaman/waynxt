@@ -83,7 +83,7 @@ function PlacesContent() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <NavbarHome className="bg-[var(--navbar-solid)] backdrop-blur-xl" />
+      <NavbarHome className="bg-[var(--navbar-solid)]/80 backdrop-blur-xl" />
 
       <div style={{paddingTop: NAVBAR_HEIGHT}}>
         {/* Sticky toolbar — pins below fixed navbar on scroll */}
@@ -220,7 +220,7 @@ function PlacesContent() {
         {/* Main — sidebar flush left, grid fills to the right edge */}
         <div className="flex w-full">
           <aside
-            className={`hidden lg:block shrink-0 bg-[var(--navbar-solid)] transition-[width] duration-300 ease-out ${
+            className={`hidden lg:block shrink-0 bg-[var(--navbar-solid)]/50 border-r border-border transition-[width] duration-300 ease-out ${
               isSidebarOpen ? "w-52" : "w-28"
             }`}>
             <div
@@ -270,7 +270,7 @@ function PlacesContent() {
             </div>
           </aside>
 
-          <main className="flex-1 min-w-0 px-4 sm:px-5 lg:pr-4 lg:pl-5 py-5 bg-background">
+          <main className="flex-1 min-w-0 px-4 sm:px-5 lg:pr-4 lg:pl-5 py-5 bg-[var(--navbar-solid)]/50 dark:bg-background">
             <section className="min-w-0">
               {error && (
                 <div className="mb-4 p-3 rounded-lg bg-red-500/5 border border-red-500/10 text-red-400 text-xs">

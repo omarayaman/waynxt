@@ -100,7 +100,7 @@ export function PlacesFilterCollapsed({
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto filters-scroll py-1 min-h-0">
+      <div className="flex-1 overflow-y-auto filters-scroll p-1 min-h-0">
         <CompactSection title="City">
           <ActiveValue value={cityPreview} />
         </CompactSection>
