@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function PlannerBackground() {
+export default function PlannerBackground({opacity = 25}: {opacity?: number}) {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
       <div className="absolute inset-0 dark:hidden">
@@ -8,7 +8,7 @@ export default function PlannerBackground() {
           src="/images/worldmapwhite.jpeg"
           alt=""
           fill
-          className="scale-102 object-cover opacity-25 blur-[3px]"
+          className={`scale-102 object-cover opacity-${opacity} blur-[3px]`}
           priority
         />
       </div>

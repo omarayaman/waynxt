@@ -11,6 +11,7 @@ import ChatInput from "./components/ChatInput";
 import AskWaynxNavbar from "./components/AskWaynxNavbar";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { useChatStore } from "@/store/chatStore";
+import PlannerBackground from "@/app/planner/components/PlannerBackground";
 
 function AskWaynxContent() {
   const router = useRouter();
@@ -172,7 +173,7 @@ function AskWaynxContent() {
     "New chat";
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-background text-foreground">
+    <div className="flex h-screen flex-col overflow-hidden bg-surface-elevated/30 dark:bg-background text-foreground">
       <AskWaynxNavbar
         title={chatTitle}
         isDesktopSidebarOpen={isDesktopSidebarOpen}

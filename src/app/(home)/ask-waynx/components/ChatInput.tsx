@@ -42,13 +42,6 @@ export default function ChatInput({
           : "relative shrink-0 px-4 pb-5 pt-2 md:px-6 md:pb-6"
       }
     >
-      {!isCentered && (
-        <div
-          className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-linear-to-t from-background to-transparent"
-          aria-hidden
-        />
-      )}
-
       <form
         onSubmit={(e) => {
           e.preventDefault();

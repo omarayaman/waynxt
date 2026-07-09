@@ -3,6 +3,7 @@
 import React, { RefObject } from "react";
 import { MapPin, Route, Sparkles } from "lucide-react";
 import ChatInput from "./ChatInput";
+import PlannerBackground from "@/app/planner/components/PlannerBackground";
 
 const SUGGESTED_PROMPTS = [
   {
@@ -58,10 +59,7 @@ export default function ChatEmptyState({
 }: ChatEmptyStateProps) {
   return (
     <div className="relative flex min-h-full flex-col items-center justify-center overflow-hidden px-4 py-10">
-      <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute left-1/2 top-[38%] h-[400px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[100px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-size-[56px_56px] mask-[radial-gradient(ellipse_at_center,black_15%,transparent_72%)] dark:bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)]" />
-      </div>
+      <PlannerBackground />
 
       <div className="relative z-10 flex w-full max-w-3xl flex-col items-center">
         <div className="mb-8 flex flex-col items-center text-center">
@@ -97,7 +95,8 @@ export default function ChatEmptyState({
                 key={label}
                 onClick={() => onSelectPrompt(prompt)}
                 disabled={isLoading}
-                className="flex items-start gap-3 rounded-xl border border-border bg-surface-elevated/50 px-4 py-3 text-left transition-colors hover:border-accent/20 hover:bg-accent/5 disabled:opacity-50"
+                className="flex items-start gap-3 rounded-xl border border-border bg-surface-elevated/70 dark:bg-surface-elevated/60 px-4 py-3 text-left transition-colors 
+                dark:hover:border-accent/20 dark:hover:bg-accent/5 disabled:opacity-50"
               >
                 <Icon size={16} className="mt-0.5 shrink-0 text-accent" />
                 <span className="text-[13px] text-foreground/80">{label}</span>

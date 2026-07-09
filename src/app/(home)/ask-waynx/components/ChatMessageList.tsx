@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
-import { ChatMessage } from "@/types/chat";
-import { Check, CheckCircle2, Copy, RefreshCw, Share2, MapPin, Sparkles } from "lucide-react";
+import React, {useState} from "react";
+import {ChatMessage} from "@/types/chat";
+import {Check, CheckCircle2, Copy, RefreshCw, Share2, MapPin, Sparkles} from "lucide-react";
 
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { motion } from 'framer-motion';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import {motion} from "framer-motion";
+import PlannerBackground from "@/app/planner/components/PlannerBackground";
 
-function MessageActionBar({ msg, onReload }: { msg: ChatMessage, onReload?: () => void }) {
+function MessageActionBar({msg, onReload}: {msg: ChatMessage; onReload?: () => void}) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -19,10 +20,12 @@ function MessageActionBar({ msg, onReload }: { msg: ChatMessage, onReload?: () =
 
   const handleShare = () => {
     if (navigator.share) {
-      navigator.share({
-        title: "Waynx AI Response",
-        text: msg.content,
-      }).catch(() => {});
+      navigator
+        .share({
+          title: "Waynx AI Response",
+          text: msg.content,
+        })
+        .catch(() => {});
     } else {
       handleCopy();
     }
@@ -30,32 +33,29 @@ function MessageActionBar({ msg, onReload }: { msg: ChatMessage, onReload?: () =
 
   return (
     <div className="mt-2 flex items-center gap-3 text-muted">
-      <button 
+      <button
         onClick={handleCopy}
         className="group relative flex items-center gap-1.5 rounded-md p-1.5 transition-colors hover:text-foreground"
-        aria-label="Copy response"
-      >
+        aria-label="Copy response">
         {copied ? <Check size={14} className="text-[#00C896]" /> : <Copy size={14} />}
         <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 rounded border border-border bg-surface-elevated px-2 py-1 text-[10px] text-foreground whitespace-nowrap opacity-0 transition-opacity group-hover:opacity-100">
           {copied ? "Copied!" : "Copy"}
         </span>
       </button>
-      <button 
+      <button
         onClick={handleShare}
         className="group relative flex items-center gap-1.5 rounded-md p-1.5 transition-colors hover:text-foreground"
-        aria-label="Share response"
-      >
+        aria-label="Share response">
         <Share2 size={14} />
         <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 rounded border border-border bg-surface-elevated px-2 py-1 text-[10px] text-foreground whitespace-nowrap opacity-0 transition-opacity group-hover:opacity-100">
           Share
         </span>
       </button>
       {onReload && (
-        <button 
+        <button
           onClick={onReload}
           className="group relative flex items-center gap-1.5 rounded-md p-1.5 transition-colors hover:text-foreground"
-          aria-label="Regenerate response"
-        >
+          aria-label="Regenerate response">
           <RefreshCw size={14} />
           <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 rounded border border-border bg-surface-elevated px-2 py-1 text-[10px] text-foreground whitespace-nowrap opacity-0 transition-opacity group-hover:opacity-100">
             Reload
@@ -76,33 +76,49 @@ function TypingIndicator() {
   );
 }
 
-function StreamedMarkdown({ content }: { content: string }) {
+function StreamedMarkdown({content}: {content: string}) {
   return (
     <div>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          p: ({ children }) => <span className="mb-4 block last:mb-0">{children}</span>,
-          ul: ({ children }) => <ul className="mb-4 list-disc pl-6">{children}</ul>,
-          ol: ({ children }) => <ol className="mb-4 list-decimal pl-6">{children}</ol>,
-          li: ({ children }) => <li className="mb-1">{children}</li>,
-          a: ({ href, children }) => (
-            <a href={href} className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">
+          p: ({children}) => <span className="mb-4 block last:mb-0">{children}</span>,
+          ul: ({children}) => <ul className="mb-4 list-disc pl-6">{children}</ul>,
+          ol: ({children}) => <ol className="mb-4 list-decimal pl-6">{children}</ol>,
+          li: ({children}) => <li className="mb-1">{children}</li>,
+          a: ({href, children}) => (
+            <a
+              href={href}
+              className="text-accent hover:underline"
+              target="_blank"
+              rel="noopener noreferrer">
               {children}
             </a>
           ),
-          strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
-          h1: ({ children }) => <h1 className="mb-3 mt-4 text-xl font-bold text-foreground">{children}</h1>,
-          h2: ({ children }) => <h2 className="mb-3 mt-4 text-lg font-bold text-foreground">{children}</h2>,
-          h3: ({ children }) => <h3 className="mb-2 mt-3 text-base font-bold text-foreground">{children}</h3>,
-          blockquote: ({ children }) => <blockquote className="border-l-2 border-accent/40 pl-4 italic text-muted">{children}</blockquote>,
-          pre: ({ children }) => (
+          strong: ({children}) => (
+            <strong className="font-semibold text-foreground">{children}</strong>
+          ),
+          h1: ({children}) => (
+            <h1 className="mb-3 mt-4 text-xl font-bold text-foreground">{children}</h1>
+          ),
+          h2: ({children}) => (
+            <h2 className="mb-3 mt-4 text-lg font-bold text-foreground">{children}</h2>
+          ),
+          h3: ({children}) => (
+            <h3 className="mb-2 mt-3 text-base font-bold text-foreground">{children}</h3>
+          ),
+          blockquote: ({children}) => (
+            <blockquote className="border-l-2 border-accent/40 pl-4 italic text-muted">
+              {children}
+            </blockquote>
+          ),
+          pre: ({children}) => (
             <pre className="mb-4 overflow-x-auto rounded-lg border border-border bg-surface-elevated p-4 text-accent">
               {children}
             </pre>
           ),
-          code: ({ className, children, ...props }) => {
-            const match = /language-(\w+)/.exec(className || '');
+          code: ({className, children, ...props}) => {
+            const match = /language-(\w+)/.exec(className || "");
             return match ? (
               <code className={className} {...props}>
                 {children}
@@ -113,8 +129,7 @@ function StreamedMarkdown({ content }: { content: string }) {
               </code>
             );
           },
-        }}
-      >
+        }}>
         {content}
       </ReactMarkdown>
     </div>
@@ -133,26 +148,22 @@ export default function ChatMessageList({
   onReload,
 }: ChatMessageListProps) {
   return (
-    <div className="px-4 py-6 pb-28 md:px-6">
+    <div className="relative px-4 py-6 pb-28 md:px-6">
       <div className="mx-auto flex max-w-3xl flex-col gap-6">
         {messages.map((msg) =>
           msg.role === "user" ? (
-            <motion.div 
-              key={msg.id} 
+            <motion.div
+              key={msg.id}
               className="flex justify-end"
-              initial={msg.isNew ? { opacity: 0, y: 6 } : false}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-            >
+              initial={msg.isNew ? {opacity: 0, y: 6} : false}
+              animate={{opacity: 1, y: 0}}
+              transition={{duration: 0.25, ease: "easeOut"}}>
               <div className="max-w-[85%] rounded-full rounded-br-md bg-accent px-5 py-3 text-sm font-medium text-accent-foreground">
                 {msg.content}
               </div>
             </motion.div>
           ) : msg.isThinking ? (
-            <div
-              key={msg.id + "-thinking"}
-              className="flex items-start gap-3"
-            >
+            <div key={msg.id + "-thinking"} className="flex items-start gap-3">
               <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-accent/15 text-accent/80">
                 <Sparkles size={14} />
               </div>
@@ -162,15 +173,14 @@ export default function ChatMessageList({
             <motion.div
               key={msg.id}
               className="flex w-full items-start gap-3"
-              initial={msg.isNew ? { opacity: 0, y: 6 } : false}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-            >
+              initial={msg.isNew ? {opacity: 0, y: 6} : false}
+              animate={{opacity: 1, y: 0}}
+              transition={{duration: 0.25, ease: "easeOut"}}>
               <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-accent/15 text-accent/80">
                 <Sparkles size={14} />
               </div>
 
-              <div className="min-w-0 flex-1">
+              <div className="min-w-0 flex-1 bg-surface-elevated/70 dark:bg-black/40 rounded-2xl p-4">
                 {msg.is_verified && (
                   <div className="mb-2 flex items-center gap-1.5 text-xs font-medium text-[#00C896]">
                     <CheckCircle2 size={14} />
@@ -183,20 +193,20 @@ export default function ChatMessageList({
                 </div>
 
                 <div className="mt-3">
-                  <MessageActionBar msg={msg} onReload={onReload ? () => onReload(msg) : undefined} />
+                  <MessageActionBar
+                    msg={msg}
+                    onReload={onReload ? () => onReload(msg) : undefined}
+                  />
                 </div>
 
                 {(msg.related_places ?? []).length > 0 && (
                   <div className="mt-4 flex flex-col gap-2">
-                    <p className="text-[11px] uppercase tracking-wide text-muted">
-                      Related places
-                    </p>
+                    <p className="text-[11px] uppercase tracking-wide text-muted">Related places</p>
                     <div className="flex flex-wrap gap-2">
                       {(msg.related_places ?? []).map((place) => (
                         <div
                           key={place}
-                          className="flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs text-foreground/80"
-                        >
+                          className="flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs text-foreground/80">
                           <MapPin size={12} className="text-accent" />
                           <span>{place}</span>
                         </div>
@@ -206,7 +216,7 @@ export default function ChatMessageList({
                 )}
               </div>
             </motion.div>
-          )
+          ),
         )}
 
         <div ref={messagesEndRef} />
