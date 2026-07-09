@@ -21,7 +21,7 @@ export function PlaceAiBanner({ placeName, city }: PlaceAiBannerProps) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="flex flex-col items-start justify-between gap-5 rounded-2xl border border-border bg-surface p-6 md:flex-row md:items-center md:p-8"
+        className="flex flex-col items-start justify-between gap-5 rounded-2xl border border-border bg-surface-card p-6 md:flex-row md:items-center md:p-8"
       >
         <div className="flex items-start gap-4">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent">

@@ -20,6 +20,7 @@ html {
   --foreground: #000000;
   --surface: #ffffff;
   --surface-elevated: #dff5cf;
+  --surface-card: #eef8e6;
   --muted: #1a2616;
   --muted-foreground: #1a2616;
   --border: #6fbf40;
@@ -52,6 +53,7 @@ html {
   --foreground: #ffffff;
   --surface: #0a0a0a;
   --surface-elevated: #141414;
+  --surface-card: #0a0a0a;
   --muted: #a0a0a0;
   --muted-foreground: #a0a0a0;
   --border: #222222;
@@ -83,6 +85,7 @@ html {
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-surface-elevated: var(--surface-elevated);
+  --color-surface-card: var(--surface-card);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);

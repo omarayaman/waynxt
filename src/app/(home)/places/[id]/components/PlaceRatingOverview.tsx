@@ -94,7 +94,7 @@ export function PlaceRatingOverview({
   }
 
   return (
-    <section className="rounded-2xl border border-border bg-surface p-6 md:p-8">
+    <section className="rounded-2xl border border-border bg-surface-card p-6 md:p-8">
       {content}
     </section>
   );

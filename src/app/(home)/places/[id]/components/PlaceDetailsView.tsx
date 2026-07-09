@@ -47,7 +47,7 @@ export function PlaceDetailsView({
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--hero-overlay-from)] via-[var(--hero-overlay-via)] to-black/20" />
 
         <div className={`absolute inset-x-0 top-0 ${PAGE_GUTTER} pt-5`}>
           <div className="mx-auto max-w-[1280px]">
@@ -61,14 +61,14 @@ export function PlaceDetailsView({
           </div>
         </div>
 
-        <div className={`absolute inset-x-0 bottom-0 ${PAGE_GUTTER} pb-8`}>
+        <div className={`absolute inset-x-0 bottom-0 ${PAGE_GUTTER} pb-8 `}>
           <div className="mx-auto max-w-[1280px]">
             <div className="mb-3 flex flex-wrap items-center gap-2">
-              <span className="rounded-md bg-black/50 px-2.5 py-1 text-xs capitalize text-[#ccc] backdrop-blur-sm">
+              <span className="rounded-md bg-white/70 dark:bg-black/50 px-2.5 py-1 text-xs capitalize font-bold dark:text-white/70 text-black/70 backdrop-blur-sm">
                 {place.category}
               </span>
               {place.rating > 0 && (
-                <span className="inline-flex items-center gap-1 rounded-md bg-black/50 px-2.5 py-1 text-xs font-medium text-accent backdrop-blur-sm">
+                <span className="inline-flex items-center gap-1 rounded-md bg-white/70 dark:bg-black/50 px-2.5 py-1 text-xs font-medium dark:text-white/70 text-black/70 backdrop-blur-sm">
                   <Star size={11} fill="currentColor" />
                   {place.rating.toFixed(1)}
                 </span>
@@ -80,7 +80,7 @@ export function PlaceDetailsView({
                 <h1 className="text-3xl font-bold tracking-tight text-white md:text-5xl">
                   {place.name}
                 </h1>
-                <p className="mt-2 flex items-center gap-1.5 text-sm text-[#aaa] md:text-base">
+                <p className="mt-2 flex items-center gap-1.5 text-sm text-white/60 md:text-base">
                   <MapPin size={14} className="text-accent" />
                   {place.city}, Egypt
                 </p>

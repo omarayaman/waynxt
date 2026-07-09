@@ -53,7 +53,7 @@ export function PlaceOverviewSection({ place }: PlaceOverviewSectionProps) {
           className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted"
         >
           {metaItems.map(({ icon: Icon, text }, index) => (
-            <span key={text} className="inline-flex items-center gap-1.5">
+            <span key={text} className="inline-flex items-center gap-1.5 bg-surface-card dark:bg-black/40 rounded-md p-2">
               {index > 0 && (
                 <span className="mr-4 hidden text-border sm:inline">·</span>
               )}

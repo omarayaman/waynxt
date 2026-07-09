@@ -12,7 +12,7 @@ import {
   CROWD_OPTIONS,
   SEASON_OPTIONS,
 } from "../constants";
-import { OptionChip, submitButtonClassName } from "./form-ui";
+import { OptionChip, submitButtonClassName, errorAlertClassName } from "./form-ui";
 
 interface PreferencesFormProps {
   initialPreferences?: UserPreferences;
@@ -67,7 +67,7 @@ export function PreferencesForm({ initialPreferences, onSuccess }: PreferencesFo
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {apiError && (
-        <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+        <div className={errorAlertClassName}>
           {apiError}
         </div>
       )}

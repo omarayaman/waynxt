@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { MapPin, Loader2, ExternalLink, Heart, Trash2 } from "lucide-react";
 import { Pagination } from "@/components/Pagination";
+import { destructiveHoverClassName } from "./form-ui";
 import type { SavedPlaceProfile } from "@/types/user";
 
 interface SavedPlacesSectionProps {
@@ -59,7 +60,7 @@ export function SavedPlacesSection({
           <Loader2 size={24} className="animate-spin text-muted" />
         </div>
       ) : places.length === 0 ? (
-        <div className="rounded-xl border border-border bg-surface py-16 text-center">
+        <div className="rounded-xl border border-border bg-surface-card py-16 text-center">
           <Heart size={24} className="text-muted mx-auto mb-3" />
           <p className="text-sm text-muted">No saved places yet</p>
           <p className="text-xs text-muted mt-1 mb-5">Explore destinations and save your favorites.</p>
@@ -72,10 +73,10 @@ export function SavedPlacesSection({
         </div>
       ) : (
         <>
-          <div className="rounded-xl border border-border overflow-hidden">
+          <div className="rounded-xl border border-border bg-surface-card overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border bg-surface">
+                <tr className="border-b border-border bg-surface-card">
                   <th className="text-left px-4 py-3 text-xs font-medium text-muted">Place</th>
                   <th className="text-left px-4 py-3 text-xs font-medium text-muted hidden sm:table-cell">
                     Location
@@ -130,7 +131,7 @@ export function SavedPlacesSection({
                           onClick={() => onUnsave({ placeId: place.place_id })}
                           disabled={unsavingIds[place.place_id]}
                           aria-label={`Remove ${place.place_name} from saved`}
-                          className="p-1.5 rounded-lg text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-50"
+                          className={`p-1.5 rounded-lg text-muted ${destructiveHoverClassName} transition-colors disabled:opacity-50`}
                         >
                           {unsavingIds[place.place_id] ? (
                             <Loader2 size={14} className="animate-spin" />

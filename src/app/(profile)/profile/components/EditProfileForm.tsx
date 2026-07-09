@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { z } from "zod";
 import { Loader2 } from "lucide-react";
 import { userService } from "@/services/user.service";
-import { FormField, inputClassName, submitButtonClassName } from "./form-ui";
+import { FormField, inputClassName, submitButtonClassName, errorAlertClassName } from "./form-ui";
 
 const profileSchema = z.object({
   full_name: z.string().min(2, "Name must be at least 2 characters"),
@@ -61,7 +61,7 @@ export function EditProfileForm({ initialName, initialCity, onSuccess }: EditPro
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {apiError && (
-        <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+        <div className={errorAlertClassName}>
           {apiError}
         </div>
       )}

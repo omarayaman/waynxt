@@ -39,7 +39,7 @@ export function StarRating({
               <Star
                 size={size}
                 fill={filled ? "currentColor" : "none"}
-                className={filled ? "text-accent" : "text-border"}
+                className={filled ? "text-accent" : "text-muted/35"}
               />
             </button>
           );
@@ -50,7 +50,7 @@ export function StarRating({
             key={starValue}
             size={size}
             fill={filled ? "currentColor" : "none"}
-            className={filled ? "text-accent" : "text-border"}
+            className={filled ? "text-accent" : "text-muted/35"}
           />
         );
       })}

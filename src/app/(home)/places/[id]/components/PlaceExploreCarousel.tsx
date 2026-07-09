@@ -60,7 +60,7 @@ function ExplorePlaceCard({ place }: { place: Place }) {
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
       />
       {/* Dark Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--hero-overlay-from)] via-[var(--hero-overlay-via)] to-transparent" />
       
       {/* Top Badges */}
       <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
@@ -75,8 +75,8 @@ function ExplorePlaceCard({ place }: { place: Place }) {
       <div className="absolute bottom-5 left-4 right-4 z-10">
         <h3 className="text-xl font-bold text-white mb-2 font-clash">{place.name}</h3>
         
-        <div className="flex flex-wrap items-center gap-2 text-[#888] text-xs font-medium">
-          <span className="flex items-center gap-1.5 text-[#ccc]">
+        <div className="flex flex-wrap items-center gap-2 text-white/50 text-xs font-medium">
+          <span className="flex items-center gap-1.5 text-white/70">
             <MapPin size={12} className="text-accent" /> {place.city}
           </span>
           

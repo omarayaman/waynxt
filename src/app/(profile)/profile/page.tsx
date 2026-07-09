@@ -174,7 +174,7 @@ function ProfilePageContent() {
           />
 
           {avatarError && (
-            <div className="mt-4 p-3 rounded-lg border border-red-500/20 bg-red-500/5 text-red-400 text-sm">
+            <div className="mt-4 p-3 rounded-lg border border-red-500/20 bg-red-500/5 text-red-600 dark:text-red-400 text-sm">
               {avatarError}
             </div>
           )}

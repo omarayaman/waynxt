@@ -177,7 +177,7 @@ export function PlaceReviewsSection({
       subtitle={`${totalReviews} ${totalReviews === 1 ? "review" : "reviews"} from travelers`}
       action={reviewAction}
     >
-      <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+      <div className="overflow-hidden rounded-2xl border border-border bg-surface-card">
         <PlaceRatingOverview
           embedded
           rating={placeRating}
@@ -195,7 +195,7 @@ export function PlaceReviewsSection({
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             onSubmit={handleSubmit}
-            className="mb-6 overflow-hidden rounded-xl border border-border bg-background p-5"
+            className="mb-6 overflow-hidden rounded-xl border border-border bg-surface-card p-5"
           >
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-sm font-medium text-foreground">

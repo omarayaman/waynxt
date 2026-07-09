@@ -25,7 +25,7 @@ export function PlaceSidebar({ place, totalReviews, askHref }: PlaceSidebarProps
   ];
 
   return (
-    <div className="rounded-2xl border border-border bg-surface">
+    <div className="rounded-2xl border border-border bg-surface-card">
       <div className="border-b border-border p-6">
         <div className="flex items-center gap-2">
           <Star size={18} className="text-accent" fill="currentColor" />

@@ -7,6 +7,7 @@ import { chatService } from "@/services/chat.service";
 import type { ChatSession } from "@/types/chat";
 import { Loader2, MessageSquare, Trash2, Plus, ExternalLink } from "lucide-react";
 import { Pagination } from "@/components/Pagination";
+import { destructiveHoverClassName, errorBannerClassName } from "./form-ui";
 import { isAxiosError } from "axios";
 
 const SESSIONS_PER_PAGE = 10;
@@ -109,7 +110,7 @@ export function ChatHistorySection({ totalCount }: ChatHistorySectionProps) {
       </div>
 
       {error && (
-        <div className="mb-4 p-3 rounded-lg border border-red-500/20 bg-red-500/5 text-red-400 text-sm">
+        <div className={errorBannerClassName}>
           {error}
         </div>
       )}
@@ -119,7 +120,7 @@ export function ChatHistorySection({ totalCount }: ChatHistorySectionProps) {
           <Loader2 size={24} className="animate-spin text-muted" />
         </div>
       ) : sessions.length === 0 ? (
-        <div className="rounded-xl border border-border bg-surface py-16 text-center">
+        <div className="rounded-xl border border-border bg-surface-card py-16 text-center">
           <MessageSquare size={24} className="text-muted mx-auto mb-3" />
           <p className="text-sm text-muted">No conversations yet</p>
           <p className="text-xs text-muted mt-1 mb-5">Ask Waynx about places, trips, and travel tips.</p>
@@ -132,7 +133,7 @@ export function ChatHistorySection({ totalCount }: ChatHistorySectionProps) {
         </div>
       ) : (
         <>
-          <div className="rounded-xl border border-border overflow-hidden divide-y divide-border">
+          <div className="rounded-xl border border-border bg-surface-card overflow-hidden divide-y divide-border">
             {sessions.map((session) => {
               const messageCount = session.messages?.length ?? 0;
               const isDeleting = deletingId === session.id;
@@ -168,7 +169,7 @@ export function ChatHistorySection({ totalCount }: ChatHistorySectionProps) {
                     type="button"
                     onClick={() => handleDelete(session.id)}
                     disabled={isDeleting}
-                    className="p-2 rounded-lg text-muted hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all disabled:opacity-50"
+                    className={`p-2 rounded-lg text-muted ${destructiveHoverClassName} opacity-0 group-hover:opacity-100 transition-all disabled:opacity-50`}
                     aria-label="Delete chat"
                   >
                     {isDeleting ? (

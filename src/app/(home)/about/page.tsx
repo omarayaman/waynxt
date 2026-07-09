@@ -26,7 +26,7 @@ export default function AboutPage() {
         </div>
 
         {/* Mission Card */}
-        <div className="bg-surface border border-border rounded-[2rem] p-10 md:p-12 max-w-3xl w-full text-center shadow-2xl mb-32 dark:bg-[#111111] dark:border-gray-800/60">
+        <div className="bg-surface-card border border-border rounded-[2rem] p-10 md:p-12 max-w-3xl w-full text-center shadow-[0_12px_40px_color-mix(in_srgb,var(--foreground)_8%,transparent)] mb-32">
           <h2 className="text-xl md:text-2xl font-medium text-foreground mb-6">
             Our mission
           </h2>
@@ -42,7 +42,7 @@ export default function AboutPage() {
             What makes WAYNX different
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="group bg-surface border border-border rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-default dark:bg-[#111111] dark:border-gray-800/50">
+            <div className="group bg-surface-card border border-border rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-default">
               <div className="w-12 h-12 rounded-full border border-accent/30 flex items-center justify-center text-accent mb-6">
                 <ShieldCheck size={20} strokeWidth={1.5} />
               </div>
@@ -52,7 +52,7 @@ export default function AboutPage() {
               </p>
             </div>
             
-            <div className="group bg-surface border border-border rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-default dark:bg-[#111111] dark:border-gray-800/50">
+            <div className="group bg-surface-card border border-border rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-default">
               <div className="w-12 h-12 rounded-full border border-accent/30 flex items-center justify-center text-accent mb-6">
                 <CheckCircle size={20} strokeWidth={1.5} />
               </div>
@@ -62,7 +62,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="group bg-surface border border-border rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-default dark:bg-[#111111] dark:border-gray-800/50">
+            <div className="group bg-surface-card border border-border rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-default">
               <div className="w-12 h-12 rounded-full border border-accent/30 flex items-center justify-center text-accent mb-6">
                 <MessageCircle size={20} strokeWidth={1.5} />
               </div>
@@ -83,7 +83,7 @@ export default function AboutPage() {
             How it works
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Link href="/ask-waynx" className="group bg-surface border border-border rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-pointer dark:bg-[#111111] dark:border-gray-800/50">
+            <Link href="/ask-waynx" className="group bg-surface-card border border-border rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-pointer">
               <div className="w-8 h-8 rounded-full bg-accent text-accent-foreground font-bold flex items-center justify-center mb-6 text-sm">
                 1
               </div>
@@ -93,7 +93,7 @@ export default function AboutPage() {
               </p>
             </Link>
             
-            <Link href="/places" className="group bg-surface border border-border rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-pointer dark:bg-[#111111] dark:border-gray-800/50">
+            <Link href="/places" className="group bg-surface-card border border-border rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-pointer">
               <div className="w-8 h-8 rounded-full bg-accent text-accent-foreground font-bold flex items-center justify-center mb-6 text-sm">
                 2
               </div>
@@ -103,7 +103,7 @@ export default function AboutPage() {
               </p>
             </Link>
 
-            <Link href="/search" className="group bg-surface border border-border rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-pointer dark:bg-[#111111] dark:border-gray-800/50">
+            <Link href="/search" className="group bg-surface-card border border-border rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-pointer">
               <div className="w-8 h-8 rounded-full bg-accent text-accent-foreground font-bold flex items-center justify-center mb-6 text-sm">
                 3
               </div>
@@ -116,7 +116,7 @@ export default function AboutPage() {
         </div>
 
         {/* Ready to explore */}
-        <div className="bg-surface border border-border rounded-[2rem] p-12 md:p-16 w-full max-w-3xl mx-auto text-center mb-32 shadow-2xl dark:bg-[#111111] dark:border-gray-800/50">
+        <div className="bg-surface-card border border-border rounded-[2rem] p-12 md:p-16 w-full max-w-3xl mx-auto text-center mb-32 shadow-[0_12px_40px_color-mix(in_srgb,var(--foreground)_8%,transparent)]">
           <h2 className="text-2xl md:text-3xl font-medium text-foreground mb-8">
             Ready to explore?
           </h2>

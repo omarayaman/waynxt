@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { userService } from "@/services/user.service";
 import { useAuthStore } from "@/store/useAuthStore";
-import { dangerButtonClassName } from "./form-ui";
+import { dangerButtonClassName, destructiveTextClassName, errorAlertClassName } from "./form-ui";
 
 export function DeleteAccountSection() {
   const { logout } = useAuthStore();
@@ -34,9 +34,9 @@ export function DeleteAccountSection() {
   return (
     <div className="space-y-4">
       <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/5 border border-red-500/20">
-        <AlertTriangle className="text-red-400 shrink-0 mt-0.5" size={18} />
+        <AlertTriangle className={`${destructiveTextClassName} shrink-0 mt-0.5`} size={18} />
         <div>
-          <p className="text-red-400 font-medium text-sm">Delete Account</p>
+          <p className={`${destructiveTextClassName} font-medium text-sm`}>Delete Account</p>
           <p className="text-muted text-xs mt-1">
             This action is permanent. Your account will be soft-deleted and you will be logged out.
           </p>
@@ -44,14 +44,14 @@ export function DeleteAccountSection() {
       </div>
 
       {apiError && (
-        <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+        <div className={errorAlertClassName}>
           {apiError}
         </div>
       )}
 
       <div className="space-y-2">
         <label className="text-sm text-foreground">
-          Type <span className="text-red-400 font-mono">DELETE</span> to confirm
+          Type <span className={`${destructiveTextClassName} font-mono`}>DELETE</span> to confirm
         </label>
         <input
           type="text"

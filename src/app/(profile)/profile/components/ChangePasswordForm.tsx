@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { z } from "zod";
 import { Loader2 } from "lucide-react";
 import { userService } from "@/services/user.service";
-import { FormField, inputClassName, submitButtonClassName } from "./form-ui";
+import { FormField, inputClassName, submitButtonClassName, errorAlertClassName, successAlertClassName } from "./form-ui";
 
 const passwordSchema = z
   .object({
@@ -78,12 +78,12 @@ export function ChangePasswordForm({ onSuccess }: ChangePasswordFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {apiError && (
-        <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+        <div className={errorAlertClassName}>
           {apiError}
         </div>
       )}
       {successMessage && (
-        <div className="p-3 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm">
+        <div className={successAlertClassName}>
           {successMessage}
         </div>
       )}

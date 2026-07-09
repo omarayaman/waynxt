@@ -7,6 +7,7 @@ import { tripService } from "@/services/trip.service";
 import type { Trip } from "@/types/trip";
 import { Loader2, Map, Plus, Trash2, Calendar, ChevronRight } from "lucide-react";
 import { Pagination } from "@/components/Pagination";
+import { destructiveHoverClassName, errorBannerClassName } from "./form-ui";
 import { isAxiosError } from "axios";
 
 const TRIPS_PER_PAGE = 8;
@@ -26,11 +27,11 @@ function getDestinationsLabel(trip: Trip): string {
 function statusStyle(status: string): string {
   switch (status) {
     case "completed":
-      return "text-green-400/80 bg-green-400/10";
+      return "text-green-700 bg-green-500/10 dark:text-green-400/80 dark:bg-green-400/10";
     case "draft":
       return "text-muted bg-surface-elevated";
     default:
-      return "text-blue-400/80 bg-blue-400/10";
+      return "text-blue-700 bg-blue-500/10 dark:text-blue-400/80 dark:bg-blue-400/10";
   }
 }
 
@@ -111,7 +112,7 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
       </div>
 
       {error && (
-        <div className="mb-4 p-3 rounded-lg border border-red-500/20 bg-red-500/5 text-red-400 text-sm">
+        <div className={errorBannerClassName}>
           {error}
         </div>
       )}
@@ -121,7 +122,7 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
           <Loader2 size={24} className="animate-spin text-muted" />
         </div>
       ) : trips.length === 0 ? (
-        <div className="rounded-xl border border-border bg-surface py-16 text-center">
+        <div className="rounded-xl border border-border bg-surface-card py-16 text-center">
           <Map size={24} className="text-muted mx-auto mb-3" />
           <p className="text-sm text-muted">No trips yet</p>
           <p className="text-xs text-muted mt-1 mb-5">
@@ -136,10 +137,10 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
         </div>
       ) : (
         <>
-          <div className="rounded-xl border border-border overflow-hidden">
+          <div className="rounded-xl border border-border bg-surface-card overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border bg-surface">
+                <tr className="border-b border-border bg-surface-card">
                   <th className="text-left px-4 py-3 text-xs font-medium text-muted">Trip</th>
                   <th className="text-left px-4 py-3 text-xs font-medium text-muted hidden md:table-cell">
                     Destinations
@@ -212,7 +213,7 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
                               handleDelete(trip.id);
                             }}
                             disabled={isDeleting}
-                            className="p-2 rounded-lg text-muted hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all disabled:opacity-50"
+                            className={`p-2 rounded-lg text-muted ${destructiveHoverClassName} opacity-0 group-hover:opacity-100 transition-all disabled:opacity-50`}
                             aria-label="Delete trip"
                           >
                             {isDeleting ? (

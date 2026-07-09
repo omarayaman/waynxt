@@ -52,7 +52,7 @@ export function ProfileOverview({ stats, isLoading, onNavigate }: ProfileOvervie
                   key={key}
                   type="button"
                   onClick={() => onNavigate(section!)}
-                  className="group flex items-center justify-between p-4 rounded-xl border border-border bg-surface hover:border-accent/30 hover:bg-surface-elevated/50 transition-colors text-left w-full"
+                  className="group flex items-center justify-between p-4 rounded-xl border border-border bg-surface-card hover:border-accent/30 hover:bg-surface-elevated/50 transition-colors text-left w-full"
                 >
                   {content}
                 </button>
@@ -62,7 +62,7 @@ export function ProfileOverview({ stats, isLoading, onNavigate }: ProfileOvervie
             return (
               <div
                 key={key}
-                className="flex items-center justify-between p-4 rounded-xl border border-border bg-surface"
+                className="flex items-center justify-between p-4 rounded-xl border border-border bg-surface-card"
               >
                 {content}
               </div>
@@ -72,7 +72,7 @@ export function ProfileOverview({ stats, isLoading, onNavigate }: ProfileOvervie
       </div>
 
       {stats && stats.explorer_points > 0 && (
-        <div className="p-4 rounded-xl border border-border bg-surface">
+        <div className="p-4 rounded-xl border border-border bg-surface-card">
           <p className="text-xs text-muted mb-1">Explorer points</p>
           <p className="text-2xl font-semibold text-foreground tabular-nums">
             {stats.explorer_points.toLocaleString()}
