@@ -10,6 +10,7 @@ import { z } from "zod";
 import { GoogleLoginButton } from "@/components/GoogleLoginButton";
 import { isGoogleOAuthConfigured } from "@/lib/google-oauth";
 import { getPostAuthRedirect } from "@/lib/auth-redirect";
+import { PUBLIC_ASSETS } from "@/lib/public-assets";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -72,14 +73,14 @@ function RegisterPageContent() {
       {/* Full-screen Background Image */}
       <div className="absolute inset-0 z-0 dark:opacity-80">
         <Image
-          src="/images/white/(3).jpeg"
+          src={PUBLIC_ASSETS.images.heroLight.three}
           alt="Green pyramids illustration on a light background"
           fill
           className="object-cover object-center dark:hidden"
           priority
         />
         <Image
-          src="/bg-register.png"
+          src={PUBLIC_ASSETS.backgrounds.register}
           alt="Ancient Egyptian ruins background"
           fill
           className="hidden object-cover object-center dark:block"

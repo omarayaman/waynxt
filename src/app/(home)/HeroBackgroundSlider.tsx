@@ -3,34 +3,35 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { PUBLIC_ASSETS } from "@/lib/public-assets";
 import { useIsDark } from "@/store/useThemeStore";
 
 const LIGHT_SLIDES = [
   {
-    src: "/images/white/1.jpeg",
+    src: PUBLIC_ASSETS.images.heroLight.one,
     alt: "Nefertiti bust — Egyptian heritage",
   },
   {
-    src: "/images/white/(2).jpeg",
+    src: PUBLIC_ASSETS.images.heroLight.two,
     alt: "Pharaoh statue — Ancient Egypt",
   },
   {
-    src: "/images/white/(3).jpeg",
+    src: PUBLIC_ASSETS.images.heroLight.three,
     alt: "Egyptian landscape through an archway at golden hour",
   },
 ] as const;
 
 const DARK_SLIDES = [
   {
-    src: "/images/1 (1).png",
+    src: PUBLIC_ASSETS.images.heroDark.one,
     alt: "Nefertiti bust — Egyptian heritage",
   },
   {
-    src: "/images/2 (1).png",
+    src: PUBLIC_ASSETS.images.heroDark.two,
     alt: "Pharaoh statue — Ancient Egypt",
   },
   {
-    src: "/images/3 (1).png",
+    src: PUBLIC_ASSETS.images.heroDark.three,
     alt: "Egyptian landscape through an archway at golden hour",
   },
 ] as const;

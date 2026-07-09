@@ -1,25 +1,26 @@
 import React from "react";
 import Image from "next/image";
+import { PUBLIC_ASSETS } from "@/lib/public-assets";
 
 const curatedPlaces = [
   {
     id: "karnak",
     title: "Temple of Karnak",
-    image: "/images/karnak.png",
+    image: PUBLIC_ASSETS.images.karnak,
     match: "95% Match",
     aiReason: "Matches your love for ancient architecture",
   },
   {
     id: "siwa",
     title: "Siwa Oasis",
-    image: "/images/siwa.png",
+    image: PUBLIC_ASSETS.images.siwa,
     match: "92% Match",
     aiReason: "Perfect for your desert adventure preference",
   },
   {
     id: "dahab",
     title: "Dahab Blue Hole",
-    image: "/images/dahab.png",
+    image: PUBLIC_ASSETS.images.dahab,
     match: "88% Match",
     aiReason: "Based on your interest in diving spots",
   },

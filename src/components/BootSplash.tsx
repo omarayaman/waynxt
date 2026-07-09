@@ -1,3 +1,5 @@
+import { PUBLIC_ASSETS } from "@/lib/public-assets";
+
 export function BootSplash() {
   return (
     <div id="waynxt-boot" aria-hidden="true" aria-busy="true" aria-label="Loading Waynx">
@@ -12,7 +14,7 @@ export function BootSplash() {
           <span className="waynxt-boot-ring waynxt-boot-ring-inner" />
           <span className="waynxt-boot-core">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/icons/waynxt.svg" alt="" width={52} height={52} className="waynxt-boot-logo" />
+            <img src={PUBLIC_ASSETS.icons.waynxt} alt="" width={52} height={52} className="waynxt-boot-logo" />
           </span>
         </div>
 

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useIsDark } from "@/store/useThemeStore";
+import { PUBLIC_ASSETS } from "@/lib/public-assets";
 
 export default function PlannerBackground({ opacity = 25 }: { opacity?: number }) {
   const isDark = useIsDark();
@@ -11,7 +12,7 @@ export default function PlannerBackground({ opacity = 25 }: { opacity?: number }
       {isDark ? (
         <>
           <Image
-            src="/images/worldmap.png"
+            src={PUBLIC_ASSETS.images.worldmap}
             alt=""
             fill
             className="object-cover object-[55%_45%] opacity-65"
@@ -23,7 +24,7 @@ export default function PlannerBackground({ opacity = 25 }: { opacity?: number }
         </>
       ) : (
         <Image
-          src="/images/worldmapwhite.jpeg"
+          src={PUBLIC_ASSETS.images.worldmapWhite}
           alt=""
           fill
           className={`scale-102 object-cover opacity-${opacity} blur-[3px]`}

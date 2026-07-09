@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { PUBLIC_ASSETS } from "@/lib/public-assets";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
   title: "Waynx",
   description: "Waynx - The next generation travel experience",
   icons: {
-    icon: "/icons/waynxt.svg",
+    icon: PUBLIC_ASSETS.icons.waynxt,
   },
 };
 

@@ -9,6 +9,7 @@ import {Menu, Sparkles, X} from "lucide-react";
 import {useAuthStore} from "@/store/useAuthStore";
 import {ThemeToggle} from "@/components/ThemeToggle";
 import {useIsDark} from "@/store/useThemeStore";
+import { PUBLIC_ASSETS } from "@/lib/public-assets";
 
 export const NAVBAR_HEIGHT = 65;
 
@@ -110,7 +111,7 @@ export default function NavbarHome({className}: {className?: string}) {
             className="shrink-0 outline-none focus:outline-none flex items-center gap-2 mt-1"
             aria-label="WAYNX home">
             <Image
-              src="/icons/rr.jpeg"
+              src={PUBLIC_ASSETS.icons.rr}
               alt="WAYNX"
               width={80}
               height={80}
@@ -118,7 +119,7 @@ export default function NavbarHome({className}: {className?: string}) {
               className="h-12 w-auto object-cover dark:hidden"
             />
             <Image
-              src="/icons/full_Logo.svg"
+              src={PUBLIC_ASSETS.icons.fullLogo}
               alt="WAYNX"
               width={180}
               height={60}

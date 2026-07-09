@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { PUBLIC_ASSETS } from "@/lib/public-assets";
 
 export default function UpcomingEvents() {
   return (
@@ -18,7 +19,7 @@ export default function UpcomingEvents() {
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/luxor_festival.png"
+              src={PUBLIC_ASSETS.images.luxorFestival}
               alt="Luxor Sphinx Festival"
               fill
               className="object-cover"
