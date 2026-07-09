@@ -62,39 +62,29 @@ export default function InterestsSection() {
   }, [emblaApi, categories.length]);
 
   return (
-    <section className="w-full bg-[#050505] py-10 px-4 flex flex-col items-center">
+    <section className="w-full bg-background py-10 px-4 flex flex-col items-center">
       <div className="max-w-[1300px] w-full flex flex-col items-center relative">
-        <h2 className="text-4xl md:text-[44px] font-bold text-white mb-4 text-center">
+        <h2 className="text-4xl md:text-[44px] font-bold text-foreground mb-4 text-center">
           Explore by interest
         </h2>
-        <p className="text-gray-400 text-base md:text-lg text-center mb-3">
+        <p className="text-muted text-base md:text-lg text-center mb-3">
           Discover Egypt through different travel experiences.
         </p>
 
         {isLoading ? (
           <div className="flex justify-center items-center w-full h-[380px]">
-            <Loader2 size={40} className="animate-spin text-[#E3D010]" />
+            <Loader2 size={40} className="animate-spin text-accent" />
           </div>
         ) : categories.length === 0 ? (
-          <p className="text-gray-500 text-center">No categories available.</p>
+          <p className="text-muted text-center">No categories available.</p>
         ) : (
           <div className="w-full relative group/carousel">
-            {/* Edge fade masks */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-y-0 left-0 w-16 md:w-24 z-[5] bg-gradient-to-r from-[#050505] to-transparent"
-            />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-y-0 right-0 w-16 md:w-24 z-[5] bg-gradient-to-l from-[#050505] to-transparent"
-            />
-
             {/* Navigation */}
             <button
               type="button"
               onClick={scrollPrev}
               aria-label="Previous interests"
-              className="absolute -left-2 md:-left-5 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 rounded-full bg-black/60 border border-white/10 text-white items-center justify-center z-10 backdrop-blur-md opacity-70 md:opacity-0 md:group-hover/carousel:opacity-100 transition-all duration-300 hover:bg-black/90 hover:scale-110 hover:border-[#E3D010]/40 shadow-xl hidden sm:flex"
+              className="absolute -left-2 md:-left-5 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 rounded-full bg-surface/90 border border-border text-foreground items-center justify-center z-10 backdrop-blur-md opacity-70 md:opacity-0 md:group-hover/carousel:opacity-100 transition-all duration-300 hover:bg-surface-elevated hover:scale-110 hover:border-accent/40 shadow-xl hidden sm:flex"
             >
               <ChevronLeft size={24} />
             </button>
@@ -102,7 +92,7 @@ export default function InterestsSection() {
               type="button"
               onClick={scrollNext}
               aria-label="Next interests"
-              className="absolute -right-2 md:-right-5 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 rounded-full bg-black/60 border border-white/10 text-white items-center justify-center z-10 backdrop-blur-md opacity-70 md:opacity-0 md:group-hover/carousel:opacity-100 transition-all duration-300 hover:bg-black/90 hover:scale-110 hover:border-[#E3D010]/40 shadow-xl hidden sm:flex"
+              className="absolute -right-2 md:-right-5 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 rounded-full bg-surface/90 border border-border text-foreground items-center justify-center z-10 backdrop-blur-md opacity-70 md:opacity-0 md:group-hover/carousel:opacity-100 transition-all duration-300 hover:bg-surface-elevated hover:scale-110 hover:border-accent/40 shadow-xl hidden sm:flex"
             >
               <ChevronRight size={24} />
             </button>
@@ -136,9 +126,9 @@ export default function InterestsSection() {
                           {interest.category}
                         </h3>
 
-                        <div className="w-full max-w-[180px] h-[2px] bg-[#E3D010] scale-x-0 origin-center transition-transform duration-500 ease-out group-hover/card:scale-x-100" />
+                        <div className="w-full max-w-[180px] h-[2px] bg-accent scale-x-0 origin-center transition-transform duration-500 ease-out group-hover/card:scale-x-100" />
 
-                        <span className="text-[#E3D010] font-medium text-sm mt-3 opacity-0 transition-all duration-500 group-hover/card:opacity-100 flex items-center gap-1">
+                        <span className="text-accent font-medium text-sm mt-3 opacity-0 transition-all duration-500 group-hover/card:opacity-100 flex items-center gap-1">
                           Explore
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -175,8 +165,8 @@ export default function InterestsSection() {
                     onClick={() => scrollTo(index)}
                     className={`h-2 rounded-full transition-all duration-500 ease-out ${
                       index === selectedIndex
-                        ? "w-8 bg-[#E3D010]"
-                        : "w-2 bg-white/25 hover:bg-white/50"
+                        ? "w-8 bg-accent"
+                        : "w-2 bg-foreground/20 hover:bg-foreground/40"
                     }`}
                   />
                 ))}

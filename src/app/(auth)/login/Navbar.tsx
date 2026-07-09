@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function Navbar() {
   return (
@@ -17,11 +18,12 @@ export default function Navbar() {
           />
         </div>
       </div>
-      <div className="text-sm z-20">
-        <span className="text-gray-300">Don&apos;t have an account ? </span>
+      <div className="flex items-center gap-4 text-sm z-20">
+        <ThemeToggle />
+        <span className="text-muted">Don&apos;t have an account ? </span>
         <Link
           href="/register"
-          className="text-[#E3D010] hover:text-yellow-300 transition-colors font-medium"
+          className="text-accent hover:text-accent-hover transition-colors font-medium"
         >
         sign up
         </Link>

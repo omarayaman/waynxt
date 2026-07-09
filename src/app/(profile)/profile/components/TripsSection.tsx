@@ -121,7 +121,7 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
           <Loader2 size={24} className="animate-spin text-[#555]" />
         </div>
       ) : trips.length === 0 ? (
-        <div className="rounded-xl border border-[#1a1a1a] bg-[#0d0d0d] py-16 text-center">
+        <div className="rounded-xl border border-border bg-[#0d0d0d] py-16 text-center">
           <Map size={24} className="text-[#444] mx-auto mb-3" />
           <p className="text-sm text-[#888]">No trips yet</p>
           <p className="text-xs text-[#555] mt-1 mb-5">
@@ -136,10 +136,10 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
         </div>
       ) : (
         <>
-          <div className="rounded-xl border border-[#1a1a1a] overflow-hidden">
+          <div className="rounded-xl border border-border overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#1a1a1a] bg-[#0d0d0d]">
+                <tr className="border-b border-border bg-[#0d0d0d]">
                   <th className="text-left px-4 py-3 text-xs font-medium text-[#666]">Trip</th>
                   <th className="text-left px-4 py-3 text-xs font-medium text-[#666] hidden md:table-cell">
                     Destinations
@@ -157,7 +157,7 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
                   return (
                     <tr
                       key={trip.id}
-                      className="group border-b border-[#1a1a1a] last:border-0 hover:bg-[#111] transition-colors cursor-pointer"
+                      className="group border-b border-border last:border-0 hover:bg-[#111] transition-colors cursor-pointer"
                       onClick={() => router.push(`/planner/${trip.id}`)}
                     >
                       <td className="px-4 py-3.5">

@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-poppins flex flex-col">
+    <div className="min-h-screen bg-background text-foreground font-poppins flex flex-col">
       <NavbarHome />
       
       <main className="flex-1 flex flex-col items-center w-full px-4 pt-20 pb-0 relative z-10">
@@ -42,8 +42,8 @@ export default function AboutPage() {
             What makes WAYNX different
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-[#DFD616]/30 hover:shadow-[0_10px_30px_rgba(223,214,22,0.05)] cursor-default">
-              <div className="w-12 h-12 rounded-full border border-[#DFD616]/30 flex items-center justify-center text-[#DFD616] mb-6">
+            <div className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-default">
+              <div className="w-12 h-12 rounded-full border border-accent/30 flex items-center justify-center text-accent mb-6">
                 <ShieldCheck size={20} strokeWidth={1.5} />
               </div>
               <h3 className="text-sm text-white font-medium mb-3">Verified cultural information</h3>
@@ -52,8 +52,8 @@ export default function AboutPage() {
               </p>
             </div>
             
-            <div className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-[#DFD616]/30 hover:shadow-[0_10px_30px_rgba(223,214,22,0.05)] cursor-default">
-              <div className="w-12 h-12 rounded-full border border-[#DFD616]/30 flex items-center justify-center text-[#DFD616] mb-6">
+            <div className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-default">
+              <div className="w-12 h-12 rounded-full border border-accent/30 flex items-center justify-center text-accent mb-6">
                 <CheckCircle size={20} strokeWidth={1.5} />
               </div>
               <h3 className="text-sm text-white font-medium mb-3">No ads. No fake reviews</h3>
@@ -62,8 +62,8 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-[#DFD616]/30 hover:shadow-[0_10px_30px_rgba(223,214,22,0.05)] cursor-default">
-              <div className="w-12 h-12 rounded-full border border-[#DFD616]/30 flex items-center justify-center text-[#DFD616] mb-6">
+            <div className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-default">
+              <div className="w-12 h-12 rounded-full border border-accent/30 flex items-center justify-center text-accent mb-6">
                 <MessageCircle size={20} strokeWidth={1.5} />
               </div>
               <h3 className="text-sm text-white font-medium mb-3 flex flex-col gap-1">
@@ -83,8 +83,8 @@ export default function AboutPage() {
             How it works
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Link href="/ask-waynx" className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-[#DFD616]/30 hover:shadow-[0_10px_30px_rgba(223,214,22,0.05)] cursor-pointer">
-              <div className="w-8 h-8 rounded-full bg-[#DFD616] text-[#0a0a0a] font-bold flex items-center justify-center mb-6 text-sm">
+            <Link href="/ask-waynx" className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-pointer">
+              <div className="w-8 h-8 rounded-full bg-accent text-accent-foreground font-bold flex items-center justify-center mb-6 text-sm">
                 1
               </div>
               <h3 className="text-sm text-white font-medium mb-3">Ask WAYNX</h3>
@@ -93,8 +93,8 @@ export default function AboutPage() {
               </p>
             </Link>
             
-            <Link href="/places" className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-[#DFD616]/30 hover:shadow-[0_10px_30px_rgba(223,214,22,0.05)] cursor-pointer">
-              <div className="w-8 h-8 rounded-full bg-[#DFD616] text-[#0a0a0a] font-bold flex items-center justify-center mb-6 text-sm">
+            <Link href="/places" className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-pointer">
+              <div className="w-8 h-8 rounded-full bg-accent text-accent-foreground font-bold flex items-center justify-center mb-6 text-sm">
                 2
               </div>
               <h3 className="text-sm text-white font-medium mb-3">Explore places</h3>
@@ -103,8 +103,8 @@ export default function AboutPage() {
               </p>
             </Link>
 
-            <Link href="/search" className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-[#DFD616]/30 hover:shadow-[0_10px_30px_rgba(223,214,22,0.05)] cursor-pointer">
-              <div className="w-8 h-8 rounded-full bg-[#DFD616] text-[#0a0a0a] font-bold flex items-center justify-center mb-6 text-sm">
+            <Link href="/search" className="group bg-[#111111] border border-gray-800/50 rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_10px_30px_color-mix(in srgb, var(--accent) %, transparent)] cursor-pointer">
+              <div className="w-8 h-8 rounded-full bg-accent text-accent-foreground font-bold flex items-center justify-center mb-6 text-sm">
                 3
               </div>
               <h3 className="text-sm text-white font-medium mb-3">Search smarter</h3>
@@ -123,7 +123,7 @@ export default function AboutPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <Link 
               href="/planner"
-              className="bg-[#DFD616] hover:bg-[#EAE121] text-[#0a0a0a] font-bold text-sm px-8 py-3 rounded-full flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(223,214,22,0.15)] hover:shadow-[0_0_20px_rgba(223,214,22,0.3)]"
+              className="bg-accent hover:bg-accent-hover text-accent-foreground font-bold text-sm px-8 py-3 rounded-full flex items-center gap-2 transition-all shadow-[0_0_15px_color-mix(in srgb, var(--accent) %, transparent)] hover:shadow-[0_0_20px_color-mix(in srgb, var(--accent) %, transparent)]"
             >
               <MapPin size={16} strokeWidth={2} />
               Start exploring

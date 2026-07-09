@@ -107,7 +107,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#050505] text-white font-sans overflow-hidden">
+    <div className="relative min-h-screen bg-background text-foreground font-sans overflow-hidden">
       {/* Full-screen Background Image */}
       <div className="absolute inset-0 z-0 opacity-80">
         <Image
@@ -126,7 +126,7 @@ export default function RegisterPage() {
       {/* Form Content */}
       <div className="relative z-10 flex items-center min-h-[calc(100vh-40px)]">
         <div className="w-full max-w-[600px] px-8 lg:px-10 ml-[10%]">
-          <h1 className="text-[42px] font-bold  text-[#E3D010] mb-3 tracking-tight">
+          <h1 className="text-[42px] font-bold  text-accent mb-3 tracking-tight">
             Create your account
           </h1>
           <p className="text-gray-300 mb-10 text-[15px] leading-relaxed">
@@ -148,7 +148,7 @@ export default function RegisterPage() {
               >
                 Name
               </label>
-              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-[#E3D010] transition-all duration-300">
+              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-accent transition-all duration-300">
                 <div className="absolute left-4 text-gray-400">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -191,7 +191,7 @@ export default function RegisterPage() {
               >
                 Email
               </label>
-              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-[#E3D010] transition-all duration-300">
+              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-accent transition-all duration-300">
                 <div className="absolute left-4 text-gray-400">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -234,7 +234,7 @@ export default function RegisterPage() {
               >
                 Password
               </label>
-              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-[#E3D010] transition-all duration-300">
+              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-accent transition-all duration-300">
                 <div className="absolute left-4 text-gray-400">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -266,7 +266,7 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 text-gray-400 hover:text-[#E3D010] transition-all duration-300 hover:scale-110 active:scale-90"
+                  className="absolute right-4 text-gray-400 hover:text-accent transition-all duration-300 hover:scale-110 active:scale-90"
                 >
                   {showPassword ? (
                     <svg
@@ -311,7 +311,7 @@ export default function RegisterPage() {
             {/* Terms Checkbox */}
             <div className="flex items-center pt-1 px-1">
               <label className="flex items-center gap-2 cursor-pointer group">
-                <div className={`w-4 h-4 rounded-[4px] border ${termsAccepted ? 'border-[#E3D010] bg-[#E3D010]' : 'border-gray-600 bg-[#181818]'} flex items-center justify-center group-hover:border-[#E3D010] transition-colors`}>
+                <div className={`w-4 h-4 rounded-[4px] border ${termsAccepted ? 'border-accent bg-accent' : 'border-gray-600 bg-[#181818]'} flex items-center justify-center group-hover:border-accent transition-colors`}>
                   {termsAccepted && (
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"></polyline>
@@ -334,11 +334,11 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 bg-[#DFD616] hover:bg-[#EAE121] text-[#0a0a0a] font-bold text-[15px] py-4 rounded-xl mt-4 transition-all duration-300 shadow-[0_0_15px_rgba(223,214,22,0.15)] hover:shadow-[0_0_20px_rgba(223,214,22,0.3)] disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-accent-foreground font-bold text-[15px] py-4 rounded-xl mt-4 transition-all duration-300 shadow-[0_0_15px_color-mix(in srgb, var(--accent) %, transparent)] hover:shadow-[0_0_20px_color-mix(in srgb, var(--accent) %, transparent)] disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <>
-                  <svg className="animate-spin h-5 w-5 text-[#0a0a0a]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="animate-spin h-5 w-5 text-accent-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>

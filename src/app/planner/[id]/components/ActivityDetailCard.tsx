@@ -20,7 +20,7 @@ export function ActivityDetailCard({ stop, totalActivities, onPrev, onNext, onCl
 
   return (
     <div className="shrink-0 mt-4 z-40">
-      <div className="relative flex flex-col sm:flex-row gap-4 bg-linear-to-br from-[#111] to-black border border-[#1a1a1a] rounded-2xl p-4 shadow-[0_20px_40px_-12px_rgba(0,0,0,0.6)]">
+      <div className="relative flex flex-col sm:flex-row gap-4 bg-linear-to-br from-[#111] to-black border border-border rounded-2xl p-4 shadow-[0_20px_40px_-12px_rgba(0,0,0,0.6)]">
         
         {/* Close button */}
         <button 
@@ -48,7 +48,7 @@ export function ActivityDetailCard({ stop, totalActivities, onPrev, onNext, onCl
           <div className="text-[11px] text-[#888] font-medium mb-1.5">
             Stop {order + 1} of {totalActivities} &middot; {city} &middot; Day {dayNumber}
           </div>
-          <h3 className="text-[#DFD616] text-lg sm:text-xl font-bold mb-1.5 truncate pr-4">
+          <h3 className="text-accent text-lg sm:text-xl font-bold mb-1.5 truncate pr-4">
             {activity.activity_name}
           </h3>
           <div className="flex items-center gap-1.5 text-xs text-[#aaa] mb-3 truncate">
@@ -71,7 +71,7 @@ export function ActivityDetailCard({ stop, totalActivities, onPrev, onNext, onCl
             <button 
               onClick={onNext}
               disabled={order === totalActivities - 1}
-              className="flex-1 bg-[#DFD616] text-[#0a0a0a] rounded-xl py-2.5 text-[13px] font-bold hover:bg-[#EAE121] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-accent text-accent-foreground rounded-xl py-2.5 text-[13px] font-bold hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next &rarr;
             </button>

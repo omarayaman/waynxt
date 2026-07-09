@@ -40,7 +40,7 @@ function statusStyle(status: string): string {
     case "confirmed":
       return "text-blue-400/80 bg-blue-400/10 border-blue-400/20";
     default:
-      return "text-[#DFD616] bg-[#111] border-[#DFD616]/30";
+      return "text-accent bg-[#111] border-accent/30";
   }
 }
 
@@ -180,7 +180,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
               <p className="text-red-400">{error || "Trip not found"}</p>
               <Link
                 href="/planner"
-                className="inline-block mt-4 text-sm text-[#DFD616] hover:underline"
+                className="inline-block mt-4 text-sm text-accent hover:underline"
               >
                 Create a new trip
               </Link>
@@ -188,7 +188,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
           ) : (
             <>
               {/* Trip Header */}
-              <div className="shrink-0 flex flex-col sm:flex-row sm:items-start justify-between gap-4 bg-linear-to-br from-[#111] to-black border border-[#1a1a1a] rounded-2xl p-5 mb-4">
+              <div className="shrink-0 flex flex-col sm:flex-row sm:items-start justify-between gap-4 bg-linear-to-br from-[#111] to-black border border-border rounded-2xl p-5 mb-4">
                 <div>
                   <h1 className="text-xl sm:text-2xl font-clash font-bold text-white mb-2">
                     {trip.title}
@@ -202,11 +202,11 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                       {trip.status}
                     </span>
                     <span className="text-[#5F5C50]">&bull;</span>
-                    <span className="font-medium text-[#DFD616]">{totalDays} <span className="text-[#9A9585] font-normal">Days</span></span>
+                    <span className="font-medium text-accent">{totalDays} <span className="text-[#9A9585] font-normal">Days</span></span>
                     <span className="text-[#5F5C50]">&bull;</span>
-                    <span className="font-medium text-[#DFD616]">{totalDestinations} <span className="text-[#9A9585] font-normal">Destinations</span></span>
+                    <span className="font-medium text-accent">{totalDestinations} <span className="text-[#9A9585] font-normal">Destinations</span></span>
                     <span className="text-[#5F5C50]">&bull;</span>
-                    <span className="font-medium text-[#DFD616]">{totalActivities} <span className="text-[#9A9585] font-normal">Activities</span></span>
+                    <span className="font-medium text-accent">{totalActivities} <span className="text-[#9A9585] font-normal">Activities</span></span>
                   </div>
                 </div>
 
@@ -215,7 +215,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                     type="button"
                     onClick={handleRegenerate}
                     disabled={isRegenerating}
-                    className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-[#9A9585] bg-transparent hover:bg-[#ffffff05] border border-[#1a1a1a] rounded-xl transition-colors disabled:opacity-50"
+                    className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-[#9A9585] bg-transparent hover:bg-[#ffffff05] border border-border rounded-xl transition-colors disabled:opacity-50"
                   >
                     {isRegenerating ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
                     Regenerate
@@ -225,7 +225,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                       type="button"
                       onClick={handleConfirm}
                       disabled={isUpdatingStatus}
-                      className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-[#1a1608] bg-[#DFD616] hover:bg-[#EAE121] rounded-xl transition-colors disabled:opacity-50"
+                      className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-[#1a1608] bg-accent hover:bg-accent-hover rounded-xl transition-colors disabled:opacity-50"
                     >
                       {isUpdatingStatus ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
                       Confirm Trip
@@ -235,7 +235,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                     type="button"
                     onClick={handleDelete}
                     disabled={isDeleting}
-                    className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-red-400 bg-transparent hover:bg-red-500/10 border border-[#1a1a1a] rounded-xl transition-colors disabled:opacity-50"
+                    className="flex-1 sm:flex-none inline-flex justify-center items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-red-400 bg-transparent hover:bg-red-500/10 border border-border rounded-xl transition-colors disabled:opacity-50"
                   >
                     {isDeleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
                     Delete
@@ -244,7 +244,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
               </div>
 
               {/* Tabs */}
-              <div className="shrink-0 flex gap-6 border-b border-[#1a1a1a] mb-2">
+              <div className="shrink-0 flex gap-6 border-b border-border mb-2">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
@@ -252,7 +252,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
                     onClick={() => setActiveTab(tab.id)}
                     className={`py-2.5 px-1 text-[13px] font-semibold transition-colors border-b-2 -mb-[1px] ${
                       activeTab === tab.id
-                        ? "border-[#DFD616] text-[#DFD616]"
+                        ? "border-accent text-accent"
                         : "border-transparent text-[#5F5C50] hover:text-[#9A9585]"
                     }`}
                   >

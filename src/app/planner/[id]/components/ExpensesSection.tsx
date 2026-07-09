@@ -126,7 +126,7 @@ export function ExpensesSection({ tripId, onExpensesChange }: ExpensesSectionPro
           {Object.entries(totalByCurrency).map(([currency, total]) => (
             <div
               key={currency}
-              className="rounded-xl border border-[#1a1a1a] bg-[#0d0d0d] px-4 py-3 flex items-center gap-3"
+              className="rounded-xl border border-border bg-[#0d0d0d] px-4 py-3 flex items-center gap-3"
             >
               <div className="w-9 h-9 rounded-lg bg-[#161616] flex items-center justify-center">
                 <Wallet size={16} className="text-[#F7EA00]" />
@@ -147,7 +147,7 @@ export function ExpensesSection({ tripId, onExpensesChange }: ExpensesSectionPro
           <Loader2 size={24} className="animate-spin text-[#555]" />
         </div>
       ) : expenses.length === 0 ? (
-        <div className="rounded-xl border border-[#1a1a1a] bg-[#0d0d0d] py-16 text-center">
+        <div className="rounded-xl border border-border bg-[#0d0d0d] py-16 text-center">
           <Wallet size={24} className="text-[#444] mx-auto mb-3" />
           <p className="text-sm text-[#888]">No expenses yet</p>
           <p className="text-xs text-[#555] mt-1 mb-4">Start tracking your trip budget.</p>
@@ -160,10 +160,10 @@ export function ExpensesSection({ tripId, onExpensesChange }: ExpensesSectionPro
           </button>
         </div>
       ) : (
-        <div className="rounded-xl border border-[#1a1a1a] overflow-hidden">
+        <div className="rounded-xl border border-border overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#1a1a1a] bg-[#0d0d0d]">
+              <tr className="border-b border-border bg-[#0d0d0d]">
                 <th className="text-left px-4 py-3 text-xs font-medium text-[#666]">Description</th>
                 <th className="text-left px-4 py-3 text-xs font-medium text-[#666] hidden sm:table-cell">
                   Category
@@ -181,7 +181,7 @@ export function ExpensesSection({ tripId, onExpensesChange }: ExpensesSectionPro
                 return (
                   <tr
                     key={expense.id}
-                    className="group border-b border-[#1a1a1a] last:border-0 hover:bg-[#111] transition-colors"
+                    className="group border-b border-border last:border-0 hover:bg-[#111] transition-colors"
                   >
                     <td className="px-4 py-3.5">
                       <p className="text-white truncate max-w-[200px]">

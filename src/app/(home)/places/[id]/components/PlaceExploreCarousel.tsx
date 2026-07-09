@@ -51,7 +51,7 @@ interface PlaceExploreCarouselProps {
 
 function ExplorePlaceCard({ place }: { place: Place }) {
   return (
-    <Link href={`/places/${place.id}`} className="group relative w-full h-[380px] block rounded-[2rem] overflow-hidden border border-[#222222] hover:border-[#DFD616]/50 transition-all duration-300 cursor-pointer">
+    <Link href={`/places/${place.id}`} className="group relative w-full h-[380px] block rounded-[2rem] overflow-hidden border border-border hover:border-accent/50 transition-all duration-300 cursor-pointer">
       {/* Background Image */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img 
@@ -64,7 +64,7 @@ function ExplorePlaceCard({ place }: { place: Place }) {
       
       {/* Top Badges */}
       <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
-        <div className="bg-[#DFD616] text-[#0a0a0a] px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-bold shadow-lg">
+        <div className="bg-accent text-accent-foreground px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-bold shadow-lg">
           <Sparkles size={12} strokeWidth={2.5} />
           {place.rating > 0 ? `${place.rating} Rating` : 'New'}
         </div>
@@ -77,7 +77,7 @@ function ExplorePlaceCard({ place }: { place: Place }) {
         
         <div className="flex flex-wrap items-center gap-2 text-[#888] text-xs font-medium">
           <span className="flex items-center gap-1.5 text-[#ccc]">
-            <MapPin size={12} className="text-[#DFD616]" /> {place.city}
+            <MapPin size={12} className="text-accent" /> {place.city}
           </span>
           
           {place.category && <span>&middot;</span>}
@@ -85,7 +85,7 @@ function ExplorePlaceCard({ place }: { place: Place }) {
             const CatIcon = CATEGORY_ICONS[place.category.toLowerCase()] || Sparkles;
             return (
               <span className="flex items-center gap-1.5 capitalize">
-                <CatIcon size={12} className="text-[#DFD616]" /> {place.category}
+                <CatIcon size={12} className="text-accent" /> {place.category}
               </span>
             );
           })()}
@@ -93,14 +93,14 @@ function ExplorePlaceCard({ place }: { place: Place }) {
           {place.category && place.budget_level && <span>&middot;</span>}
           {place.budget_level && (
             <span className="flex items-center gap-1.5 capitalize">
-              <Diamond size={12} className="text-[#DFD616]" /> {place.budget_level}
+              <Diamond size={12} className="text-accent" /> {place.budget_level}
             </span>
           )}
           
           {(place.category || place.budget_level) && place.duration_needed > 0 && <span>&middot;</span>}
           {place.duration_needed > 0 && (
             <span className="flex items-center gap-1.5">
-              <Clock size={12} className="text-[#DFD616]" /> {place.duration_needed}h
+              <Clock size={12} className="text-accent" /> {place.duration_needed}h
             </span>
           )}
         </div>
@@ -164,7 +164,7 @@ export function PlaceExploreCarousel({
           action={
             <Link
               href={viewAllHref}
-              className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-[#DFD616] transition-colors hover:text-[#EAE121]"
+              className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-accent transition-colors hover:text-[var(--accent-hover)]"
             >
               View all
               <ArrowRight size={16} />
@@ -177,7 +177,7 @@ export function PlaceExploreCarousel({
               onClick={scrollPrev}
               disabled={!canScrollPrev}
               aria-label="Previous places"
-              className="absolute -left-1 top-[42%] z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/70 text-white backdrop-blur-md transition-all hover:border-[#DFD616]/30 hover:bg-black/90 disabled:pointer-events-none disabled:opacity-0 sm:flex md:-left-2"
+              className="absolute -left-1 top-[42%] z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/70 text-white backdrop-blur-md transition-all hover:border-accent/30 hover:bg-black/90 disabled:pointer-events-none disabled:opacity-0 sm:flex md:-left-2"
             >
               <ChevronLeft size={20} />
             </button>
@@ -186,7 +186,7 @@ export function PlaceExploreCarousel({
               onClick={scrollNext}
               disabled={!canScrollNext}
               aria-label="Next places"
-              className="absolute -right-1 top-[42%] z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/70 text-white backdrop-blur-md transition-all hover:border-[#DFD616]/30 hover:bg-black/90 disabled:pointer-events-none disabled:opacity-0 sm:flex md:-right-2"
+              className="absolute -right-1 top-[42%] z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/70 text-white backdrop-blur-md transition-all hover:border-accent/30 hover:bg-black/90 disabled:pointer-events-none disabled:opacity-0 sm:flex md:-right-2"
             >
               <ChevronRight size={20} />
             </button>
@@ -210,7 +210,7 @@ export function PlaceExploreCarousel({
                 onClick={scrollPrev}
                 disabled={!canScrollPrev}
                 aria-label="Previous places"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[#222] text-white disabled:opacity-30"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground disabled:opacity-30"
               >
                 <ChevronLeft size={18} />
               </button>
@@ -219,7 +219,7 @@ export function PlaceExploreCarousel({
                 onClick={scrollNext}
                 disabled={!canScrollNext}
                 aria-label="Next places"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[#222] text-white disabled:opacity-30"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground disabled:opacity-30"
               >
                 <ChevronRight size={18} />
               </button>

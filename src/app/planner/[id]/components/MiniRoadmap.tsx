@@ -76,7 +76,7 @@ export function MiniRoadmap({ destinations, activeDayNumber, onSelectDay }: Mini
         <span className="text-xs text-[#555]">Tap any stop to jump</span>
       </div>
       
-      <div className="relative bg-[#0d0d0d] border border-[#1a1a1a] rounded-xl py-4 overflow-hidden px-2">
+      <div className="relative bg-[#0d0d0d] border border-border rounded-xl py-4 overflow-hidden px-2">
         {/* Navigation Buttons */}
         {canScrollPrev && (
           <button
@@ -124,8 +124,8 @@ export function MiniRoadmap({ destinations, activeDayNumber, onSelectDay }: Mini
                   <div 
                     className={`w-16 h-16 rounded-full border-[3px] flex items-center justify-center relative z-10 transition-all duration-300 overflow-hidden
                       ${isActive 
-                        ? "border-[#DFD616] shadow-[0_0_15px_rgba(223,214,22,0.4)] scale-110" 
-                        : "border-[#1a1a1a] bg-[#111] group-hover/item:border-[#DFD616]/50"
+                        ? "border-accent shadow-[0_0_15px_color-mix(in srgb, var(--accent) %, transparent)] scale-110" 
+                        : "border-border bg-[#111] group-hover/item:border-accent/50"
                       }`}
                   >
                     <img 
@@ -144,7 +144,7 @@ export function MiniRoadmap({ destinations, activeDayNumber, onSelectDay }: Mini
                   </div>
                   
                   {/* Labels */}
-                  <div className={`text-[11px] text-center mt-3 font-semibold transition-colors ${isActive ? "text-[#DFD616]" : "text-[#888] group-hover/item:text-[#ccc]"}`}>
+                  <div className={`text-[11px] text-center mt-3 font-semibold transition-colors ${isActive ? "text-accent" : "text-[#888] group-hover/item:text-[#ccc]"}`}>
                     {dest.city}
                   </div>
                   <div className="text-[10px] text-[#555] font-medium mt-0.5">

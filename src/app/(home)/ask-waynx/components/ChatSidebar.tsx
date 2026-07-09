@@ -40,11 +40,11 @@ export default function ChatSidebar({
   onClose,
 }: ChatSidebarProps) {
   return (
-    <aside className="flex h-full w-full flex-col bg-[#0A0A0A]">
-      <div className="flex items-center justify-between border-b border-[#222222] p-4">
+    <aside className="flex h-full w-full flex-col bg-surface border-r border-border">
+      <div className="flex items-center justify-between border-b border-border p-4">
         <button
           onClick={onNewChat}
-          className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#DFD616] px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#EAE121]"
+          className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent-hover"
         >
           <MessageSquarePlus size={16} />
           New chat
@@ -52,7 +52,7 @@ export default function ChatSidebar({
         {onClose && (
           <button
             onClick={onClose}
-            className="ml-2 rounded-lg p-2 text-[#888888] hover:bg-[#1A1A1A] hover:text-white lg:hidden"
+            className="ml-2 rounded-lg p-2 text-muted transition-colors hover:bg-surface-elevated hover:text-foreground lg:hidden"
             aria-label="Close sidebar"
           >
             <X size={18} />
@@ -60,17 +60,17 @@ export default function ChatSidebar({
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] p-3">
-        <p className="mb-2 px-2 text-[11px] font-medium uppercase tracking-wider text-[#555555]">
+      <div className="flex-1 overflow-y-auto p-3 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <p className="mb-2 px-2 text-[11px] font-medium uppercase tracking-wider text-muted">
           Recent chats
         </p>
 
         {isLoadingHistory ? (
           <div className="flex items-center justify-center py-10">
-            <Loader2 size={20} className="animate-spin text-[#DFD616]" />
+            <Loader2 size={20} className="animate-spin text-accent" />
           </div>
         ) : sessions.length === 0 ? (
-          <p className="px-2 py-6 text-center text-xs text-[#666666]">
+          <p className="px-2 py-6 text-center text-xs text-muted">
             No conversations yet. Start a new chat to ask about places or trips.
           </p>
         ) : (
@@ -82,10 +82,10 @@ export default function ChatSidebar({
               return (
                 <li key={session.id}>
                   <div
-                    className={`group flex items-center gap-1 rounded-xl transition-colors ${
+                    className={`group flex items-center gap-1 rounded-xl cursor-pointer transition-colors ${
                       isActive
-                        ? "bg-[#1A1809] ring-1 ring-[#DFD616]/30"
-                        : "hover:bg-[#141414]"
+                        ? "ring-1 bg-footer ring-accent/30"
+                        : "bg-surface-elevated/70"
                     }`}
                   >
                     <button
@@ -93,13 +93,11 @@ export default function ChatSidebar({
                       className="flex min-w-0 flex-1 flex-col items-start px-3 py-2.5 text-left"
                     >
                       <span
-                        className={`w-full truncate text-sm ${
-                          isActive ? "text-[#DFD616]" : "text-[#CCCCCC]"
-                        }`}
+                        className={`w-full truncate text-sm`}
                       >
                         {session.title || "Untitled chat"}
                       </span>
-                      <span className="mt-0.5 text-[11px] text-[#666666]">
+                      <span className="mt-0.5 text-[11px] text-muted">
                         {formatSessionDate(session.updated_at)}
                       </span>
                     </button>
@@ -109,7 +107,7 @@ export default function ChatSidebar({
                         onDeleteSession(session.id);
                       }}
                       disabled={isDeleting}
-                      className="mr-2 rounded-lg p-1.5 text-[#555555] opacity-0 transition-all hover:bg-[#2A1515] hover:text-red-400 group-hover:opacity-100 disabled:opacity-50"
+                      className="mr-2 rounded-lg p-1.5 text-muted opacity-0 transition-all hover:bg-red-500/10 hover:text-red-500 group-hover:opacity-100 disabled:opacity-50"
                       aria-label="Delete chat"
                     >
                       {isDeleting ? (

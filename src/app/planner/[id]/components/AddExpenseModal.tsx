@@ -169,7 +169,7 @@ export function AddExpenseModal({
           <button
             type="submit"
             disabled={isSubmitting || !form.amount}
-            className="flex-1 px-4 py-2 text-sm font-bold text-[#0a0a0a] bg-[#DFD616] hover:bg-[#EAE121] rounded-lg transition-colors disabled:opacity-50"
+            className="flex-1 px-4 py-2 text-sm font-bold text-accent-foreground bg-accent hover:bg-accent-hover rounded-lg transition-colors disabled:opacity-50"
           >
             {isSubmitting ? "Saving…" : isEdit ? "Update" : "Add"}
           </button>

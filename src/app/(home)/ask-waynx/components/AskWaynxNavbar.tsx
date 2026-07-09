@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { PanelLeft, User } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface AskWaynxNavbarProps {
   title: string;
@@ -30,7 +31,7 @@ export default function AskWaynxNavbar({
   const { user, isAuthenticated, isLoading } = useAuthStore();
 
   return (
-    <header className="relative z-50 flex h-14 shrink-0 items-center gap-3 border-b border-[#1A1A1A] bg-[#050505] px-4 lg:px-6">
+    <header className="relative z-50 flex h-14 shrink-0 items-center gap-3 border-b border-border bg-background px-4 lg:px-6">
       <div className="flex min-w-0 items-center gap-3 lg:gap-6">
         <Link
           href="/"
@@ -56,8 +57,8 @@ export default function AskWaynxNavbar({
                 href={link.href}
                 className={`text-sm font-medium transition-colors ${
                   isActive
-                    ? "text-[#E3D010]"
-                    : "text-[#AAAAAA] hover:text-white"
+                    ? "text-accent"
+                    : "text-muted hover:text-foreground"
                 }`}
               >
                 {link.name}
@@ -68,14 +69,14 @@ export default function AskWaynxNavbar({
 
         <button
           onClick={onOpenMobileSidebar}
-          className="rounded-lg p-1.5 text-[#888888] transition-colors hover:bg-[#1A1A1A] hover:text-white lg:hidden"
+          className="rounded-lg p-1.5 text-muted transition-colors hover:bg-surface-elevated hover:text-foreground lg:hidden"
           aria-label="Open chat history"
         >
           <PanelLeft size={18} />
         </button>
         <button
           onClick={onToggleDesktopSidebar}
-          className="hidden rounded-lg p-1.5 text-[#888888] transition-colors hover:bg-[#1A1A1A] hover:text-white lg:block"
+          className="hidden rounded-lg p-1.5 text-muted transition-colors hover:bg-surface-elevated hover:text-foreground lg:block"
           aria-label="Toggle chat history"
           title={isDesktopSidebarOpen ? "Hide sidebar" : "Show sidebar"}
         >
@@ -84,20 +85,22 @@ export default function AskWaynxNavbar({
       </div>
 
       <div className="min-w-0 flex-1 px-2 text-center lg:px-4">
-        <h1 className="truncate text-sm font-medium text-white">{title}</h1>
-        <p className="hidden truncate text-[11px] text-[#666666] lg:block">
+        <h1 className="truncate text-sm font-medium text-foreground">{title}</h1>
+        <p className="hidden truncate text-[11px] text-muted lg:block">
           Ask about places, trips, and travel in Egypt
         </p>
       </div>
 
-      <div className="flex shrink-0 items-center">
+      <div className="flex shrink-0 items-center gap-2">
+        <ThemeToggle />
+
         {isLoading ? (
-          <div className="h-9 w-9 animate-pulse rounded-full bg-[#1A1A1A]" />
+          <div className="h-9 w-9 animate-pulse rounded-full bg-surface-elevated" />
         ) : isAuthenticated && user ? (
           <Link
             href="/profile"
             aria-label="Go to profile"
-            className="flex h-9 w-9 overflow-hidden rounded-full border border-[#333333] transition-colors hover:border-[#DFD616]/50"
+            className="flex h-9 w-9 overflow-hidden rounded-full border border-border transition-colors hover:border-accent/50"
           >
             {user.avatar_url ? (
               <Image
@@ -108,7 +111,7 @@ export default function AskWaynxNavbar({
                 className="h-full w-full object-cover"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-[#111111] text-[#DFD616]">
+              <div className="flex h-full w-full items-center justify-center bg-surface-elevated text-accent">
                 <User size={16} strokeWidth={2} />
               </div>
             )}
@@ -116,7 +119,7 @@ export default function AskWaynxNavbar({
         ) : (
           <Link
             href="/login"
-            className="rounded-lg bg-[#DFD616] px-3 py-1.5 text-xs font-semibold text-black transition-colors hover:bg-[#EAE121]"
+            className="rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground transition-colors hover:bg-accent-hover"
           >
             Log in
           </Link>

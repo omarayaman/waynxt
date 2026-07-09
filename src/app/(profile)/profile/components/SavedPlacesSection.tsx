@@ -59,7 +59,7 @@ export function SavedPlacesSection({
           <Loader2 size={24} className="animate-spin text-[#555]" />
         </div>
       ) : places.length === 0 ? (
-        <div className="rounded-xl border border-[#1a1a1a] bg-[#0d0d0d] py-16 text-center">
+        <div className="rounded-xl border border-border bg-[#0d0d0d] py-16 text-center">
           <Heart size={24} className="text-[#444] mx-auto mb-3" />
           <p className="text-sm text-[#888]">No saved places yet</p>
           <p className="text-xs text-[#555] mt-1 mb-5">Explore destinations and save your favorites.</p>
@@ -72,10 +72,10 @@ export function SavedPlacesSection({
         </div>
       ) : (
         <>
-          <div className="rounded-xl border border-[#1a1a1a] overflow-hidden">
+          <div className="rounded-xl border border-border overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#1a1a1a] bg-[#0d0d0d]">
+                <tr className="border-b border-border bg-[#0d0d0d]">
                   <th className="text-left px-4 py-3 text-xs font-medium text-[#666]">Place</th>
                   <th className="text-left px-4 py-3 text-xs font-medium text-[#666] hidden sm:table-cell">
                     Location
@@ -90,7 +90,7 @@ export function SavedPlacesSection({
                 {places.map((place) => (
                   <tr
                     key={place.id}
-                    className="border-b border-[#1a1a1a] last:border-0 hover:bg-[#111] transition-colors"
+                    className="border-b border-border last:border-0 hover:bg-[#111] transition-colors"
                   >
                     <td className="px-4 py-3.5">
                       <Link
@@ -110,7 +110,7 @@ export function SavedPlacesSection({
                           )}
                         </div>
                         <div className="min-w-0">
-                          <span className="text-white font-medium truncate block group-hover:text-[#DFD616] transition-colors">
+                          <span className="text-white font-medium truncate block group-hover:text-accent transition-colors">
                             {place.place_name}
                           </span>
                           {place.category && (

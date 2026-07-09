@@ -119,7 +119,7 @@ export function ChatHistorySection({ totalCount }: ChatHistorySectionProps) {
           <Loader2 size={24} className="animate-spin text-[#555]" />
         </div>
       ) : sessions.length === 0 ? (
-        <div className="rounded-xl border border-[#1a1a1a] bg-[#0d0d0d] py-16 text-center">
+        <div className="rounded-xl border border-border bg-[#0d0d0d] py-16 text-center">
           <MessageSquare size={24} className="text-[#444] mx-auto mb-3" />
           <p className="text-sm text-[#888]">No conversations yet</p>
           <p className="text-xs text-[#555] mt-1 mb-5">Ask Waynx about places, trips, and travel tips.</p>
@@ -132,7 +132,7 @@ export function ChatHistorySection({ totalCount }: ChatHistorySectionProps) {
         </div>
       ) : (
         <>
-          <div className="rounded-xl border border-[#1a1a1a] overflow-hidden divide-y divide-[#1a1a1a]">
+          <div className="rounded-xl border border-border overflow-hidden divide-y divide-[#1a1a1a]">
             {sessions.map((session) => {
               const messageCount = session.messages?.length ?? 0;
               const isDeleting = deletingId === session.id;

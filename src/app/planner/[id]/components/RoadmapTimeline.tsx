@@ -104,10 +104,10 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
   };
 
   return (
-    <div className="relative w-full rounded-2xl border border-[#1a1a1a] bg-black shadow-2xl flex flex-col flex-1 min-h-0">
+    <div className="relative w-full rounded-2xl border border-border bg-black shadow-2xl flex flex-col flex-1 min-h-0">
       {/* Header section matching the mockup */}
       <div className="flex flex-col items-center pt-4 pb-2 shrink-0">
-        <h2 className="text-xl font-semibold text-[#DFD616] tracking-wide mb-2 font-clash">
+        <h2 className="text-xl font-semibold text-accent tracking-wide mb-2 font-clash">
           Your unique journey is ready
         </h2>
         <div className="text-[12px] text-[#A67B5B]">
@@ -133,7 +133,7 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
           </div>
           <div className="h-[2px] flex-1 bg-[#2C2917] mx-4 relative rounded-full">
             <div 
-              className="absolute left-0 top-0 h-full bg-[#DFD616] rounded-full transition-all duration-500" 
+              className="absolute left-0 top-0 h-full bg-accent rounded-full transition-all duration-500" 
               style={{ width: `${((activeIndex + 1) / stops.length) * 100}%` }}
             />
           </div>
@@ -173,7 +173,7 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
                   <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
                 <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#DFD616" />
+                  <stop offset="0%" stopColor="var(--accent)" />
                   <stop offset="100%" stopColor="#A67B5B" />
                 </linearGradient>
               </defs>
@@ -218,14 +218,14 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
                   <div
                     className={`relative rounded-full border-4 transition-all duration-300 z-10 ${
                       isActive
-                        ? "border-[#DFD616] w-24 h-24 shadow-[0_0_25px_rgba(223,214,22,0.6)] scale-110"
+                        ? "border-accent w-24 h-24 shadow-[0_0_25px_color-mix(in srgb, var(--accent) %, transparent)] scale-110"
                         : isPast
-                        ? "border-[#C4A265] w-20 h-20 group-hover:border-[#DFD616]"
+                        ? "border-[#C4A265] w-20 h-20 group-hover:border-accent"
                         : "border-[#2a2418] w-20 h-20 opacity-60 group-hover:opacity-100 group-hover:border-[#555]"
                     }`}
                   >
                     {(i === 0 || i === stops.length - 1) && (
-                      <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#DFD616] text-black px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap shadow-[0_4px_15px_rgba(223,214,22,0.5)] flex items-center gap-1 animate-bounce z-20 after:content-[''] after:absolute after:bottom-[-4px] after:left-1/2 after:-translate-x-1/2 after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent after:border-t-[5px] after:border-t-[#DFD616]">
+                      <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap shadow-[0_4px_15px_color-mix(in srgb, var(--accent) %, transparent)] flex items-center gap-1 animate-bounce z-20 after:content-[''] after:absolute after:bottom-[-4px] after:left-1/2 after:-translate-x-1/2 after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent after:border-t-[5px] after:border-t-[var(--accent)]">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                           <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z"/>
                         </svg>
@@ -247,7 +247,7 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
                     {/* Rating Badge */}
                     {stop.activity.rating != null && stop.activity.rating > 0 && (
                       <div className="absolute -bottom-2 -right-2 bg-[#111] border border-[#333] rounded-full px-2 py-0.5 flex items-center gap-1 shadow-xl">
-                        <Star size={10} className="text-[#DFD616]" fill="currentColor" />
+                        <Star size={10} className="text-accent" fill="currentColor" />
                         <span className="text-[10px] text-white font-bold">{stop.activity.rating}</span>
                       </div>
                     )}

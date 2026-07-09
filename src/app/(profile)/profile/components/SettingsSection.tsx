@@ -53,7 +53,7 @@ export function SettingsSection({ fullName, city, onProfileUpdate }: SettingsSec
           ))}
         </nav>
 
-        <div className="flex-1 min-w-0 lg:border-l lg:border-[#1a1a1a] lg:pl-8">
+        <div className="flex-1 min-w-0 lg:border-l lg:border-border lg:pl-8">
           {activeTab === "profile" && (
             <EditProfileForm initialName={fullName} initialCity={city} onSuccess={onProfileUpdate} />
           )}

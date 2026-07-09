@@ -30,6 +30,10 @@ export default function ChatInput({
 }: ChatInputProps) {
   const isCentered = variant === "centered";
 
+  const inputClassName = isCentered
+    ? "w-full rounded-full border border-border bg-surface py-4 pl-6 pr-14 text-base text-foreground shadow-sm placeholder:text-muted transition-colors focus:border-accent/40 focus:outline-none"
+    : "w-full rounded-full border border-border bg-surface/90 py-3.5 pl-5 pr-14 text-sm text-foreground shadow-sm backdrop-blur-sm placeholder:text-muted transition-colors focus:border-accent/40 focus:outline-none";
+
   return (
     <div
       className={
@@ -40,7 +44,7 @@ export default function ChatInput({
     >
       {!isCentered && (
         <div
-          className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-linear-to-t from-[#050505] to-transparent"
+          className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-linear-to-t from-background to-transparent"
           aria-hidden
         />
       )}
@@ -59,11 +63,7 @@ export default function ChatInput({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           autoFocus={isCentered}
-          className={
-            isCentered
-              ? "w-full rounded-full border border-white/8 bg-white/4 py-4 pl-6 pr-14 text-base text-white backdrop-blur-sm placeholder:text-[#666666] transition-colors focus:border-[#DFD616]/30 focus:bg-white/5 focus:outline-none"
-              : "w-full rounded-full border border-white/6 bg-[#050505]/80 py-3.5 pl-5 pr-14 text-sm text-white backdrop-blur-sm placeholder:text-[#666666] transition-colors focus:border-[#DFD616]/25 focus:outline-none"
-          }
+          className={inputClassName}
         />
         <button
           type="submit"
@@ -72,8 +72,8 @@ export default function ChatInput({
             isCentered ? "h-10 w-10" : "h-9 w-9"
           } ${
             value.trim() && !isLoading && !disabled
-              ? "bg-[#DFD616] text-black hover:bg-[#EAE121]"
-              : "bg-[#DFD616]/15 text-[#DFD616]"
+              ? "bg-accent text-accent-foreground hover:bg-accent-hover"
+              : "bg-accent/15 text-accent"
           }`}
         >
           {isLoading ? (
@@ -86,11 +86,11 @@ export default function ChatInput({
 
       {showDisclaimer && (
         <p
-          className={`mx-auto text-center text-[10px] text-[#555555] ${
+          className={`mx-auto text-center text-[10px] text-muted ${
             isCentered ? "mt-4 max-w-md" : "mt-3 max-w-3xl"
           }`}
         >
-          <span className="font-semibold text-[#DFD616]">WAYNX</span> AI provides
+          <span className="font-semibold text-accent">WAYNX</span> AI provides
           verified information. Always check official sources before travel.
         </p>
       )}

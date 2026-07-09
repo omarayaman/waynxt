@@ -12,7 +12,7 @@ import Footer from "./Footer";
 export default function Home() {
   return (
     <>
-    <div className="relative bg-[#050505] text-white font-sans overflow-x-hidden">
+    <div className="relative bg-background text-foreground font-sans overflow-x-hidden">
       <NavbarHome />
 
       {/* Hero Section */}
@@ -22,15 +22,15 @@ export default function Home() {
         {/* Main Content Area */}
         <main className="relative z-10 flex items-center min-h-screen px-6 lg:px-16 xl:px-[10%]">
           <div className="max-w-[550px] pt-10">
-            <h1 className="text-[56px] lg:text-[72px] font-bold text-white mb-6 leading-[1.05] tracking-tight">
+            <h1 className="text-[56px] lg:text-[72px] font-bold text-foreground dark:text-white mb-6 leading-[1.05] tracking-tight">
               Explore Egypt with clarity.
             </h1>
-            <p className="text-[#a1a1a1] text-lg lg:text-[20px] leading-relaxed mb-12 max-w-[480px]">
+            <p className="text-muted-foreground dark:text-white/75 text-lg lg:text-[20px] leading-relaxed mb-12 max-w-[480px]">
               Explore Egypt through immersive storytelling and real-time AI answers — in one place.
             </p>
             <Link
               href="/places"
-              className="inline-flex items-center gap-3 bg-[#DFD616] hover:bg-[#EAE121] text-[#0a0a0a] font-bold text-[16px] px-8 py-4 rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(223,214,22,0.15)] hover:shadow-[0_0_20px_rgba(223,214,22,0.3)] group"
+              className="inline-flex items-center gap-3 bg-accent hover:bg-accent-hover text-accent-foreground font-bold text-[16px] px-8 py-4 rounded-xl transition-all duration-300 shadow-[0_4px_24px_color-mix(in_srgb,var(--accent)_35%,transparent)] hover:shadow-[0_6px_32px_color-mix(in_srgb,var(--accent)_45%,transparent)] group"
             >
               Start Exploring
               <svg

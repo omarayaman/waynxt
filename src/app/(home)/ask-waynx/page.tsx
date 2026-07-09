@@ -172,7 +172,7 @@ function AskWaynxContent() {
     "New chat";
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-[#050505] text-white">
+    <div className="flex h-screen flex-col overflow-hidden bg-background text-foreground">
       <AskWaynxNavbar
         title={chatTitle}
         isDesktopSidebarOpen={isDesktopSidebarOpen}
@@ -184,7 +184,7 @@ function AskWaynxContent() {
 
       <div className="flex flex-1 overflow-hidden">
         <div 
-          className={`relative z-[60] hidden shrink-0 border-[#222222] transition-all duration-300 ease-in-out lg:block ${isDesktopSidebarOpen ? "w-[280px] border-r opacity-100" : "w-0 border-r-0 opacity-0 overflow-hidden"}`}
+          className={`relative z-[60] hidden shrink-0 border-border transition-all duration-300 ease-in-out lg:block ${isDesktopSidebarOpen ? "w-[280px] border-r opacity-100" : "w-0 border-r-0 opacity-0 overflow-hidden"}`}
         >
           <div className="h-full w-[280px]">
             <ChatSidebar
@@ -202,11 +202,11 @@ function AskWaynxContent() {
         {isSidebarOpen && (
           <div className="fixed inset-0 z-[70] lg:hidden">
             <button
-              className="absolute inset-0 bg-black/60"
+              className="absolute inset-0 bg-[var(--overlay)]"
               onClick={() => setIsSidebarOpen(false)}
               aria-label="Close sidebar overlay"
             />
-            <div className="absolute bottom-0 left-0 top-0 w-[min(100%,280px)] border-r border-[#222222]">
+            <div className="absolute bottom-0 left-0 top-0 w-[min(100%,280px)] border-r border-border">
               <ChatSidebar
                 sessions={sessions}
                 activeSessionId={sessionId}
@@ -223,7 +223,7 @@ function AskWaynxContent() {
 
         <main className="relative flex min-w-0 flex-1 flex-col overflow-hidden">
           {error && (
-            <div className="relative z-10 mx-4 mt-3 flex shrink-0 items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300 md:mx-6">
+            <div className="relative z-10 mx-4 mt-3 flex shrink-0 items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-600 dark:text-red-300 md:mx-6">
               <AlertCircle size={16} className="shrink-0" />
               <span>{error}</span>
             </div>
@@ -231,7 +231,7 @@ function AskWaynxContent() {
 
           {showSessionLoading ? (
             <div className="flex flex-1 items-center justify-center">
-              <Loader2 size={28} className="animate-spin text-[#DFD616]" />
+              <Loader2 size={28} className="animate-spin text-accent" />
             </div>
           ) : showEmptyState ? (
             <ChatEmptyState
@@ -276,8 +276,8 @@ export default function AskWaynxPage() {
     <ProtectedRoute>
       <Suspense
         fallback={
-          <div className="flex h-screen items-center justify-center bg-[#050505]">
-            <Loader2 size={28} className="animate-spin text-[#DFD616]" />
+          <div className="flex h-screen items-center justify-center bg-background">
+            <Loader2 size={28} className="animate-spin text-accent" />
           </div>
         }
       >

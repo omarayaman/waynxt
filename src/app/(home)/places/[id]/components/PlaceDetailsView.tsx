@@ -68,7 +68,7 @@ export function PlaceDetailsView({
                 {place.category}
               </span>
               {place.rating > 0 && (
-                <span className="inline-flex items-center gap-1 rounded-md bg-black/50 px-2.5 py-1 text-xs font-medium text-[#DFD616] backdrop-blur-sm">
+                <span className="inline-flex items-center gap-1 rounded-md bg-black/50 px-2.5 py-1 text-xs font-medium text-accent backdrop-blur-sm">
                   <Star size={11} fill="currentColor" />
                   {place.rating.toFixed(1)}
                 </span>
@@ -81,7 +81,7 @@ export function PlaceDetailsView({
                   {place.name}
                 </h1>
                 <p className="mt-2 flex items-center gap-1.5 text-sm text-[#aaa] md:text-base">
-                  <MapPin size={14} className="text-[#DFD616]" />
+                  <MapPin size={14} className="text-accent" />
                   {place.city}, Egypt
                 </p>
               </div>
@@ -120,7 +120,7 @@ export function PlaceDetailsView({
           </aside>
         </div>
 
-        <div className="mt-12 border-t border-[#141414] pt-12">
+        <div className="mt-12 border-t border-border pt-12">
           <PlaceAiBanner placeName={place.name} city={place.city} />
         </div>
       </div>

@@ -27,7 +27,7 @@ const curatedPlaces = [
 
 export default function CuratedForYou() {
   return (
-    <section className="w-full bg-[#050505] py-20 px-4 flex flex-col items-center overflow-hidden">
+    <section className="w-full bg-background py-20 px-4 flex flex-col items-center overflow-hidden">
       <div className="max-w-[1200px] w-full flex flex-col items-center">
         <h2 className="text-4xl md:text-[44px] font-bold text-white mb-4 text-center">
           Curated for You
@@ -41,7 +41,7 @@ export default function CuratedForYou() {
           {curatedPlaces.map((place) => (
             <div
               key={place.id}
-              className="min-w-[280px] w-[320px] md:w-[350px] shrink-0 snap-center bg-[#151515] rounded-2xl overflow-hidden border border-white/5 shadow-lg group cursor-pointer hover:border-[#E3D010]/30 transition-colors"
+              className="min-w-[280px] w-[320px] md:w-[350px] shrink-0 snap-center bg-[#151515] rounded-2xl overflow-hidden border border-white/5 shadow-lg group cursor-pointer hover:border-accent/30 transition-colors"
             >
               {/* Image Section */}
               <div className="relative h-[200px] w-full overflow-hidden">
@@ -54,7 +54,7 @@ export default function CuratedForYou() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#151515] to-transparent"></div>
 
                 {/* Match Tag */}
-                <div className="absolute top-4 right-4 bg-[#E3D010] text-[#0a0a0a] text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1 shadow-md">
+                <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1 shadow-md">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="12"
@@ -78,7 +78,7 @@ export default function CuratedForYou() {
                 <h3 className="text-white font-bold text-xl">{place.title}</h3>
 
                 <div className="flex flex-col gap-1.5 mt-1">
-                  <div className="flex items-center gap-1.5 text-[#E3D010]">
+                  <div className="flex items-center gap-1.5 text-accent">
                     <svg
                       width="16"
                       height="16"

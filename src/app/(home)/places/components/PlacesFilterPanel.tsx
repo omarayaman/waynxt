@@ -22,8 +22,8 @@ interface PlacesFilterPanelProps {
 
 function FilterSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="py-3 border-b border-[#141414] last:border-0">
-      <h3 className="text-[10px] font-medium text-[#555] uppercase tracking-wider mb-2">{title}</h3>
+    <div className="py-3 first:pt-0">
+      <h3 className="text-[10px] font-medium text-[var(--navbar-muted)] uppercase tracking-wider mb-2">{title}</h3>
       {children}
     </div>
   );
@@ -44,8 +44,8 @@ function Chip({
       onClick={onClick}
       className={`px-2 py-1 rounded-md text-[11px] transition-colors ${
         active
-          ? "bg-[#DFD616]/10 text-[#DFD616] ring-1 ring-[#DFD616]/30"
-          : "text-[#777] hover:text-[#bbb] ring-1 ring-[#222] hover:ring-[#333]"
+          ? "bg-accent-subtle text-accent ring-1 ring-accent/40"
+          : "text-[var(--navbar-muted)] hover:text-[var(--navbar-foreground)] ring-1 ring-black/15 hover:ring-accent/30"
       }`}
     >
       {label}
@@ -71,7 +71,7 @@ function CityList({ cities, loading }: { cities: string[]; loading?: boolean }) 
     return (
       <div className="space-y-1.5">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-4 w-20 rounded bg-[#111] animate-pulse" />
+          <div key={i} className="h-4 w-20 rounded bg-black/10 animate-pulse" />
         ))}
       </div>
     );
@@ -92,13 +92,15 @@ function CityList({ cities, loading }: { cities: string[]; loading?: boolean }) 
               <span
                 className={`w-3 h-3 rounded-sm border flex items-center justify-center shrink-0 transition-colors ${
                   isActive
-                    ? "border-[#DFD616] bg-[#DFD616]"
-                    : "border-[#333] group-hover:border-[#555]"
+                    ? "border-accent bg-accent"
+                    : "border-black/20 group-hover:border-accent/50"
                 }`}
               >
-                {isActive && <Check size={8} className="text-black stroke-[3]" />}
+                {isActive && <Check size={8} className="text-accent-foreground stroke-[3]" />}
               </span>
-              <span className={`text-xs ${isActive ? "text-[#ddd]" : "text-[#666]"}`}>{city}</span>
+              <span className={`text-xs ${isActive ? "text-[var(--navbar-foreground)] font-medium" : "text-[var(--navbar-muted)]"}`}>
+                {city}
+              </span>
             </button>
           );
         })}
@@ -108,7 +110,7 @@ function CityList({ cities, loading }: { cities: string[]; loading?: boolean }) 
         <button
           type="button"
           onClick={() => setExpanded(!expanded)}
-          className="mt-2 flex items-center gap-1 text-[11px] text-[#666] hover:text-[#aaa] transition-colors"
+          className="mt-2 flex items-center gap-1 text-[11px] text-[var(--navbar-muted)] transition-colors hover:text-[var(--navbar-foreground)]"
         >
           {expanded ? (
             <>
@@ -145,7 +147,7 @@ export function PlacesFilterPanel({
   } = usePlacesStore();
 
   return (
-    <div className="flex flex-col px-1">
+    <div className="flex flex-col">
       <div>
         <FilterSection title="City">
           <CityList cities={cities} loading={citiesLoading} />
@@ -221,7 +223,7 @@ export function PlacesFilterPanel({
         <button
           type="button"
           onClick={onApply}
-          className="mt-4 w-full py-2 rounded-lg bg-[#DFD616] text-[#0a0a0a] text-xs font-medium hover:bg-[#EAE121] transition-colors"
+          className="mt-4 w-full py-2 rounded-lg bg-accent text-accent-foreground text-xs font-medium hover:bg-accent-hover transition-colors"
         >
           Apply
         </button>

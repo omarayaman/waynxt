@@ -18,7 +18,7 @@ export function LogoutSection() {
   };
 
   return (
-    <div className="pt-6 mt-6 border-t border-[#1a1a1a]">
+    <div className="pt-6 mt-6 border-t border-border">
       <h3 className="text-sm font-medium text-white mb-1">Sign out</h3>
       <p className="text-xs text-[#666] mb-4">Log out of your Waynx account on this device.</p>
       <button

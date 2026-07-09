@@ -32,7 +32,7 @@ export function Pagination({
   const pages = getPages();
 
   return (
-    <div className="mt-10 pt-6 border-t border-[#1a1a1a] flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
       <p className="text-xs text-[#666] tabular-nums order-2 sm:order-1">
         Page <span className="text-[#aaa]">{currentPage}</span> of{" "}
         <span className="text-[#aaa]">{totalPages}</span>
@@ -47,7 +47,7 @@ export function Pagination({
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1 || disabled}
           aria-label="Previous page"
-          className="flex items-center gap-1 h-9 px-3 rounded-lg border border-[#222] text-xs text-[#888] hover:text-white hover:border-[#444] disabled:opacity-40 disabled:pointer-events-none transition-colors"
+          className="flex items-center gap-1 h-9 px-3 rounded-lg border border-border text-xs text-[#888] hover:text-white hover:border-[#444] disabled:opacity-40 disabled:pointer-events-none transition-colors"
         >
           <ChevronLeft size={16} />
           <span className="hidden sm:inline">Prev</span>
@@ -76,7 +76,7 @@ export function Pagination({
                 aria-current={isActive ? "page" : undefined}
                 className={`min-w-[36px] h-9 px-2 rounded-lg text-xs font-medium transition-colors disabled:opacity-40 ${
                   isActive
-                    ? "bg-[#DFD616] text-[#0a0a0a]"
+                    ? "bg-accent text-accent-foreground"
                     : "text-[#888] hover:text-white hover:bg-[#141414]"
                 }`}
               >
@@ -91,7 +91,7 @@ export function Pagination({
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages || disabled}
           aria-label="Next page"
-          className="flex items-center gap-1 h-9 px-3 rounded-lg border border-[#222] text-xs text-[#888] hover:text-white hover:border-[#444] disabled:opacity-40 disabled:pointer-events-none transition-colors"
+          className="flex items-center gap-1 h-9 px-3 rounded-lg border border-border text-xs text-[#888] hover:text-white hover:border-[#444] disabled:opacity-40 disabled:pointer-events-none transition-colors"
         >
           <span className="hidden sm:inline">Next</span>
           <ChevronRight size={16} />

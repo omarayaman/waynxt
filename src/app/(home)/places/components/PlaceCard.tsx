@@ -16,7 +16,7 @@ export function PlaceCard({place}: PlaceCardProps) {
   return (
     <Link
       href={`/places/${place.id}`}
-      className="group relative w-full h-[340px] block rounded-2xl overflow-hidden border border-[#222222] hover:border-[#DFD616]/50 transition-all duration-300 cursor-pointer">
+      className="group relative w-full h-[340px] block rounded-2xl overflow-hidden border border-border hover:border-accent/50 transition-all duration-300 cursor-pointer">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={
@@ -29,7 +29,7 @@ export function PlaceCard({place}: PlaceCardProps) {
       <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent" />
 
       <div className="absolute top-3.5 left-3.5 right-3.5 flex justify-between items-start z-10">
-        <div className="bg-[#DFD616] text-[#0a0a0a] px-2.5 py-1 rounded-full flex items-center gap-1 text-[11px] font-bold shadow-lg">
+        <div className="bg-accent text-accent-foreground px-2.5 py-1 rounded-full flex items-center gap-1 text-[11px] font-bold shadow-lg">
           <Sparkles size={11} strokeWidth={2.5} />
           {place.rating > 0 ? `${place.rating} Rating` : "New"}
         </div>
@@ -41,20 +41,20 @@ export function PlaceCard({place}: PlaceCardProps) {
 
         <div className="flex flex-wrap items-center gap-1.5 text-[#888] text-xs font-medium">
           <span className="flex items-center gap-1.5 text-[#ccc]">
-            <MapPin size={12} className="text-[#DFD616]" /> {place.city}
+            <MapPin size={12} className="text-accent" /> {place.city}
           </span>
 
           {place.category && <span>&middot;</span>}
           {place.category && CatIcon && (
             <span className="flex items-center gap-1.5 capitalize">
-              <CatIcon size={12} className="text-[#DFD616]" /> {place.category}
+              <CatIcon size={12} className="text-accent" /> {place.category}
             </span>
           )}
 
           {place.category && place.budget_level && <span>&middot;</span>}
           {place.budget_level && (
             <span className="flex items-center gap-1.5 capitalize">
-              <Diamond size={12} className="text-[#DFD616]" /> {place.budget_level}
+              <Diamond size={12} className="text-accent" /> {place.budget_level}
             </span>
           )}
 
@@ -63,7 +63,7 @@ export function PlaceCard({place}: PlaceCardProps) {
           )}
           {place.duration_needed > 0 && (
             <span className="flex items-center gap-1.5">
-              <Clock size={12} className="text-[#DFD616]" /> {place.duration_needed}h
+              <Clock size={12} className="text-accent" /> {place.duration_needed}h
             </span>
           )}
         </div>

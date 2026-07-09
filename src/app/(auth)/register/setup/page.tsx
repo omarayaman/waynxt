@@ -37,14 +37,14 @@ export default function SetupPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#050505] text-white font-sans overflow-hidden">
+    <div className="relative min-h-screen bg-background text-foreground font-sans overflow-hidden">
       {/* Top Navigation */}
       <NavbarRegister step={2} />
 
       {/* Form Content */}
       <div className="relative z-10 flex items-center min-h-[calc(100vh-40px)]">
         <div className="w-full max-w-[600px] px-8 lg:px-10 ml-[10%] mt-20">
-          <h1 className="text-[42px] font-bold text-[#E3D010] mb-3 tracking-tight">
+          <h1 className="text-[42px] font-bold text-accent mb-3 tracking-tight">
             Quick setup
           </h1>
           <p className="text-gray-300 mb-10 text-[15px] leading-relaxed">
@@ -67,7 +67,7 @@ export default function SetupPage() {
                       onClick={() => toggleInterest(item)}
                       className={`px-8 py-2.5 rounded-full text-[14px] transition-all duration-300 ${
                         isSelected
-                          ? "bg-[#DFD616] text-[#0a0a0a] font-medium"
+                          ? "bg-accent text-accent-foreground font-medium"
                           : "bg-[#181818] text-gray-400 hover:bg-[#222]"
                       }`}
                     >
@@ -93,7 +93,7 @@ export default function SetupPage() {
                       onClick={() => setVisitingTime(item)}
                       className={`px-6 py-3 rounded-xl border text-[14px] text-center transition-all duration-300 ${
                         isSelected
-                          ? "bg-[#DFD616] border-[#DFD616] text-[#0a0a0a] font-medium"
+                          ? "bg-accent border-accent text-accent-foreground font-medium"
                           : "bg-transparent border-[#333] text-gray-400 hover:border-gray-500"
                       }`}
                     >
@@ -121,7 +121,7 @@ export default function SetupPage() {
                       onClick={() => setStoryPreference(item)}
                       className={`px-8 py-2.5 rounded-xl border text-[14px] transition-all duration-300 ${
                         isSelected
-                          ? "bg-[#DFD616] border-[#DFD616] text-[#0a0a0a] font-medium"
+                          ? "bg-accent border-accent text-accent-foreground font-medium"
                           : "bg-transparent border-[#333] text-gray-400 hover:border-gray-500"
                       }`}
                     >
@@ -135,7 +135,7 @@ export default function SetupPage() {
             {/* Finish Button */}
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 bg-[#DFD616] hover:bg-[#EAE121] text-[#0a0a0a] font-bold text-[15px] py-4 rounded-xl mt-12! transition-all duration-300 shadow-[0_0_15px_rgba(223,214,22,0.15)] hover:shadow-[0_0_20px_rgba(223,214,22,0.3)]"
+              className="w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-accent-foreground font-bold text-[15px] py-4 rounded-xl mt-12! transition-all duration-300 shadow-[0_0_15px_color-mix(in srgb, var(--accent) %, transparent)] hover:shadow-[0_0_20px_color-mix(in srgb, var(--accent) %, transparent)]"
             >
               Finish sign up
               <svg

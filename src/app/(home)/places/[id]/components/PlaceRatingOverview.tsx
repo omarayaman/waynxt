@@ -34,13 +34,13 @@ export function PlaceRatingOverview({
     <div className="grid gap-8 md:grid-cols-[180px_1fr] md:items-center">
       <div>
         <div className="flex items-end gap-2">
-          <span className="text-4xl font-bold text-[#DFD616]">
+          <span className="text-4xl font-bold text-accent">
             {rating > 0 ? rating.toFixed(1) : "—"}
           </span>
-          <span className="mb-1 text-sm text-[#555]">/ 5</span>
+          <span className="mb-1 text-sm text-muted">/ 5</span>
         </div>
         <StarRating rating={rating} size={16} className="mt-2" />
-        <p className="mt-2 text-sm text-[#666]">
+        <p className="mt-2 text-sm text-muted">
           {totalReviews} {totalReviews === 1 ? "review" : "reviews"}
         </p>
       </div>
@@ -59,11 +59,11 @@ export function PlaceRatingOverview({
               transition={{ duration: 0.3, delay: index * 0.04 }}
               className="flex items-center gap-3"
             >
-              <span className="flex w-7 items-center gap-1 text-xs text-[#888]">
+              <span className="flex w-7 items-center gap-1 text-xs text-muted">
                 {stars}
-                <Star size={10} className="text-[#DFD616]" fill="currentColor" />
+                <Star size={10} className="text-accent" fill="currentColor" />
               </span>
-              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[#141414]">
+              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-elevated">
                 <motion.div
                   initial={{ width: 0 }}
                   whileInView={{ width: `${percentage}%` }}
@@ -73,15 +73,15 @@ export function PlaceRatingOverview({
                     delay: 0.08 + index * 0.05,
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="h-full rounded-full bg-[#DFD616]"
+                  className="h-full rounded-full bg-accent"
                 />
               </div>
-              <span className="w-6 text-right text-xs text-[#555]">{count}</span>
+              <span className="w-6 text-right text-xs text-muted">{count}</span>
             </motion.div>
           );
         })}
         {reviews.length === 0 && (
-          <p className="text-sm text-[#555]">No rating breakdown yet.</p>
+          <p className="text-sm text-muted">No rating breakdown yet.</p>
         )}
       </div>
     </div>
@@ -89,12 +89,12 @@ export function PlaceRatingOverview({
 
   if (embedded) {
     return (
-      <div className="border-b border-[#1a1a1a] p-6 md:p-8">{content}</div>
+      <div className="border-b border-border p-6 md:p-8">{content}</div>
     );
   }
 
   return (
-    <section className="rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a] p-6 md:p-8">
+    <section className="rounded-2xl border border-border bg-surface p-6 md:p-8">
       {content}
     </section>
   );

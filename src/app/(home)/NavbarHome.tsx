@@ -8,6 +8,8 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Sparkles, X } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { resolveTheme, useThemeStore } from "@/store/useThemeStore";
 
 export const NAVBAR_HEIGHT = 60;
 
@@ -39,8 +41,17 @@ export default function NavbarHome({className}: {className?: string}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const themeMode = useThemeStore((state) => state.theme);
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    setIsDark(resolveTheme(themeMode) === "dark");
+  }, [themeMode]);
+
   const isHome = pathname === "/";
   const showSolidBg = !isHome || scrolled;
+  const useGreenNavbar = !isDark;
+  const onHero = isDark && isHome && !showSolidBg;
 
   useEffect(() => {
     setMounted(true);
@@ -65,14 +76,23 @@ export default function NavbarHome({className}: {className?: string}) {
   }, [mobileOpen]);
 
   const askActive = isLinkActive(pathname, "/ask-waynx");
+  const navLinkInactive =
+    useGreenNavbar || onHero
+      ? "text-[var(--navbar-muted)] hover:text-[var(--navbar-foreground)]"
+      : "text-muted hover:text-foreground";
+  const navLinkActive =
+    useGreenNavbar || onHero ? "text-[var(--navbar-foreground)]" : "text-accent";
+  const navIndicator = useGreenNavbar
+    ? "bg-[var(--navbar-foreground)]"
+    : "bg-accent";
 
   const navbar = (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-[200] transition-[background-color,backdrop-filter] duration-300 ${className} ${
-          showSolidBg
-            ? "bg-[#050505]/70 backdrop-blur-xl"
-            : "bg-linear-to-b from-black/75 via-black/35 to-transparent"
+        className={`fixed inset-x-0 top-0 z-[200] transition-[background-color,backdrop-filter] duration-300 ${className ?? ""} ${
+          useGreenNavbar || showSolidBg || !isHome
+            ? "bg-[var(--navbar-solid)] backdrop-blur-xl"
+            : "bg-transparent"
         }`}
       >
         <div className="mx-auto flex h-[60px] max-w-[1440px] items-center justify-between gap-6 px-6 lg:px-12">
@@ -99,14 +119,14 @@ export default function NavbarHome({className}: {className?: string}) {
                   key={link.name}
                   href={link.href}
                   className={`relative py-1 text-[15px] font-medium transition-colors ${
-                    isActive ? "text-[#DFD616]" : "text-[#C8C8C8] hover:text-white"
+                    isActive ? navLinkActive : navLinkInactive
                   }`}
                 >
                   {link.name}
                   {isActive && (
                     <motion.span
                       layoutId="navbar-indicator"
-                      className="absolute -bottom-1 left-0 right-0 mx-auto h-[2px] w-full rounded-full bg-[#DFD616]"
+                      className={`absolute -bottom-1 left-0 right-0 mx-auto h-[2px] w-full rounded-full ${navIndicator}`}
                       transition={{ type: "spring", bounce: 0.15, duration: 0.45 }}
                     />
                   )}
@@ -118,18 +138,27 @@ export default function NavbarHome({className}: {className?: string}) {
               href="/ask-waynx"
               className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[15px] font-medium transition-colors ${
                 askActive
-                  ? "bg-[#DFD616]/12 text-[#DFD616]"
-                  : "text-[#C8C8C8] hover:bg-white/5 hover:text-white"
+                  ? useGreenNavbar
+                    ? "bg-white/15 text-[var(--navbar-foreground)]"
+                    : "bg-accent/12 text-accent"
+                  : useGreenNavbar || onHero
+                    ? "text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]"
+                    : "text-muted hover:bg-accent-subtle hover:text-foreground"
               }`}
             >
-              <Sparkles size={15} className="text-[#DFD616]" />
+              <Sparkles
+                size={15}
+                className={useGreenNavbar || onHero ? "text-[var(--navbar-foreground)]" : "text-accent"}
+              />
               Ask Waynx
             </Link>
           </nav>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <ThemeToggle variant="navbar" />
+
             {isLoading ? (
-              <div className="h-10 w-10 animate-pulse rounded-full bg-white/5" />
+              <div className="h-10 w-10 animate-pulse rounded-full bg-white/10" />
             ) : isAuthenticated && user ? (
               <Link
                 href="/profile"
@@ -137,8 +166,12 @@ export default function NavbarHome({className}: {className?: string}) {
                 title={user.full_name}
                 className={`relative h-10 w-10 overflow-hidden rounded-full transition-all duration-200 ${
                   pathname === "/profile"
-                    ? "ring-2 ring-[#DFD616]/70 ring-offset-2 ring-offset-[#050505]"
-                    : "ring-2 ring-white/10 hover:ring-[#DFD616]/45"
+                    ? useGreenNavbar || onHero
+                      ? "ring-2 ring-white/70 ring-offset-2 ring-offset-[var(--navbar-solid)]"
+                      : "ring-2 ring-accent/70 ring-offset-2 ring-offset-background"
+                    : useGreenNavbar || onHero
+                      ? "ring-2 ring-white/25 hover:ring-white/50"
+                      : "ring-2 ring-border hover:ring-accent/45"
                 }`}
               >
                 {user.avatar_url ? (
@@ -150,7 +183,13 @@ export default function NavbarHome({className}: {className?: string}) {
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-[#2B2908] to-[#141414] text-sm font-semibold text-[#DFD616]">
+                  <div
+                    className={`flex h-full w-full items-center justify-center text-sm font-semibold ${
+                      useGreenNavbar || onHero
+                        ? "bg-white/15 text-[var(--navbar-foreground)]"
+                        : "bg-linear-to-br from-accent-subtle to-surface-elevated text-accent"
+                    }`}
+                  >
                     {getInitials(user.full_name) || "U"}
                   </div>
                 )}
@@ -159,13 +198,21 @@ export default function NavbarHome({className}: {className?: string}) {
               <div className="hidden items-center gap-5 sm:flex">
                 <Link
                   href="/login"
-                  className="text-[15px] font-medium text-[#C8C8C8] transition-colors hover:text-white"
+                  className={`text-[15px] font-medium transition-colors ${
+                    useGreenNavbar || onHero
+                      ? "text-[var(--navbar-muted)] hover:text-[var(--navbar-foreground)]"
+                      : "text-muted hover:text-foreground"
+                  }`}
                 >
                   Log in
                 </Link>
                 <Link
                   href="/register"
-                  className="rounded-xl bg-[#DFD616] px-6 py-2.5 text-[15px] font-bold text-[#0a0a0a] transition-colors hover:bg-[#EAE121]"
+                  className={`rounded-xl px-6 py-2.5 text-[15px] font-bold transition-colors ${
+                    useGreenNavbar
+                      ? "bg-white text-brand-green-strong hover:bg-white/90"
+                      : "bg-accent text-accent-foreground hover:bg-accent-hover"
+                  }`}
                 >
                   Sign up
                 </Link>
@@ -175,7 +222,11 @@ export default function NavbarHome({className}: {className?: string}) {
             <button
               type="button"
               onClick={() => setMobileOpen((prev) => !prev)}
-              className="rounded-lg p-2 text-[#AAAAAA] transition-colors hover:bg-white/5 hover:text-white lg:hidden"
+              className={`rounded-lg p-2 transition-colors lg:hidden ${
+                useGreenNavbar || onHero
+                  ? "text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]"
+                  : "text-muted hover:bg-foreground/5 hover:text-foreground"
+              }`}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileOpen}
             >
@@ -193,7 +244,7 @@ export default function NavbarHome({className}: {className?: string}) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[190] bg-black/60 lg:hidden"
+              className="fixed inset-0 z-[190] bg-[var(--overlay)] lg:hidden"
               onClick={() => setMobileOpen(false)}
               aria-label="Close menu overlay"
             />
@@ -202,7 +253,7 @@ export default function NavbarHome({className}: {className?: string}) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-x-0 top-[68px] z-[195] bg-[#050505]/96 px-6 py-5 backdrop-blur-xl lg:hidden"
+              className="fixed inset-x-0 top-[68px] z-[195] bg-[var(--navbar-mobile)] px-6 py-5 backdrop-blur-xl lg:hidden"
             >
               <nav className="flex flex-col gap-1">
                 {NAV_LINKS.map((link) => {
@@ -213,8 +264,8 @@ export default function NavbarHome({className}: {className?: string}) {
                       href={link.href}
                       className={`rounded-xl px-4 py-3 text-base font-medium transition-colors ${
                         isActive
-                          ? "bg-[#DFD616]/10 text-[#DFD616]"
-                          : "text-[#CCCCCC] hover:bg-white/5 hover:text-white"
+                          ? "bg-white/15 text-[var(--navbar-foreground)]"
+                          : "text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]"
                       }`}
                     >
                       {link.name}
@@ -226,25 +277,25 @@ export default function NavbarHome({className}: {className?: string}) {
                   href="/ask-waynx"
                   className={`mt-1 flex items-center gap-2 rounded-xl px-4 py-3 text-base font-medium transition-colors ${
                     askActive
-                      ? "bg-[#DFD616]/10 text-[#DFD616]"
-                      : "text-[#CCCCCC] hover:bg-white/5 hover:text-white"
+                      ? "bg-white/15 text-[var(--navbar-foreground)]"
+                      : "text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]"
                   }`}
                 >
-                  <Sparkles size={16} className="text-[#DFD616]" />
+                  <Sparkles size={16} className="text-[var(--navbar-foreground)]" />
                   Ask Waynx
                 </Link>
 
                 {!isLoading && !isAuthenticated && (
-                  <div className="mt-4 flex flex-col gap-2 border-t border-white/8 pt-4">
+                  <div className="mt-4 flex flex-col gap-2 border-t border-[var(--navbar-border)] pt-4">
                     <Link
                       href="/login"
-                      className="rounded-xl px-4 py-3 text-center text-base font-medium text-[#CCCCCC] hover:bg-white/5 hover:text-white"
+                      className="rounded-xl px-4 py-3 text-center text-base font-medium text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]"
                     >
                       Log in
                     </Link>
                     <Link
                       href="/register"
-                      className="rounded-xl bg-[#DFD616] px-4 py-3 text-center text-base font-bold text-[#0a0a0a] hover:bg-[#EAE121]"
+                      className="rounded-xl bg-white px-4 py-3 text-center text-base font-bold text-brand-green-strong hover:bg-white/90"
                     >
                       Sign up
                     </Link>

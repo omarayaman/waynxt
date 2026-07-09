@@ -4,12 +4,12 @@ import Link from "next/link";
 
 export default function UpcomingEvents() {
   return (
-    <section className="w-full bg-[#050505] py-20 px-4 flex flex-col items-center">
+    <section className="w-full bg-background py-20 px-4 flex flex-col items-center">
       <div className="max-w-[1000px] w-full flex flex-col items-center">
-        <h2 className="text-4xl md:text-[44px] font-bold text-white mb-4 text-center">
+        <h2 className="text-4xl md:text-[44px] font-bold text-foreground mb-4 text-center">
           Happening Soon
         </h2>
-        <p className="text-gray-400 text-base md:text-lg text-center mb-12">
+        <p className="text-muted text-base md:text-lg text-center mb-12">
           Don&apos;t miss out on Egypt&apos;s most spectacular cultural events.
         </p>
 
@@ -29,7 +29,7 @@ export default function UpcomingEvents() {
 
          
             {/* Featured Tag (Mobile view usually places it at top, desktop might float right, we'll keep it inline top for simplicity or absolute top right) */}
-            <div className="absolute top-8 right-8 border border-[#E3D010] text-[#E3D010] text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 bg-[#050505]/50 backdrop-blur-sm">
+            <div className="absolute top-8 right-8 border border-accent text-accent text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 bg-background/50 backdrop-blur-sm">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="12"
@@ -63,19 +63,19 @@ export default function UpcomingEvents() {
               <div className="flex gap-4">
                 {/* Timer Box */}
                 <div className="flex flex-col items-center justify-center bg-[#1a1a1a]/80 backdrop-blur-sm border border-white/10 rounded-xl w-[70px] h-[75px]">
-                  <span className="text-[#E3D010] font-bold text-2xl">12</span>
+                  <span className="text-accent font-bold text-2xl">12</span>
                   <span className="text-gray-400 text-[11px] uppercase tracking-wider">
                     Days
                   </span>
                 </div>
                 <div className="flex flex-col items-center justify-center bg-[#1a1a1a]/80 backdrop-blur-sm border border-white/10 rounded-xl w-[70px] h-[75px]">
-                  <span className="text-[#E3D010] font-bold text-2xl">05</span>
+                  <span className="text-accent font-bold text-2xl">05</span>
                   <span className="text-gray-400 text-[11px] uppercase tracking-wider">
                     Hours
                   </span>
                 </div>
                 <div className="flex flex-col items-center justify-center bg-[#1a1a1a]/80 backdrop-blur-sm border border-white/10 rounded-xl w-[70px] h-[75px]">
-                  <span className="text-[#E3D010] font-bold text-2xl">34</span>
+                  <span className="text-accent font-bold text-2xl">34</span>
                   <span className="text-gray-400 text-[11px] uppercase tracking-wider">
                     Minutes
                   </span>
@@ -87,7 +87,7 @@ export default function UpcomingEvents() {
             <div className="flex flex-wrap items-center gap-4 mt-auto">
               <Link
                 href="/events/luxor-sphinx"
-                className="inline-flex items-center gap-2 bg-[#DFD616] hover:bg-[#EAE121] text-[#0a0a0a] font-bold text-sm px-6 py-3 rounded-xl transition-colors group"
+                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-foreground font-bold text-sm px-6 py-3 rounded-xl transition-colors group"
               >
                 View Details
                 <svg

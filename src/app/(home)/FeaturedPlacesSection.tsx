@@ -8,11 +8,11 @@ import { PlaceCard } from "./places/components/PlaceCard";
 
 function PlaceCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-xl border border-[#141414]">
-      <div className="aspect-[16/10] animate-pulse bg-[#111]" />
+    <div className="overflow-hidden rounded-xl border border-border">
+      <div className="aspect-[16/10] animate-pulse bg-surface-elevated" />
       <div className="space-y-2 p-3.5">
-        <div className="h-4 w-3/4 animate-pulse rounded bg-[#111]" />
-        <div className="h-3 w-1/2 animate-pulse rounded bg-[#111]" />
+        <div className="h-4 w-3/4 animate-pulse rounded bg-surface-elevated" />
+        <div className="h-3 w-1/2 animate-pulse rounded bg-surface-elevated" />
       </div>
     </div>
   );
@@ -22,17 +22,17 @@ export default function FeaturedPlacesSection() {
   const { places, isLoading, error } = usePopularPlaces({ limit: 6 });
 
   return (
-    <section className="w-full bg-[#050505] px-4 py-24">
+    <section className="w-full bg-background px-4 py-24">
       <div className="mx-auto max-w-[1200px]">
         <div className="mb-12 flex flex-col items-center text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
           <div>
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#DFD616]/30 bg-[#DFD616]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#DFD616]">
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent-subtle px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-accent">
               Top Destinations
             </span>
-            <h2 className="mb-3 text-4xl font-bold text-white md:text-[44px]">
+            <h2 className="mb-3 text-4xl font-bold text-foreground md:text-[44px]">
               Places worth visiting
             </h2>
-            <p className="max-w-[520px] text-base text-gray-400 md:text-lg">
+            <p className="max-w-[520px] text-base text-muted md:text-lg">
               Hand-picked destinations loved by travelers — explore history,
               nature, and culture across Egypt.
             </p>
@@ -40,7 +40,7 @@ export default function FeaturedPlacesSection() {
 
           <Link
             href="/places"
-            className="mt-6 inline-flex shrink-0 items-center gap-2 text-sm font-bold text-[#DFD616] transition-colors hover:text-[#EAE121] sm:mt-0"
+            className="mt-6 inline-flex shrink-0 items-center gap-2 text-sm font-bold text-accent transition-colors hover:text-[var(--accent-hover)] sm:mt-0"
           >
             View all places
             <ArrowRight size={16} />
@@ -75,7 +75,7 @@ export default function FeaturedPlacesSection() {
 
         {isLoading && (
           <div className="mt-8 flex justify-center">
-            <Loader2 size={20} className="animate-spin text-[#555]" />
+            <Loader2 size={20} className="animate-spin text-muted" />
           </div>
         )}
 
@@ -83,7 +83,7 @@ export default function FeaturedPlacesSection() {
           <div className="mt-12 flex justify-center">
             <Link
               href="/places"
-              className="inline-flex items-center gap-3 rounded-xl border border-[#DFD616]/30 bg-[#DFD616]/10 px-8 py-4 text-sm font-bold text-[#DFD616] transition-all hover:bg-[#DFD616] hover:text-[#0a0a0a]"
+              className="inline-flex items-center gap-3 rounded-xl border border-accent/40 bg-accent-subtle px-8 py-4 text-sm font-bold text-accent transition-all hover:bg-accent hover:text-accent-foreground"
             >
               Explore All {places.length}+ Places
               <ArrowRight size={16} />

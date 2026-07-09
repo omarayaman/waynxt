@@ -50,15 +50,15 @@ export function PlaceOverviewSection({ place }: PlaceOverviewSectionProps) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.4, delay: 0.05 }}
-          className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-[#888]"
+          className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted"
         >
           {metaItems.map(({ icon: Icon, text }, index) => (
             <span key={text} className="inline-flex items-center gap-1.5">
               {index > 0 && (
-                <span className="mr-4 hidden text-[#333] sm:inline">·</span>
+                <span className="mr-4 hidden text-border sm:inline">·</span>
               )}
-              <Icon size={14} className="text-[#DFD616]" />
-              <span className="capitalize text-[#ccc]">{text}</span>
+              <Icon size={14} className="text-accent" />
+              <span className="capitalize text-foreground/80">{text}</span>
             </span>
           ))}
         </motion.p>
@@ -76,7 +76,7 @@ export function PlaceOverviewSection({ place }: PlaceOverviewSectionProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="max-w-3xl text-base leading-[1.8] text-[#b0b0b0] md:text-lg md:leading-[1.85]"
+              className="max-w-3xl text-base leading-[1.8] text-foreground/80 md:text-lg md:leading-[1.85]"
             >
               {displayDescription}
             </motion.p>
@@ -86,7 +86,7 @@ export function PlaceOverviewSection({ place }: PlaceOverviewSectionProps) {
             <button
               type="button"
               onClick={() => setExpanded((prev) => !prev)}
-              className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[#DFD616] transition-colors hover:text-[#EAE121]"
+              className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent transition-colors hover:text-[var(--accent-hover)]"
             >
               {expanded ? "Show less" : "Read more"}
               <motion.span
@@ -105,20 +105,20 @@ export function PlaceOverviewSection({ place }: PlaceOverviewSectionProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="space-y-3 border-t border-[#1a1a1a] pt-6"
+            className="space-y-3 border-t border-border pt-6"
           >
             {suitableFor.length > 0 && (
               <p className="text-sm leading-relaxed">
-                <span className="font-medium text-[#666]">Great for </span>
-                <span className="text-[#DFD616]">
+                <span className="font-medium text-muted">Great for </span>
+                <span className="text-accent">
                   {suitableFor.join(" · ")}
                 </span>
               </p>
             )}
             {suitableAge.length > 0 && (
               <p className="text-sm leading-relaxed">
-                <span className="font-medium text-[#666]">Ages </span>
-                <span className="text-[#aaa]">{suitableAge.join(" · ")}</span>
+                <span className="font-medium text-muted">Ages </span>
+                <span className="text-foreground/80">{suitableAge.join(" · ")}</span>
               </p>
             )}
           </motion.div>

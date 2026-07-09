@@ -95,7 +95,7 @@ export function InteractiveRoadmap({ destinations, seed }: InteractiveRoadmapPro
   return (
     <div className="space-y-4">
       <div className="text-center px-2">
-        <p className="text-[#DFD616] text-base sm:text-lg font-clash font-bold">
+        <p className="text-accent text-base sm:text-lg font-clash font-bold">
           خطة رحلتك الفريدة جاهزة!
         </p>
         <p className="text-[#777] text-xs mt-1">
@@ -117,7 +117,7 @@ export function InteractiveRoadmap({ destinations, seed }: InteractiveRoadmapPro
         </div>
         <div className="flex-1 h-0.5 rounded-full bg-[#1a1610] overflow-hidden">
           <div
-            className="h-full rounded-full bg-linear-to-r from-[#8B7355] via-[#C4A265] to-[#DFD616] transition-[width] duration-700 ease-out"
+            className="h-full rounded-full bg-linear-to-r from-[#8B7355] via-[#C4A265] to-accent transition-[width] duration-700 ease-out"
             style={{ width: `${progressPct}%` }}
           />
         </div>
@@ -146,7 +146,7 @@ export function InteractiveRoadmap({ destinations, seed }: InteractiveRoadmapPro
                 <linearGradient id="pathGold" x1="0%" y1="0%" x2="100%" y2="0%">
                   <stop offset="0%" stopColor="#8B7355" />
                   <stop offset="50%" stopColor="#C4A265" />
-                  <stop offset="100%" stopColor="#DFD616" />
+                  <stop offset="100%" stopColor="var(--accent)" />
                 </linearGradient>
               </defs>
               <path
@@ -345,7 +345,7 @@ function NavOrb({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="w-8 h-8 rounded-full border border-[#3d3428] bg-[#141010] flex items-center justify-center text-[#C4A265] hover:border-[#C4A265]/40 hover:text-[#DFD616] transition-colors disabled:opacity-30"
+      className="w-8 h-8 rounded-full border border-[#3d3428] bg-[#141010] flex items-center justify-center text-[#C4A265] hover:border-[#C4A265]/40 hover:text-accent transition-colors disabled:opacity-30"
     >
       {children}
     </button>
@@ -451,7 +451,7 @@ function JourneyNode({
       </div>
 
       <div className="mt-1.5 text-center" style={{ width: labelWidth }}>
-        <p className={`${fontScale} font-semibold text-[#DFD616] leading-tight line-clamp-2`}>
+        <p className={`${fontScale} font-semibold text-accent leading-tight line-clamp-2`}>
           {activity.activity_name}
         </p>
         <p className="text-[8px] text-[#666] mt-0.5 truncate">
@@ -511,7 +511,7 @@ function StopDetail({
           <p className="text-[10px] tracking-widest text-[#8B7355] mb-1">
             المحطة {index + 1} من {total}
           </p>
-          <h3 className="text-base font-clash font-bold text-[#DFD616]">
+          <h3 className="text-base font-clash font-bold text-accent">
             {activity.activity_name}
           </h3>
           <p className="text-xs text-[#666] mt-1 flex items-center gap-1">
@@ -532,7 +532,7 @@ function StopDetail({
               {activity.start_time}–{activity.end_time} · {activity.duration_hours}h
             </span>
             {activity.estimated_cost != null && (
-              <span className="text-[#DFD616]">~{activity.estimated_cost} EGP</span>
+              <span className="text-accent">~{activity.estimated_cost} EGP</span>
             )}
           </div>
 
@@ -549,7 +549,7 @@ function StopDetail({
               type="button"
               onClick={onNext}
               disabled={!hasNext}
-              className="flex-1 py-1.5 rounded-lg border border-[#C4A265]/30 bg-[#C4A265]/8 text-xs text-[#DFD616] disabled:opacity-30"
+              className="flex-1 py-1.5 rounded-lg border border-[#C4A265]/30 bg-[#C4A265]/8 text-xs text-accent disabled:opacity-30"
             >
               التالي →
             </button>

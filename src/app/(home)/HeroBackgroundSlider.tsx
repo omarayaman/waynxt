@@ -3,8 +3,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { resolveTheme, useThemeStore } from "@/store/useThemeStore";
 
-const SLIDES = [
+const LIGHT_HERO = {
+  src: "/images/1 light.png",
+  alt: "Nefertiti bust on a light background — Egyptian heritage",
+} as const;
+
+const DARK_SLIDES = [
   {
     src: "/images/1 (1).png",
     alt: "Nefertiti bust — Egyptian heritage",
@@ -23,21 +29,30 @@ const SLIDE_DURATION_MS = 6000;
 const FADE_DURATION_S = 1.8;
 
 export default function HeroBackgroundSlider() {
+  const themeMode = useThemeStore((state) => state.theme);
+  const [isDark, setIsDark] = useState(true);
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const goToSlide = useCallback((index: number) => {
-    setCurrent(index);
-  }, []);
+  useEffect(() => {
+    const apply = () => setIsDark(resolveTheme(themeMode) === "dark");
+    apply();
+
+    if (themeMode !== "system") return;
+
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    media.addEventListener("change", apply);
+    return () => media.removeEventListener("change", apply);
+  }, [themeMode]);
 
   const goToNext = useCallback(() => {
-    setCurrent((prev) => (prev + 1) % SLIDES.length);
+    setCurrent((prev) => (prev + 1) % DARK_SLIDES.length);
   }, []);
 
   useEffect(() => {
-    if (isPaused) {
+    if (!isDark || isPaused) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
@@ -52,10 +67,26 @@ export default function HeroBackgroundSlider() {
         clearInterval(intervalRef.current);
       }
     };
-  }, [current, goToNext, isPaused]);
+  }, [current, goToNext, isDark, isPaused]);
 
   const slideDurationS = SLIDE_DURATION_MS / 1000;
   const fadeDuration = prefersReducedMotion ? 0.4 : FADE_DURATION_S;
+
+  if (!isDark) {
+    return (
+      <div className="absolute inset-0 z-0 overflow-hidden bg-white" aria-hidden>
+        <Image
+          src={LIGHT_HERO.src}
+          alt={LIGHT_HERO.alt}
+          fill
+          priority
+          quality={100}
+          sizes="100vw"
+          className="object-cover object-right mt-12"
+        />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -64,7 +95,7 @@ export default function HeroBackgroundSlider() {
       onMouseLeave={() => setIsPaused(false)}
       aria-hidden
     >
-      <div className="absolute inset-0 bg-[#050505]" />
+      <div className="absolute inset-0 bg-background" />
 
       <AnimatePresence initial={false}>
         <motion.div
@@ -102,8 +133,8 @@ export default function HeroBackgroundSlider() {
           }}
         >
           <Image
-            src={SLIDES[current].src}
-            alt={SLIDES[current].alt}
+            src={DARK_SLIDES[current].src}
+            alt={DARK_SLIDES[current].alt}
             fill
             priority={current === 0}
             quality={100}
@@ -124,7 +155,7 @@ export default function HeroBackgroundSlider() {
             transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
             style={{
               background:
-                "linear-gradient(105deg, transparent 35%, rgba(223,214,22,0.18) 48%, rgba(255,235,150,0.12) 52%, transparent 65%)",
+                "linear-gradient(105deg, transparent 35%, color-mix(in srgb, var(--accent) 18%, transparent) 48%, rgba(255,235,150,0.12) 52%, transparent 65%)",
             }}
           />
         </AnimatePresence>

@@ -48,14 +48,14 @@ export function Modal({ isOpen, onClose, title, children, size = "md" }: ModalPr
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", duration: 0.4 }}
-            className={`relative w-full ${sizeClasses[size]} bg-[#111] border border-white/10 rounded-2xl shadow-2xl overflow-hidden`}
+            className={`relative w-full ${sizeClasses[size]} bg-surface border border-border rounded-2xl shadow-2xl overflow-hidden`}
           >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-              <h2 className="text-lg font-semibold text-white">{title}</h2>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+              <h2 className="text-lg font-semibold text-foreground">{title}</h2>
               <button
                 type="button"
                 onClick={onClose}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-muted hover:text-foreground hover:bg-surface-elevated transition-colors"
               >
                 <X size={18} />
               </button>

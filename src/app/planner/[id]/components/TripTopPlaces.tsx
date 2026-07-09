@@ -73,7 +73,7 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <Loader2 size={32} className="animate-spin text-[#DFD616] mb-4" />
+        <Loader2 size={32} className="animate-spin text-accent mb-4" />
         <p className="text-[#888]">Finding the best spots for your trip...</p>
       </div>
     );
@@ -114,7 +114,7 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {places.map((place, index) => (
-          <Link href={place.id ? `/places/${place.id}` : '#'} key={place.id || `place-${index}`} className="group relative w-full h-[380px] block rounded-[2rem] overflow-hidden border border-[#222222] hover:border-[#DFD616]/50 transition-all duration-300 cursor-pointer">
+          <Link href={place.id ? `/places/${place.id}` : '#'} key={place.id || `place-${index}`} className="group relative w-full h-[380px] block rounded-[2rem] overflow-hidden border border-border hover:border-accent/50 transition-all duration-300 cursor-pointer">
             {/* Background Image */}
             <img 
               src={place.thumbnail_url || (place as any).image_url || "https://images.unsplash.com/photo-1539667468225-eebb663053e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"} 
@@ -129,7 +129,7 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
             
             {/* Top Badges */}
             <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
-              <div className="bg-[#DFD616] text-[#0a0a0a] px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-bold shadow-lg">
+              <div className="bg-accent text-accent-foreground px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-bold shadow-lg">
                 <Sparkles size={12} strokeWidth={2.5} />
                 {place.rating > 0 ? `${place.rating} Rating` : 'New'}
               </div>
@@ -142,7 +142,7 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
               
               <div className="flex flex-wrap items-center gap-2 text-[#888] text-xs font-medium">
                 <span className="flex items-center gap-1.5 text-[#ccc]">
-                  <MapPin size={12} className="text-[#DFD616]" /> {place.city}
+                  <MapPin size={12} className="text-accent" /> {place.city}
                 </span>
                 
                 {place.category && <span>&middot;</span>}
@@ -150,7 +150,7 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
                   const CatIcon = CATEGORY_ICONS[place.category.toLowerCase()] || Sparkles;
                   return (
                     <span className="flex items-center gap-1.5 capitalize">
-                      <CatIcon size={12} className="text-[#DFD616]" /> {place.category}
+                      <CatIcon size={12} className="text-accent" /> {place.category}
                     </span>
                   );
                 })()}
@@ -158,14 +158,14 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
                 {place.category && place.budget_level && <span>&middot;</span>}
                 {place.budget_level && (
                   <span className="flex items-center gap-1.5 capitalize">
-                    <Diamond size={12} className="text-[#DFD616]" /> {place.budget_level}
+                    <Diamond size={12} className="text-accent" /> {place.budget_level}
                   </span>
                 )}
                 
                 {(place.category || place.budget_level) && place.duration_needed > 0 && <span>&middot;</span>}
                 {place.duration_needed > 0 && (
                   <span className="flex items-center gap-1.5">
-                    <Clock size={12} className="text-[#DFD616]" /> {place.duration_needed}h
+                    <Clock size={12} className="text-accent" /> {place.duration_needed}h
                   </span>
                 )}
               </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface NavbarRegisterProps {
   step?: number;
@@ -24,16 +25,17 @@ export default function NavbarRegister({ step }: NavbarRegisterProps) {
       </div>
 
       {step && (
-        <span className="absolute left-1/2 -translate-x-1/2 text-sm text-gray-300 tracking-wide">
+        <span className="absolute left-1/2 -translate-x-1/2 text-sm text-muted tracking-wide">
           Step {step} of 2
         </span>
       )}
 
-      <div className="text-sm z-20">
-        <span className="text-gray-300">Already have an account? </span>
+      <div className="flex items-center gap-4 text-sm z-20">
+        <ThemeToggle />
+        <span className="text-muted">Already have an account? </span>
         <Link
           href="/login"
-          className="text-[#E3D010] hover:text-[#FFF566] hover:[text-shadow:0_0_12px_rgba(227,208,16,0.8)] transition-all duration-300 font-medium"
+          className="text-accent hover:text-accent-hover transition-all duration-300 font-medium"
         >
           log in
         </Link>

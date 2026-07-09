@@ -110,7 +110,7 @@ export default function SearchPage() {
   const hasResultsOrQuery = searchQuery.trim().length > 0;
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-sans flex flex-col">
+    <div className="min-h-screen bg-background text-foreground font-sans flex flex-col">
       <NavbarHome />
 
       <main className="flex-1 w-full px-6 pt-24 pb-24 relative z-10 flex flex-col items-center">
@@ -139,7 +139,7 @@ export default function SearchPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search museums, landmarks, history, culture..."
-              className={`w-full bg-[#111111] border border-[#222222] py-5 pl-14 pr-12 text-base text-white placeholder:text-[#666666] focus:outline-none focus:border-[#DFD616]/50 transition-colors ${hasResultsOrQuery ? "rounded-t-2xl border-b-[#111111] focus:border-b-[#111111]" : "rounded-2xl"}`}
+              className={`w-full bg-[#111111] border border-border py-5 pl-14 pr-12 text-base text-white placeholder:text-[#666666] focus:outline-none focus:border-accent/50 transition-colors ${hasResultsOrQuery ? "rounded-t-2xl border-b-[#111111] focus:border-b-[#111111]" : "rounded-2xl"}`}
             />
             {searchQuery && (
               <button
@@ -154,15 +154,15 @@ export default function SearchPage() {
 
           {/* Search Results Dropdown */}
           {hasResultsOrQuery && (
-            <div className="absolute top-full left-0 w-full bg-[#1A1A1A] border border-[#222222] border-t-0 rounded-b-2xl overflow-hidden shadow-2xl z-10 flex flex-col max-h-[400px] overflow-y-auto custom-scrollbar">
+            <div className="absolute top-full left-0 w-full bg-[#1A1A1A] border border-border border-t-0 rounded-b-2xl overflow-hidden shadow-2xl z-10 flex flex-col max-h-[400px] overflow-y-auto custom-scrollbar">
               {searchResults.length > 0
                 ? searchResults.map((place) => (
                     <button
                       key={place.id}
                       onClick={() => router.push(`/places/${place.id}`)}
-                      className="w-full flex items-center gap-4 px-6 py-4 hover:bg-[#222222] transition-colors border-b border-[#222222] last:border-b-0 text-left"
+                      className="w-full flex items-center gap-4 px-6 py-4 hover:bg-[#222222] transition-colors border-b border-border last:border-b-0 text-left"
                     >
-                      <div className="w-10 h-10 rounded-full bg-[#2A280D] flex items-center justify-center text-[#DFD616] shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-[#2A280D] flex items-center justify-center text-accent shrink-0">
                         {getDropdownIcon(place.category)}
                       </div>
                       <div className="flex flex-col">
@@ -191,7 +191,7 @@ export default function SearchPage() {
             <section>
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp
-                  className="text-[#DFD616]"
+                  className="text-accent"
                   size={18}
                   strokeWidth={2}
                 />
@@ -222,7 +222,7 @@ export default function SearchPage() {
 
               {isLoadingCategories ? (
                 <div className="w-full flex justify-center py-10">
-                  <Loader2 size={32} className="animate-spin text-[#DFD616]" />
+                  <Loader2 size={32} className="animate-spin text-accent" />
                 </div>
               ) : (
                 <div className="grid grid-cols-3 md:grid-cols-7 gap-2.5">
@@ -238,7 +238,7 @@ export default function SearchPage() {
                         }
                         className="flex flex-col items-center gap-2 bg-[#0d0d0a] rounded-xl py-3.5 px-2 hover:bg-[#1A1A1A] transition-colors group"
                       >
-                        <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-[#22200A] flex items-center justify-center text-[#DFD616] group-hover:bg-[#2A280D] transition-colors">
+                        <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-[#22200A] flex items-center justify-center text-accent group-hover:bg-[#2A280D] transition-colors">
                           <Icon size={18} strokeWidth={1.5} />
                         </div>
                         <span className="text-[#CCCCCC] text-[11px] md:text-xs capitalize group-hover:text-white transition-colors">
@@ -255,7 +255,7 @@ export default function SearchPage() {
       </main>
 
       <footer className="w-full py-8 text-center text-xs text-[#666666] border-t border-[#1A1A1A] mt-auto">
-        <span className="text-[#DFD616]">WAYNX</span> — Immersive travel
+        <span className="text-accent">WAYNX</span> — Immersive travel
         exploration
       </footer>
 

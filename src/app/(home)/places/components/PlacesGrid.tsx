@@ -17,8 +17,8 @@ interface PlacesGridProps {
 
 function PlaceCardSkeleton() {
   return (
-    <div className="rounded-2xl border border-[#222222] overflow-hidden animate-pulse">
-      <div className="h-[280px] bg-[#111]" />
+    <div className="rounded-2xl border border-border overflow-hidden animate-pulse">
+      <div className="h-[280px] bg-surface-elevated" />
     </div>
   );
 }
@@ -91,7 +91,7 @@ export function PlacesGrid({
 
       {hasMore && (
         <div ref={sentinelRef} className="w-full h-10 flex items-center justify-center mt-4">
-          {isLoadingMore && <Loader2 size={24} className="animate-spin text-[#DFD616]" />}
+          {isLoadingMore && <Loader2 size={24} className="animate-spin text-accent" />}
         </div>
       )}
     </>

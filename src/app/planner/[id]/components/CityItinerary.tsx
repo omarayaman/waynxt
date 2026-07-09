@@ -29,20 +29,20 @@ export function CityItinerary({ destinations, activeStopId, onSelectStop, stops 
     <div className="space-y-4" ref={containerRef}>
       {destinations.map((dest, destIdx) => {
         const days = [...(dest.trip_days ?? [])].sort((a, b) => a.day_number - b.day_number);
-        const destColor = destIdx % 2 === 0 ? "#DFD616" : "#FF5D7A"; // Cycle pin colors or use standard gold
+        const destColor = destIdx % 2 === 0 ? "var(--accent)" : "#FF5D7A"; // Cycle pin colors or use standard gold
         
         return (
-          <div key={dest.id} className="bg-[#0d0d0d] border border-[#1a1a1a] rounded-2xl overflow-hidden">
+          <div key={dest.id} className="bg-[#0d0d0d] border border-border rounded-2xl overflow-hidden">
             {/* City Header */}
             <div className="flex justify-between items-center p-4 cursor-default">
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full shadow-[0_0_8px_rgba(223,214,22,0.5)]" style={{ backgroundColor: "#DFD616" }} />
+                <div className="w-2 h-2 rounded-full shadow-[0_0_8px_color-mix(in srgb, var(--accent) %, transparent)]" style={{ backgroundColor: "var(--accent)" }} />
                 <div>
                   <h2 className="text-sm font-bold text-white">{dest.city}</h2>
                   <div className="text-[10px] text-[#666] mt-0.5 capitalize">{dest.theme || "Destination"}</div>
                 </div>
               </div>
-              <div className="bg-[#1a180e] text-[#DFD616] text-[10px] px-2.5 py-1 rounded-full border border-[#DFD616]/30 font-medium">
+              <div className="bg-[#1a180e] text-accent text-[10px] px-2.5 py-1 rounded-full border border-accent/30 font-medium">
                 {dest.days_allocated} DAYS
               </div>
             </div>
@@ -71,12 +71,12 @@ export function CityItinerary({ destinations, activeStopId, onSelectStop, stops 
                             onClick={() => onSelectStop(activity.id)}
                             className={`flex justify-between items-center gap-3 rounded-xl p-3 cursor-pointer transition-colors border
                               ${isSelected 
-                                ? "bg-[#1B1710] border-[#DFD616]/50 shadow-[0_0_15px_rgba(223,214,22,0.05)]" 
-                                : "bg-[#111] border-[#1a1a1a] hover:border-[#333]"
+                                ? "bg-[#1B1710] border-accent/50 shadow-[0_0_15px_color-mix(in srgb, var(--accent) %, transparent)]" 
+                                : "bg-[#111] border-border hover:border-[#333]"
                               }`}
                           >
                             <div className="flex items-center gap-2.5 min-w-0">
-                              <div className={`w-1.5 h-1.5 rounded-full flex-none transition-colors ${isSelected ? "bg-[#DFD616]" : "bg-[#333]"}`} />
+                              <div className={`w-1.5 h-1.5 rounded-full flex-none transition-colors ${isSelected ? "bg-accent" : "bg-[#333]"}`} />
                               <div className="min-w-0">
                                 <div className={`text-xs font-semibold truncate transition-colors ${isSelected ? "text-white" : "text-[#ddd]"}`}>
                                   {activity.activity_name}
@@ -89,11 +89,11 @@ export function CityItinerary({ destinations, activeStopId, onSelectStop, stops 
                             
                             <div className="flex items-center gap-2.5 flex-none text-[10px]">
                               {activity.duration && (
-                                <span className={`font-medium ${isSelected ? "text-[#DFD616]" : "text-[#888]"}`}>
+                                <span className={`font-medium ${isSelected ? "text-accent" : "text-[#888]"}`}>
                                   {activity.duration}
                                 </span>
                               )}
-                              <span className="text-[#DFD616]">★ {activity.rating || "4.5"}</span>
+                              <span className="text-accent">★ {activity.rating || "4.5"}</span>
                             </div>
                           </div>
                         );

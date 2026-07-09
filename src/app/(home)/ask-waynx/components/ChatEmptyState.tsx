@@ -59,19 +59,19 @@ export default function ChatEmptyState({
   return (
     <div className="relative flex min-h-full flex-col items-center justify-center overflow-hidden px-4 py-10">
       <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute left-1/2 top-[38%] h-[400px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DFD616]/5 blur-[100px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size-[56px_56px] mask-[radial-gradient(ellipse_at_center,black_15%,transparent_72%)]" />
+        <div className="absolute left-1/2 top-[38%] h-[400px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[100px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-size-[56px_56px] mask-[radial-gradient(ellipse_at_center,black_15%,transparent_72%)] dark:bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)]" />
       </div>
 
       <div className="relative z-10 flex w-full max-w-3xl flex-col items-center">
         <div className="mb-8 flex flex-col items-center text-center">
-          <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-[#DFD616]/15 bg-[#DFD616]/8 text-[#DFD616]">
+          <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-accent/15 bg-accent/8 text-accent">
             <Sparkles size={24} />
           </div>
-          <h2 className="mb-2 text-2xl font-semibold tracking-tight text-white md:text-3xl">
+          <h2 className="mb-2 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
             Where to next?
           </h2>
-          <p className="max-w-md text-sm leading-relaxed text-[#888888] md:text-base">
+          <p className="max-w-md text-sm leading-relaxed text-muted md:text-base">
             Ask WAYNX about places, trips, and hidden gems across Egypt — powered
             by AI.
           </p>
@@ -88,7 +88,7 @@ export default function ChatEmptyState({
         />
 
         <div className="mt-10 w-full max-w-2xl">
-          <p className="mb-3 text-center text-xs text-[#555555]">
+          <p className="mb-3 text-center text-xs text-muted">
             Or try one of these
           </p>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -97,10 +97,10 @@ export default function ChatEmptyState({
                 key={label}
                 onClick={() => onSelectPrompt(prompt)}
                 disabled={isLoading}
-                className="flex items-start gap-3 rounded-xl border border-white/6 bg-white/3 px-4 py-3 text-left transition-colors hover:border-[#DFD616]/20 hover:bg-[#DFD616]/5 disabled:opacity-50"
+                className="flex items-start gap-3 rounded-xl border border-border bg-surface-elevated/50 px-4 py-3 text-left transition-colors hover:border-accent/20 hover:bg-accent/5 disabled:opacity-50"
               >
-                <Icon size={16} className="mt-0.5 shrink-0 text-[#DFD616]" />
-                <span className="text-[13px] text-[#B0B0B0]">{label}</span>
+                <Icon size={16} className="mt-0.5 shrink-0 text-accent" />
+                <span className="text-[13px] text-foreground/80">{label}</span>
               </button>
             ))}
           </div>

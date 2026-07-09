@@ -1,16 +1,21 @@
 "use client";
 
 import { Toaster } from "sonner";
+import { resolveTheme, useThemeStore } from "@/store/useThemeStore";
 
 export function ToasterProvider() {
+  const theme = useThemeStore((state) => state.theme);
+  const resolved = resolveTheme(theme);
+
   return (
     <Toaster
       position="top-center"
-      theme="dark"
+      theme={resolved}
       toastOptions={{
         classNames: {
-          toast: "bg-[#141414] border border-[#2a2a2a] text-white",
-          success: "border-[#DFD616]/30",
+          toast:
+            "bg-surface border border-border text-foreground",
+          success: "border-accent/30",
           error: "border-red-500/30",
         },
       }}

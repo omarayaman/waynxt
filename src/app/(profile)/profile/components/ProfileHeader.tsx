@@ -32,7 +32,7 @@ export function ProfileHeader({
   };
 
   return (
-    <div className="flex items-center gap-5 pb-8 border-b border-[#1a1a1a]">
+    <div className="flex items-center gap-5 pb-8 border-b border-border">
       <div className="relative shrink-0">
         <div className="relative w-16 h-16 rounded-full overflow-hidden bg-[#161616] group">
           {avatarUrl ? (

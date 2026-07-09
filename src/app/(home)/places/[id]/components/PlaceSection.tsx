@@ -19,11 +19,11 @@ export function PlaceSection({
     <section className={className}>
       <div className="mb-5 flex items-end justify-between gap-4">
         <div>
-          <h2 className="text-lg font-semibold text-white md:text-xl">
+          <h2 className="text-lg font-semibold text-foreground md:text-xl">
             {title}
           </h2>
           {subtitle && (
-            <p className="mt-1 text-sm text-[#666]">{subtitle}</p>
+            <p className="mt-1 text-sm text-muted">{subtitle}</p>
           )}
         </div>
         {action}

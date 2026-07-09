@@ -25,43 +25,43 @@ export function PlaceSidebar({ place, totalReviews, askHref }: PlaceSidebarProps
   ];
 
   return (
-    <div className="rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a]">
-      <div className="border-b border-[#1a1a1a] p-6">
+    <div className="rounded-2xl border border-border bg-surface">
+      <div className="border-b border-border p-6">
         <div className="flex items-center gap-2">
-          <Star size={18} className="text-[#DFD616]" fill="currentColor" />
-          <span className="text-3xl font-bold text-white">
+          <Star size={18} className="text-accent" fill="currentColor" />
+          <span className="text-3xl font-bold text-foreground">
             {place.rating > 0 ? place.rating.toFixed(1) : "—"}
           </span>
-          <span className="text-sm text-[#555]">/ 5</span>
+          <span className="text-sm text-muted">/ 5</span>
         </div>
-        <p className="mt-2 text-sm text-[#666]">
+        <p className="mt-2 text-sm text-muted">
           {totalReviews} {totalReviews === 1 ? "review" : "reviews"}
         </p>
       </div>
 
-      <ul className="divide-y divide-[#1a1a1a]">
+      <ul className="divide-y divide-border">
         {facts.map((fact) => (
           <li
             key={fact.label}
             className="flex items-center justify-between px-6 py-3.5 text-sm"
           >
-            <span className="text-[#666]">{fact.label}</span>
-            <span className="font-medium capitalize text-white">{fact.value}</span>
+            <span className="text-muted">{fact.label}</span>
+            <span className="font-medium capitalize text-foreground">{fact.value}</span>
           </li>
         ))}
       </ul>
 
-      <div className="space-y-2.5 border-t border-[#1a1a1a] p-6">
+      <div className="space-y-2.5 border-t border-border p-6">
         <Link
           href={askHref}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#DFD616] py-3 text-sm font-semibold text-black transition-colors hover:bg-[#EAE121]"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent-hover"
         >
           <Sparkles size={16} />
           Ask AI
         </Link>
         <Link
           href="/planner"
-          className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#222] py-3 text-sm font-medium text-[#999] transition-colors hover:border-[#333] hover:text-white"
+          className="flex w-full items-center justify-center gap-2 rounded-xl border border-border py-3 text-sm font-medium text-muted transition-colors hover:border-accent/30 hover:text-foreground"
         >
           <CalendarPlus size={16} />
           Plan a trip

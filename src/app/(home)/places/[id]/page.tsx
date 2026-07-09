@@ -51,7 +51,7 @@ export default async function PlaceDetailsPage({
       : [];
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#050505] font-sans text-white">
+    <div className="flex min-h-screen flex-col bg-background font-sans text-foreground">
       <NavbarHome />
       <PlaceDetailsView
         place={place}

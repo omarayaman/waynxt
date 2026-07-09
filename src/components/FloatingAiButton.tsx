@@ -63,7 +63,7 @@ export default function FloatingAiButton() {
         className={`flex items-center h-14 rounded-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
           expanded
             ? "bg-[#111] border border-[#333] pl-5 pr-1.5 shadow-xl translate-y-0"
-            : "bg-[#DFD616] border border-transparent px-2 shadow-[0_4px_20px_rgba(223,214,22,0.3)] hover:shadow-[0_4px_25px_rgba(223,214,22,0.5)] hover:-translate-y-1 cursor-pointer"
+            : "bg-accent border border-transparent px-2 shadow-[0_4px_20px_color-mix(in srgb, var(--accent) %, transparent)] hover:shadow-[0_4px_25px_color-mix(in srgb, var(--accent) %, transparent)] hover:-translate-y-1 cursor-pointer"
         }`}
         onClick={() => {
           if (!expanded) {
@@ -100,8 +100,8 @@ export default function FloatingAiButton() {
           aria-label="Ask Waynx AI"
           className={`shrink-0 flex items-center justify-center rounded-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
             expanded
-              ? "w-11 h-11 bg-[#DFD616] text-black hover:bg-[#EAE121]"
-              : "w-10 h-10 bg-transparent text-black"
+              ? "w-11 h-11 bg-accent text-accent-foreground hover:bg-accent-hover"
+              : "w-10 h-10 bg-transparent text-accent-foreground"
           }`}
         >
           <div className="relative flex items-center justify-center w-full h-full">

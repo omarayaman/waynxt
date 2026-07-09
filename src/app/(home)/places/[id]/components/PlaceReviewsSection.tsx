@@ -157,7 +157,7 @@ export function PlaceReviewsSection({
       <button
         type="button"
         onClick={openCreateForm}
-        className="inline-flex items-center gap-2 rounded-xl border border-[#DFD616]/30 bg-[#DFD616]/10 px-4 py-2 text-sm font-medium text-[#DFD616] transition-colors hover:bg-[#DFD616]/15"
+        className="inline-flex items-center gap-2 rounded-xl border border-accent/30 bg-accent/10 px-4 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent/15"
       >
         <MessageSquarePlus size={16} />
         Add review
@@ -165,7 +165,7 @@ export function PlaceReviewsSection({
     ) : !isAuthenticated ? (
       <Link
         href="/login"
-        className="inline-flex items-center gap-2 rounded-xl border border-[#222] px-4 py-2 text-sm text-[#999] transition-colors hover:border-[#333] hover:text-white"
+        className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-accent/30 hover:text-foreground"
       >
         Sign in to review
       </Link>
@@ -177,7 +177,7 @@ export function PlaceReviewsSection({
       subtitle={`${totalReviews} ${totalReviews === 1 ? "review" : "reviews"} from travelers`}
       action={reviewAction}
     >
-      <div className="overflow-hidden rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a]">
+      <div className="overflow-hidden rounded-2xl border border-border bg-surface">
         <PlaceRatingOverview
           embedded
           rating={placeRating}
@@ -195,16 +195,16 @@ export function PlaceReviewsSection({
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             onSubmit={handleSubmit}
-            className="mb-6 overflow-hidden rounded-xl border border-[#141414] bg-[#050505] p-5"
+            className="mb-6 overflow-hidden rounded-xl border border-border bg-background p-5"
           >
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-sm font-medium text-white">
+              <h3 className="text-sm font-medium text-foreground">
                 {editingReview ? "Edit your review" : "Write a review"}
               </h3>
               <button
                 type="button"
                 onClick={resetForm}
-                className="rounded-full p-1.5 text-[#666] transition-colors hover:bg-[#141414] hover:text-white"
+                className="rounded-full p-1.5 text-muted transition-colors hover:bg-surface-elevated hover:text-foreground"
                 aria-label="Close form"
               >
                 <X size={16} />
@@ -212,7 +212,7 @@ export function PlaceReviewsSection({
             </div>
 
             <div className="mb-4">
-              <p className="mb-2 text-xs uppercase tracking-wider text-[#555]">
+              <p className="mb-2 text-xs uppercase tracking-wider text-muted">
                 Your rating
               </p>
               <StarRating
@@ -230,14 +230,14 @@ export function PlaceReviewsSection({
               }
               placeholder="Share your experience (optional)"
               rows={3}
-              className="mb-4 w-full resize-none rounded-xl border border-[#1a1a1a] bg-[#050505] px-4 py-3 text-sm text-white placeholder:text-[#444] outline-none transition-colors focus:border-[#DFD616]/40"
+              className="mb-4 w-full resize-none rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-accent/40"
             />
 
             <div className="flex items-center gap-3">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-2 rounded-full bg-[#DFD616] px-5 py-2.5 text-sm font-medium text-black transition-colors hover:bg-[#EAE121] disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover disabled:opacity-60"
               >
                 {isSubmitting && <Loader2 size={14} className="animate-spin" />}
                 {editingReview ? "Update review" : "Submit review"}
@@ -245,7 +245,7 @@ export function PlaceReviewsSection({
               <button
                 type="button"
                 onClick={resetForm}
-                className="text-sm text-[#666] transition-colors hover:text-white"
+                className="text-sm text-muted transition-colors hover:text-foreground"
               >
                 Cancel
               </button>
@@ -255,11 +255,11 @@ export function PlaceReviewsSection({
       </AnimatePresence>
 
       {reviews.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-[#1a1a1a] px-6 py-10 text-center">
-          <p className="text-sm text-[#555]">No reviews yet. Be the first!</p>
+        <div className="rounded-xl border border-dashed border-border px-6 py-10 text-center">
+          <p className="text-sm text-muted">No reviews yet. Be the first!</p>
         </div>
       ) : (
-        <ul className="divide-y divide-[#141414]">
+        <ul className="divide-y divide-border">
           {reviews.map((review, index) => {
             const isOwner = user?.id === review.user_id;
             const displayName =
@@ -280,7 +280,7 @@ export function PlaceReviewsSection({
                 className="py-5 first:pt-0 last:pb-0"
               >
                 <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#141414] text-sm font-medium text-[#DFD616]">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-surface-elevated text-sm font-medium text-accent">
                     {avatarUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -295,17 +295,17 @@ export function PlaceReviewsSection({
 
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                      <span className="text-sm font-medium text-white">
+                      <span className="text-sm font-medium text-foreground">
                         {displayName}
                       </span>
                       <StarRating rating={review.rating} size={13} />
-                      <span className="text-xs text-[#555]">
+                      <span className="text-xs text-muted">
                         {formatRelativeDate(review.created_at)}
                       </span>
                     </div>
 
                     {review.comment && (
-                      <p className="mt-2 text-sm leading-relaxed text-[#999]">
+                      <p className="mt-2 text-sm leading-relaxed text-muted">
                         {review.comment}
                       </p>
                     )}
@@ -315,7 +315,7 @@ export function PlaceReviewsSection({
                         <button
                           type="button"
                           onClick={() => openEditForm(review)}
-                          className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-[#666] transition-colors hover:bg-[#141414] hover:text-white"
+                          className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-muted transition-colors hover:bg-surface-elevated hover:text-foreground"
                         >
                           <Pencil size={12} />
                           Edit
@@ -324,7 +324,7 @@ export function PlaceReviewsSection({
                           type="button"
                           onClick={() => handleDelete(review.id)}
                           disabled={deletingId === review.id}
-                          className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-[#666] transition-colors hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50"
+                          className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-muted transition-colors hover:bg-red-500/10 hover:text-red-500 disabled:opacity-50"
                         >
                           {deletingId === review.id ? (
                             <Loader2 size={12} className="animate-spin" />
@@ -349,7 +349,7 @@ export function PlaceReviewsSection({
             type="button"
             onClick={handleLoadMore}
             disabled={isLoadingMore}
-            className="inline-flex items-center gap-2 rounded-xl border border-[#222] px-5 py-2.5 text-sm text-[#999] transition-colors hover:border-[#333] hover:text-white disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-accent/30 hover:text-foreground disabled:opacity-60"
           >
             {isLoadingMore && <Loader2 size={14} className="animate-spin" />}
             Load more

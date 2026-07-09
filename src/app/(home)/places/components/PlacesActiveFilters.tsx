@@ -82,16 +82,16 @@ export function PlacesActiveFilters() {
           key={filter.key}
           type="button"
           onClick={filter.onRemove}
-          className="inline-flex items-center gap-1 pl-2 pr-1.5 py-0.5 rounded-md bg-[#111] text-[10px] text-[#888] hover:text-[#bbb] transition-colors capitalize"
+          className="inline-flex items-center gap-1 pl-2 pr-1.5 py-0.5 rounded-md bg-accent-subtle text-[10px] text-muted hover:text-foreground transition-colors capitalize border border-border"
         >
           {filter.label}
-          <X size={10} className="text-[#555]" />
+          <X size={10} className="text-muted" />
         </button>
       ))}
       <button
         type="button"
         onClick={resetFilters}
-        className="text-[10px] text-[#555] hover:text-[#888] px-1"
+        className="text-[10px] text-muted hover:text-accent px-1"
       >
         Clear
       </button>

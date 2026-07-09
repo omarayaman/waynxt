@@ -102,13 +102,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#050505] text-white font-sans">
+    <div className="min-h-screen flex bg-background text-foreground font-sans">
       <Navbar />
 
       {/* Left Section - Form */}
       <div className="w-full lg:w-[45%] xl:w-[40%] flex flex-col justify-center px-8 sm:px-16 relative z-0 pt-36 pb-12 lg:pt-[120px]">
         <div className="max-w-[600px] w-full ml-[10%]">
-          <h1 className="text-[42px] font-bold text-[#E3D010] mb-3 tracking-tight">
+          <h1 className="text-[42px] font-bold text-accent mb-3 tracking-tight">
             Welcome back
           </h1>
           <p className="text-gray-300 mb-10 text-[15px] leading-relaxed pr-8">
@@ -123,7 +123,7 @@ export default function LoginPage() {
               {isAccountNotFound && (
                 <Link
                   href="/register"
-                  className="w-full flex justify-center items-center gap-2 bg-transparent border border-[#DFD616] text-[#DFD616] hover:bg-[#DFD616]/10 font-bold text-[15px] py-3.5 rounded-xl transition-all duration-300 shadow-[0_0_10px_rgba(223,214,22,0.05)] hover:shadow-[0_0_15px_rgba(223,214,22,0.15)]"
+                  className="w-full flex justify-center items-center gap-2 bg-transparent border border-accent text-accent hover:bg-accent/10 font-bold text-[15px] py-3.5 rounded-xl transition-all duration-300 shadow-[0_0_10px_color-mix(in srgb, var(--accent) %, transparent)] hover:shadow-[0_0_15px_color-mix(in srgb, var(--accent) %, transparent)]"
                 >
                   Create a new account
                 </Link>
@@ -140,7 +140,7 @@ export default function LoginPage() {
               >
                 Email
               </label>
-              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-[#E3D010] focus-within:bg-[#1a1a1a] transition-all duration-300 shadow-sm">
+              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-accent focus-within:bg-[#1a1a1a] transition-all duration-300 shadow-sm">
                 <div className="absolute left-4 text-gray-400">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -183,7 +183,7 @@ export default function LoginPage() {
               >
                 Password
               </label>
-              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-[#E3D010] focus-within:bg-[#1a1a1a] transition-all duration-300 shadow-sm">
+              <div className="relative flex items-center bg-[#181818] rounded-xl border border-transparent focus-within:border-accent focus-within:bg-[#1a1a1a] transition-all duration-300 shadow-sm">
                 <div className="absolute left-4 text-gray-400">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -215,7 +215,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 text-gray-400 hover:text-[#E3D010] transition-all duration-300 hover:scale-110 active:scale-90"
+                  className="absolute right-4 text-gray-400 hover:text-accent transition-all duration-300 hover:scale-110 active:scale-90"
                 >
                   {showPassword ? (
                     <svg
@@ -260,7 +260,7 @@ export default function LoginPage() {
             {/* Options */}
             <div className="flex justify-between items-center pt-1 px-1">
               <label className="flex items-center gap-2 cursor-pointer group">
-                <div className="w-4 h-4 rounded-[4px] border border-gray-600 bg-[#181818] flex items-center justify-center group-hover:border-[#E3D010] transition-colors">
+                <div className="w-4 h-4 rounded-[4px] border border-gray-600 bg-[#181818] flex items-center justify-center group-hover:border-accent transition-colors">
                   {/* checked icon could go here */}
                 </div>
                 <span className="text-[13px] text-gray-400 select-none group-hover:text-gray-200 transition-colors">
@@ -281,12 +281,12 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#DFD616] hover:bg-[#EAE121] text-[#0a0a0a] font-bold text-[15px] py-4 rounded-xl mt-4 transition-all duration-300 shadow-[0_0_15px_rgba(223,214,22,0.15)] hover:shadow-[0_0_20px_rgba(223,214,22,0.3)] disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+              className="w-full bg-accent hover:bg-accent-hover text-accent-foreground font-bold text-[15px] py-4 rounded-xl mt-4 transition-all duration-300 shadow-[0_0_15px_color-mix(in srgb, var(--accent) %, transparent)] hover:shadow-[0_0_20px_color-mix(in srgb, var(--accent) %, transparent)] disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
             >
               {isLoading ? (
                 <>
                   <svg
-                    className="animate-spin h-5 w-5 text-[#0a0a0a]"
+                    className="animate-spin h-5 w-5 text-accent-foreground"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -314,9 +314,9 @@ export default function LoginPage() {
 
             {/* OR Separator */}
             <div className="flex items-center gap-4 my-8">
-              <div className="flex-1 border-t border-[#222]"></div>
+              <div className="flex-1 border-t border-border"></div>
               <span className="text-gray-500 text-sm font-medium pb-1">or</span>
-              <div className="flex-1 border-t border-[#222]"></div>
+              <div className="flex-1 border-t border-border"></div>
             </div>
 
             {/* Google Login */}

@@ -7,25 +7,25 @@ export function getCityAccent(city: string): { from: string; to: string; glow: s
   const key = city.toLowerCase();
   // Site palette: pharaonic gold + warm sand tones (no neon greens/blues)
   if (key.includes('cairo') || key.includes('giza')) {
-    return { from: '#DFD616', to: '#B8960C', glow: 'rgba(223,214,22,0.38)', ring: '#F7EA00' };
+    return { from: 'var(--accent)', to: '#B8960C', glow: 'color-mix(in srgb, var(--accent) %, transparent)', ring: '#F7EA00' };
   }
   if (key.includes('luxor') || key.includes('aswan')) {
     return { from: '#D4A853', to: '#A67B5B', glow: 'rgba(212,168,83,0.35)', ring: '#E8C872' };
   }
   if (key.includes('alex')) {
-    return { from: '#C4A265', to: '#8B7355', glow: 'rgba(196,162,101,0.32)', ring: '#DFD616' };
+    return { from: '#C4A265', to: '#8B7355', glow: 'rgba(196,162,101,0.32)', ring: 'var(--accent)' };
   }
   if (key.includes('hurghada') || key.includes('sharm') || key.includes('dahab')) {
     return { from: '#E8C872', to: '#C9952A', glow: 'rgba(232,200,114,0.32)', ring: '#F7EA00' };
   }
-  return { from: '#DFD616', to: '#C4A265', glow: 'rgba(223,214,22,0.3)', ring: '#F7EA00' };
+  return { from: 'var(--accent)', to: '#C4A265', glow: 'color-mix(in srgb, var(--accent) %, transparent)', ring: '#F7EA00' };
 }
 
-/** Shared Egyptian tourism palette — matches site (#DFD616, #F7EA00, dark panels). */
+/** Shared Egyptian tourism palette — matches site (var(--accent), #F7EA00, dark panels). */
 export const EGYPT_ROADMAP_THEME = {
-  gold: '#DFD616',
+  gold: 'var(--accent)',
   goldBright: '#F7EA00',
-  goldHover: '#EAE121',
+  goldHover: 'var(--accent-hover)',
   sand: '#C4A265',
   amber: '#D4A853',
   bronze: '#A67B5B',
@@ -34,7 +34,7 @@ export const EGYPT_ROADMAP_THEME = {
   panel: '#0a0a0a',
   card: '#111111',
   border: '#1a1a1a',
-  borderGold: 'rgba(223,214,22,0.25)',
+  borderGold: 'color-mix(in srgb, var(--accent) %, transparent)',
   muted: '#888888',
   trail: '#2a2418',
 } as const;

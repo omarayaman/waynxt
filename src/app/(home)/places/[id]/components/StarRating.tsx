@@ -33,13 +33,13 @@ export function StarRating({
               key={starValue}
               type="button"
               onClick={() => onChange?.(starValue)}
-              className="text-[#DFD616] transition-transform hover:scale-110 focus:outline-none"
+              className="text-accent transition-transform hover:scale-110 focus:outline-none"
               aria-label={`Rate ${starValue} stars`}
             >
               <Star
                 size={size}
                 fill={filled ? "currentColor" : "none"}
-                className={filled ? "text-[#DFD616]" : "text-[#333]"}
+                className={filled ? "text-accent" : "text-border"}
               />
             </button>
           );
@@ -50,7 +50,7 @@ export function StarRating({
             key={starValue}
             size={size}
             fill={filled ? "currentColor" : "none"}
-            className={filled ? "text-[#DFD616]" : "text-[#333]"}
+            className={filled ? "text-accent" : "text-border"}
           />
         );
       })}
