@@ -1,7 +1,7 @@
 "use client";
 
 import React, {Suspense, useEffect, useRef, useState} from "react";
-import NavbarHome, {NAVBAR_HEIGHT} from "../NavbarHome";
+import {NAVBAR_HEIGHT} from "../NavbarHome";
 import {usePlacesStore} from "@/store/usePlacesStore";
 import {usePlaces} from "@/hooks/usePlaces";
 import {useCategories} from "@/hooks/useCategories";
@@ -83,8 +83,6 @@ function PlacesContent() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <NavbarHome className="bg-[var(--navbar-solid)]/80 backdrop-blur-xl" />
-
       <div style={{paddingTop: NAVBAR_HEIGHT}}>
         {/* Sticky toolbar — pins below fixed navbar on scroll */}
         <div

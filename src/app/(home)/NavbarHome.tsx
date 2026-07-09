@@ -1,7 +1,6 @@
 "use client";
 
 import React, {useEffect, useState} from "react";
-import {createPortal} from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import {usePathname} from "next/navigation";
@@ -34,23 +33,31 @@ function getInitials(name: string): string {
     .join("");
 }
 
+function isAuthRoute(pathname: string): boolean {
+  return pathname.startsWith("/login") || pathname.startsWith("/register");
+}
+
+function shouldHideNavbar(pathname: string): boolean {
+  return isAuthRoute(pathname) || pathname.startsWith("/ask-waynx");
+}
+
+function getRouteNavbarClassName(pathname: string): string {
+  if (pathname === "/places" || pathname.startsWith("/places/")) {
+    return "bg-[var(--navbar-solid)]/80 backdrop-blur-xl";
+  }
+  if (pathname === "/planner" || pathname.startsWith("/planner/")) {
+    return "dark:bg-transparent dark:backdrop-blur-none";
+  }
+  return "";
+}
+
 export default function NavbarHome({className}: {className?: string}) {
   const pathname = usePathname();
   const {user, isAuthenticated, isLoading} = useAuthStore();
-  const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isDark = useIsDark();
-
-  const isHome = pathname === "/";
-  const showSolidBg = !isHome || scrolled;
-  const useGreenNavbar = !isDark;
-  const onHero = isDark && isHome && !showSolidBg;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -70,6 +77,16 @@ export default function NavbarHome({className}: {className?: string}) {
     };
   }, [mobileOpen]);
 
+  const isHome = pathname === "/";
+  const showSolidBg = !isHome || scrolled;
+  const useGreenNavbar = !isDark;
+  const onHero = isDark && isHome && !showSolidBg;
+  const navbarClassName = [getRouteNavbarClassName(pathname), className].filter(Boolean).join(" ");
+
+  if (shouldHideNavbar(pathname)) {
+    return null;
+  }
+
   const askActive = isLinkActive(pathname, "/ask-waynx");
   const navLinkInactive =
     useGreenNavbar || onHero
@@ -79,10 +96,10 @@ export default function NavbarHome({className}: {className?: string}) {
     useGreenNavbar || onHero ? "text-[var(--navbar-foreground)]" : "text-accent";
   const navIndicator = useGreenNavbar ? "bg-[var(--navbar-foreground)]" : "bg-accent";
 
-  const navbar = (
+  return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-[200] transition-[background-color,backdrop-filter] duration-300 ${className ?? ""} ${
+        className={`fixed inset-x-0 top-0 z-[200] transition-[background-color,backdrop-filter] duration-300 ${navbarClassName} ${
           useGreenNavbar || showSolidBg || !isHome
             ? "bg-[var(--navbar-solid)] backdrop-blur-xl"
             : "bg-transparent"
@@ -97,7 +114,8 @@ export default function NavbarHome({className}: {className?: string}) {
               alt="WAYNX"
               width={80}
               height={80}
-              className="object-cover sm:h-12 dark:hidden"
+              priority
+              className="h-12 w-auto object-cover dark:hidden"
             />
             <Image
               src="/icons/full_Logo.svg"
@@ -121,7 +139,7 @@ export default function NavbarHome({className}: {className?: string}) {
                   {link.name}
                   {isActive && (
                     <motion.span
-                      layoutId="navbar-indicator"
+                      layoutId={`navbar-indicator-${link.href}`}
                       className={`absolute -bottom-1 left-0 right-0 mx-auto h-[2px] w-full rounded-full ${navIndicator}`}
                       transition={{type: "spring", bounce: 0.15, duration: 0.45}}
                     />
@@ -295,8 +313,4 @@ export default function NavbarHome({className}: {className?: string}) {
       </AnimatePresence>
     </>
   );
-
-  if (!mounted) return null;
-
-  return createPortal(navbar, document.body);
 }

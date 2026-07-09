@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { placesService } from "@/services/places.service";
-import NavbarHome from "../../NavbarHome";
 import { PlaceDetailsView } from "./components/PlaceDetailsView";
 
 export default async function PlaceDetailsPage({
@@ -52,7 +51,6 @@ export default async function PlaceDetailsPage({
 
   return (
     <div className="flex min-h-screen flex-col bg-background font-sans text-foreground">
-      <NavbarHome />
       <PlaceDetailsView
         place={place}
         reviews={reviews}

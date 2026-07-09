@@ -27,7 +27,8 @@ import { ToasterProvider } from "@/components/ToasterProvider";
 import { ThemeScript } from "@/components/ThemeScript";
 import { BootScreen } from "@/components/BootScreen";
 import { BootSplash } from "@/components/BootSplash";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleOAuthProviderWrapper } from "@/providers/GoogleOAuthProviderWrapper";
+import NavbarHome from "@/app/(home)/NavbarHome";
 
 export default function RootLayout({
   children,
@@ -38,6 +39,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
@@ -47,15 +49,16 @@ export default function RootLayout({
         <BootSplash />
 
         <div id="app-content" className="min-h-full flex flex-col bg-background text-foreground">
-          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+          <GoogleOAuthProviderWrapper>
             <ThemeProvider>
               <AuthProvider>
+                <NavbarHome />
                 {children}
                 <FloatingAiButton />
                 <ToasterProvider />
               </AuthProvider>
             </ThemeProvider>
-          </GoogleOAuthProvider>
+          </GoogleOAuthProviderWrapper>
           <BootScreen />
         </div>
       </body>

@@ -16,7 +16,7 @@ import {
 import { tripService } from "@/services/trip.service";
 import type { Trip, TripStatus } from "@/types/trip";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import NavbarHome, { NAVBAR_HEIGHT } from "@/app/(home)/NavbarHome";
+import { NAVBAR_HEIGHT } from "@/app/(home)/NavbarHome";
 import PlannerBackground from "@/app/planner/components/PlannerBackground";
 import { TripTopPlaces } from "./TripTopPlaces";
 import { RoadmapTimeline } from "./RoadmapTimeline";
@@ -158,11 +158,6 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
   return (
     <ProtectedRoute>
       <div className="flex h-dvh flex-col overflow-hidden bg-background text-foreground font-poppins dark:bg-black">
-        <NavbarHome
-          className="dark:bg-transparent dark:backdrop-blur-none"
-          // backLink={{ href: "/planner", label: "Back to planner" }}
-        />
-
         <div
           className="relative flex min-h-0 flex-1 flex-col overflow-hidden px-4 sm:px-6"
           style={{

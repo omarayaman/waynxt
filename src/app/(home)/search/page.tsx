@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import NavbarHome from "../NavbarHome";
 import { useRouter } from "next/navigation";
 import {
   Search,
@@ -111,8 +110,6 @@ export default function SearchPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans flex flex-col">
-      <NavbarHome />
-
       <main className="flex-1 w-full px-6 pt-24 pb-24 relative z-10 flex flex-col items-center">
         {/* Header Text */}
         <div className="text-center mt-4 md:mt-6 mb-10">

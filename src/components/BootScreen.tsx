@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 
 const MIN_DISPLAY_MS = 900;
-const EXIT_MS = 480;
 
 export function BootScreen() {
   useEffect(() => {
@@ -20,10 +19,6 @@ export function BootScreen() {
       window.setTimeout(() => {
         root.setAttribute("data-boot", "ready");
         boot?.setAttribute("aria-busy", "false");
-
-        window.setTimeout(() => {
-          boot?.remove();
-        }, EXIT_MS);
       }, wait);
     };
 

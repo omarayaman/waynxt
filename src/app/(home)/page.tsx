@@ -1,5 +1,4 @@
 import Link from "next/link";
-import NavbarHome from "./NavbarHome";
 import HeroBackgroundSlider from "./HeroBackgroundSlider";
 import AiSearchSection from "./AiSearchSection";
 import InterestsSection from "./InterestsSection";
@@ -13,8 +12,6 @@ export default function Home() {
   return (
     <>
     <div className="relative bg-background text-foreground font-sans overflow-x-hidden">
-      <NavbarHome />
-
       {/* Hero Section */}
       <section className="relative min-h-screen">
         <HeroBackgroundSlider />

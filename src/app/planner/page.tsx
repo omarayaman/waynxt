@@ -2,15 +2,12 @@
 
 import React from "react";
 import { Sparkles } from "lucide-react";
-import NavbarHome from "@/app/(home)/NavbarHome";
 import PlannerBackground from "./components/PlannerBackground";
 import TripWizard from "./components/TripWizard";
 
 export default function PlannerPage() {
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-background text-foreground font-poppins dark:bg-black">
-      <NavbarHome className="dark:bg-transparent dark:backdrop-blur-none" />
-
       <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden px-4 pb-5 pt-5 sm:px-6 sm:pb-6 sm:pt-6">
         <PlannerBackground />
 

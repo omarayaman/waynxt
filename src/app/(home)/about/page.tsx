@@ -1,5 +1,4 @@
 import React from "react";
-import NavbarHome from "../NavbarHome";
 import Footer from "../Footer";
 import { ShieldCheck, CheckCircle, MessageCircle, MapPin, Sparkles } from "lucide-react";
 import Link from "next/link";
@@ -7,8 +6,6 @@ import Link from "next/link";
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-background text-foreground font-poppins flex flex-col">
-      <NavbarHome />
-      
       <main className="flex-1 flex flex-col items-center w-full px-4 pt-20 pb-0 relative z-10">
         
         {/* Hero Section */}
