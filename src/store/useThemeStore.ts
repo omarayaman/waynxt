@@ -1,36 +1,64 @@
+"use client";
+
+import { useSyncExternalStore } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import {
+  applyThemeClass,
+  resolveTheme,
+  THEME_STORAGE_KEY,
+  type ThemeMode,
+} from "@/lib/theme";
 
-export type ThemeMode = "light" | "dark" | "system";
+export { applyThemeClass, resolveTheme, THEME_STORAGE_KEY };
+export type { ThemeMode };
 
 interface ThemeState {
   theme: ThemeMode;
   setTheme: (theme: ThemeMode) => void;
 }
 
-export const THEME_STORAGE_KEY = "waynxt-theme";
-
-export function resolveTheme(theme: ThemeMode): "light" | "dark" {
-  if (theme === "light") return "light";
-  if (theme === "dark") return "dark";
-  if (typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    return "dark";
-  }
-  return "light";
+function subscribeToThemeClass(onStoreChange: () => void): () => void {
+  const observer = new MutationObserver(onStoreChange);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+  return () => observer.disconnect();
 }
 
-export function applyThemeClass(resolved: "light" | "dark"): void {
-  const root = document.documentElement;
-  root.classList.toggle("dark", resolved === "dark");
-  root.style.colorScheme = resolved;
+function getIsDarkSnapshot(): boolean {
+  return document.documentElement.classList.contains("dark");
+}
+
+/** Reads resolved theme from the `<html class="dark">` set by the blocking script. */
+export function useResolvedTheme(): "light" | "dark" {
+  const isDark = useSyncExternalStore(
+    subscribeToThemeClass,
+    getIsDarkSnapshot,
+    () => true
+  );
+  return isDark ? "dark" : "light";
+}
+
+export function useIsDark(): boolean {
+  return useResolvedTheme() === "dark";
 }
 
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
       theme: "dark",
-      setTheme: (theme) => set({ theme }),
+      setTheme: (theme) => {
+        set({ theme });
+        applyThemeClass(resolveTheme(theme));
+      },
     }),
-    { name: THEME_STORAGE_KEY }
+    {
+      name: THEME_STORAGE_KEY,
+      onRehydrateStorage: () => (state) => {
+        if (state) applyThemeClass(resolveTheme(state.theme));
+      },
+    }
   )
 );

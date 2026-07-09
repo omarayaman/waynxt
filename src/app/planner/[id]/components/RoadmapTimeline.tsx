@@ -140,7 +140,7 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
 
   return (
     <div className="relative flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border border-border 
-    bg-white/80 backdrop-blur-md shadow-[0_12px_48px_color-mix(in_srgb,var(--foreground)_8%,transparent)] dark:border-white/10 dark:bg-black/40 dark:backdrop-blur-md dark:shadow-2xl">
+    bg-white/10 backdrop-blur shadow-[0_12px_48px_color-mix(in_srgb,var(--foreground)_8%,transparent)] dark:border-white/10 dark:bg-black/40 dark:backdrop-blur-md dark:shadow-2xl">
       {/* Header section matching the mockup */}
       <div className="flex shrink-0 flex-col items-center px-4 pb-2 pt-4">
         <h2 className="mb-2 text-center font-clash text-xl font-semibold tracking-wide text-accent">

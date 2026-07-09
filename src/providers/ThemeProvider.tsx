@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { applyThemeClass, resolveTheme, useThemeStore } from "@/store/useThemeStore";
+
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const theme = useThemeStore((state) => state.theme);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     applyThemeClass(resolveTheme(theme));
   }, [theme]);
 

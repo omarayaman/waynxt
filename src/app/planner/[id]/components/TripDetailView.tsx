@@ -190,7 +190,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
           ) : (
             <>
               {/* Trip Header */}
-              <div className="mb-3 flex shrink-0 flex-col justify-between gap-4 rounded-2xl border border-border bg-white/80 backdrop-blur-md p-4 shadow-[0_12px_48px_color-mix(in_srgb,var(--foreground)_8%,transparent)] sm:flex-row sm:items-start sm:p-5 dark:border-white/10 dark:bg-black/40 dark:backdrop-blur-md dark:shadow-[0_8px_60px_rgba(0,0,0,0.55)]">
+              <div className="mb-3 flex shrink-0 flex-col justify-between gap-4 rounded-2xl border border-border bg-white/10 backdrop-blur p-4 shadow-[0_12px_48px_color-mix(in_srgb,var(--foreground)_8%,transparent)] sm:flex-row sm:items-start sm:p-5 dark:border-white/10 dark:bg-black/40 dark:backdrop-blur-md dark:shadow-[0_8px_60px_rgba(0,0,0,0.55)]">
                 <div>
                   <h1 className="mb-2 font-clash text-xl font-bold text-foreground sm:text-2xl dark:text-white">
                     {trip.title}

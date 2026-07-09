@@ -30,7 +30,7 @@ export function ActivityDetailCard({
 
   return (
     <aside
-      className={`flex max-h-[38vh] w-full flex-col overflow-hidden rounded-2xl border border-border bg-white/80 backdrop-blur-md shadow-[0_12px_40px_color-mix(in_srgb,var(--foreground)_10%,transparent)] lg:max-h-full lg:h-full lg:w-[360px] lg:shrink-0 dark:border-white/10 dark:bg-black/50 dark:backdrop-blur-md ${className}`}
+      className={`flex max-h-[38vh] w-full flex-col overflow-hidden rounded-2xl border border-border bg-white/10 backdrop-blur shadow-[0_12px_40px_color-mix(in_srgb,var(--foreground)_10%,transparent)] lg:max-h-full lg:h-full lg:w-[360px] lg:shrink-0 dark:border-white/10 dark:bg-black/50 dark:backdrop-blur-md ${className}`}
     >
       <div className="flex shrink-0 items-start justify-between gap-3 border-b border-border px-4 py-3 dark:border-white/10">
         <div className="min-w-0">

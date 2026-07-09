@@ -25,6 +25,8 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
 import FloatingAiButton from "@/components/FloatingAiButton";
 import { ToasterProvider } from "@/components/ToasterProvider";
 import { ThemeScript } from "@/components/ThemeScript";
+import { BootScreen } from "@/components/BootScreen";
+import { BootSplash } from "@/components/BootSplash";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function RootLayout({
@@ -41,16 +43,21 @@ export default function RootLayout({
       <head>
         <ThemeScript />
       </head>
-      <body className="min-h-full flex flex-col bg-background text-foreground">
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
-          <ThemeProvider>
-            <AuthProvider>
-              {children}
-              <FloatingAiButton />
-              <ToasterProvider />
-            </AuthProvider>
-          </ThemeProvider>
-        </GoogleOAuthProvider>
+      <body>
+        <BootSplash />
+
+        <div id="app-content" className="min-h-full flex flex-col bg-background text-foreground">
+          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+            <ThemeProvider>
+              <AuthProvider>
+                {children}
+                <FloatingAiButton />
+                <ToasterProvider />
+              </AuthProvider>
+            </ThemeProvider>
+          </GoogleOAuthProvider>
+          <BootScreen />
+        </div>
       </body>
     </html>
   );

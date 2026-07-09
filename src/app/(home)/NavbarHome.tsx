@@ -9,7 +9,7 @@ import {AnimatePresence, motion} from "framer-motion";
 import {Menu, Sparkles, X} from "lucide-react";
 import {useAuthStore} from "@/store/useAuthStore";
 import {ThemeToggle} from "@/components/ThemeToggle";
-import {resolveTheme, useThemeStore} from "@/store/useThemeStore";
+import {useIsDark} from "@/store/useThemeStore";
 
 export const NAVBAR_HEIGHT = 60;
 
@@ -41,12 +41,7 @@ export default function NavbarHome({className}: {className?: string}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const themeMode = useThemeStore((state) => state.theme);
-  const [isDark, setIsDark] = useState(true);
-
-  useEffect(() => {
-    setIsDark(resolveTheme(themeMode) === "dark");
-  }, [themeMode]);
+  const isDark = useIsDark();
 
   const isHome = pathname === "/";
   const showSolidBg = !isHome || scrolled;

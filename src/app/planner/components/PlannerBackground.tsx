@@ -1,9 +1,27 @@
-import Image from "next/image";
+"use client";
 
-export default function PlannerBackground({opacity = 25}: {opacity?: number}) {
+import Image from "next/image";
+import { useIsDark } from "@/store/useThemeStore";
+
+export default function PlannerBackground({ opacity = 25 }: { opacity?: number }) {
+  const isDark = useIsDark();
+
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-      <div className="absolute inset-0 dark:hidden">
+      {isDark ? (
+        <>
+          <Image
+            src="/images/worldmap.png"
+            alt=""
+            fill
+            className="object-cover object-[55%_45%] opacity-65"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/35 to-black/55" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-black/30" />
+        </>
+      ) : (
         <Image
           src="/images/worldmapwhite.jpeg"
           alt=""
@@ -11,17 +29,7 @@ export default function PlannerBackground({opacity = 25}: {opacity?: number}) {
           className={`scale-102 object-cover opacity-${opacity} blur-[3px]`}
           priority
         />
-      </div>
-      <Image
-        src="/images/worldmap.png"
-        alt=""
-        fill
-        className="hidden object-cover object-[55%_45%] opacity-0 dark:block dark:opacity-65"
-        priority
-      />
-      <div className="absolute inset-0 hidden dark:block bg-black/50" />
-      <div className="absolute inset-0 hidden bg-linear-to-r from-black/70 via-black/35 to-black/55 dark:block" />
-      <div className="absolute inset-0 hidden bg-linear-to-t from-black/80 via-transparent to-black/30 dark:block" />
+      )}
 
       <div className="absolute left-1/2 top-[38%] h-[420px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/12 blur-[120px] dark:bg-accent/15" />
       <div className="absolute right-[8%] top-[55%] h-[280px] w-[320px] rounded-full bg-accent/8 blur-[90px] dark:bg-[#F7EA00]/10" />

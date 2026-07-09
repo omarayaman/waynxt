@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { resolveTheme, useThemeStore } from "@/store/useThemeStore";
+import { useIsDark } from "@/store/useThemeStore";
 
 const LIGHT_SLIDES = [
   {
@@ -39,23 +39,11 @@ const SLIDE_DURATION_MS = 6000;
 const FADE_DURATION_S = 1.8;
 
 export default function HeroBackgroundSlider() {
-  const themeMode = useThemeStore((state) => state.theme);
-  const [isDark, setIsDark] = useState(true);
+  const isDark = useIsDark();
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  useEffect(() => {
-    const apply = () => setIsDark(resolveTheme(themeMode) === "dark");
-    apply();
-
-    if (themeMode !== "system") return;
-
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    media.addEventListener("change", apply);
-    return () => media.removeEventListener("change", apply);
-  }, [themeMode]);
 
   const slides = isDark ? DARK_SLIDES : LIGHT_SLIDES;
 
