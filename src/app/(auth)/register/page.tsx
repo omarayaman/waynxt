@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -17,7 +17,7 @@ const registerSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters."),
 });
 
-export default function RegisterPage() {
+function RegisterPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const postAuthRedirect = getPostAuthRedirect(searchParams);
@@ -344,5 +344,19 @@ export default function RegisterPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-surface-card text-muted">
+          Loading...
+        </div>
+      }
+    >
+      <RegisterPageContent />
+    </Suspense>
   );
 }

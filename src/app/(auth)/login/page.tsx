@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -16,7 +16,7 @@ const loginSchema = z.object({
   password: z.string().min(1, "Password is required."),
 });
 
-export default function LoginPage() {
+function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const postAuthRedirect = getPostAuthRedirect(searchParams);
@@ -313,5 +313,19 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-surface-card text-muted">
+          Loading...
+        </div>
+      }
+    >
+      <LoginPageContent />
+    </Suspense>
   );
 }
