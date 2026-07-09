@@ -10,8 +10,10 @@ export default function StepSection({ title, subtitle, children }: StepSectionPr
   return (
     <section className="space-y-3">
       <div>
-        <h2 className="text-lg font-bold font-clash text-white">{title}</h2>
-        <p className="text-gray-400 text-xs mt-0.5">{subtitle}</p>
+        <h2 className="font-clash text-base font-bold text-foreground sm:text-lg dark:text-white">
+          {title}
+        </h2>
+        <p className="mt-1 text-xs text-muted sm:text-sm dark:text-gray-400">{subtitle}</p>
       </div>
       {children}
     </section>

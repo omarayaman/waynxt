@@ -3,16 +3,151 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { CalendarDays, Loader2, Minus, Plus, Users } from "lucide-react";
 import { useTripStore } from "@/store/useTripStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { tripService } from "@/services/trip.service";
 import { buildCreateTripInput } from "@/lib/trip-mappers";
-import { TRIP_CREATE_TIMEOUT_MS } from "@/lib/api-errors";
 import { Snowflake, Flower2, Sun, Leaf } from "lucide-react";
 import OptionCard from "./OptionCard";
 import StepSection from "./StepSection";
 import StepFooter from "./StepFooter";
+
+function TripDurationTravelers({
+  journeyLength,
+  setJourneyLength,
+  travelersCount,
+  setTravelersCount,
+}: {
+  journeyLength: number;
+  setJourneyLength: (value: number) => void;
+  travelersCount: number;
+  setTravelersCount: (value: number) => void;
+}) {
+  const rangePercent = ((journeyLength - 1) / 13) * 100;
+
+  return (
+    <div className="overflow-hidden rounded-xl border border-border bg-surface dark:border-white/10 dark:bg-black/25">
+      <div className="grid grid-cols-1 sm:grid-cols-2 sm:divide-x sm:divide-border dark:sm:divide-white/10">
+        <div className="p-3 sm:p-3.5">
+          <div className="mb-2.5 flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-md border border-border bg-surface-elevated text-muted dark:border-white/10 dark:bg-black/30 dark:text-gray-400">
+              <CalendarDays size={14} strokeWidth={1.75} />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-foreground dark:text-white">How many days?</p>
+              <p className="text-[11px] text-muted dark:text-gray-400">Slide to set length</p>
+            </div>
+          </div>
+
+          <div className="flex items-end justify-between gap-3">
+            <div className="flex items-baseline gap-1">
+              <span className="font-clash text-2xl font-bold tabular-nums leading-none text-foreground dark:text-accent">
+                {journeyLength}
+              </span>
+              <span className="pb-0.5 text-xs text-muted dark:text-gray-400">days</span>
+            </div>
+            <span className="pb-0.5 text-[10px] font-medium text-muted dark:text-gray-500">1 – 14</span>
+          </div>
+
+          <input
+            type="range"
+            min="1"
+            max="14"
+            value={journeyLength}
+            onChange={(e) => setJourneyLength(Number(e.target.value))}
+            aria-label="Trip length in days"
+            className="planner-range planner-range-track mt-2.5 h-1.5 w-full cursor-pointer appearance-none rounded-full outline-none"
+          />
+        </div>
+
+        <div className="border-t border-border p-3 sm:border-t-0 sm:p-3.5 dark:border-white/10">
+          <div className="mb-2.5 flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-md border border-border bg-surface-elevated text-muted dark:border-white/10 dark:bg-black/30 dark:text-gray-400">
+              <Users size={14} strokeWidth={1.75} />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-foreground dark:text-white">Travelers</p>
+              <p className="text-[11px] text-muted dark:text-gray-400">Who is going?</p>
+            </div>
+          </div>
+
+          <div className="flex h-[52px] items-center justify-between rounded-lg border border-border bg-surface-elevated px-2 dark:border-white/10 dark:bg-black/30">
+            <button
+              type="button"
+              onClick={() => setTravelersCount(Math.max(1, travelersCount - 1))}
+              disabled={travelersCount <= 1}
+              aria-label="Decrease travelers"
+              className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-surface text-foreground disabled:opacity-40 dark:border-white/10 dark:bg-black/25 dark:text-white"
+            >
+              <Minus size={14} />
+            </button>
+
+            <div className="flex flex-col items-center">
+              <span className="font-clash text-xl font-bold tabular-nums leading-none text-foreground dark:text-accent">
+                {travelersCount}
+              </span>
+              <span className="mt-0.5 text-[10px] text-muted dark:text-gray-400">
+                {travelersCount === 1 ? "person" : "people"}
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setTravelersCount(Math.min(20, travelersCount + 1))}
+              disabled={travelersCount >= 20}
+              aria-label="Increase travelers"
+              className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-surface text-foreground disabled:opacity-40 dark:border-white/10 dark:bg-black/25 dark:text-white"
+            >
+              <Plus size={14} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .planner-range-track {
+              background: linear-gradient(to right, var(--foreground) 0%, var(--foreground) ${rangePercent}%, var(--border) ${rangePercent}%, var(--border) 100%);
+            }
+            .dark .planner-range-track {
+              background: linear-gradient(to right, var(--accent) 0%, var(--accent) ${rangePercent}%, #374151 ${rangePercent}%, #374151 100%);
+            }
+            .planner-range::-webkit-slider-thumb {
+              -webkit-appearance: none;
+              appearance: none;
+              width: 14px;
+              height: 14px;
+              border-radius: 50%;
+              background: var(--foreground);
+              cursor: pointer;
+              border: 2px solid var(--surface);
+            }
+            .planner-range::-moz-range-thumb {
+              width: 14px;
+              height: 14px;
+              border-radius: 50%;
+              background: var(--foreground);
+              cursor: pointer;
+              border: 2px solid var(--surface);
+            }
+            .dark .planner-range::-webkit-slider-thumb {
+              background: var(--accent);
+              border-color: #0a0a0a;
+              box-shadow: 0 0 10px rgba(247, 234, 0, 0.45);
+            }
+            .dark .planner-range::-moz-range-thumb {
+              background: var(--accent);
+              border-color: #0a0a0a;
+              box-shadow: 0 0 10px rgba(247, 234, 0, 0.45);
+            }
+          `,
+        }}
+      />
+    </div>
+  );
+}
 
 export default function StepThree() {
   const router = useRouter();
@@ -40,10 +175,10 @@ export default function StepThree() {
   const [error, setError] = useState("");
 
   const seasonOptions = [
-    { id: "Winter", label: "Winter", desc: "Dec–Feb", icon: <Snowflake size={18} strokeWidth={1.5} /> },
-    { id: "Spring", label: "Spring", desc: "Mar–May", icon: <Flower2 size={18} strokeWidth={1.5} /> },
-    { id: "Summer", label: "Summer", desc: "Jun–Aug", icon: <Sun size={18} strokeWidth={1.5} /> },
-    { id: "Autumn", label: "Autumn", desc: "Sep–Nov", icon: <Leaf size={18} strokeWidth={1.5} /> },
+    { id: "Winter", label: "Winter", desc: "Dec–Feb", icon: <Snowflake size={16} strokeWidth={1.5} /> },
+    { id: "Spring", label: "Spring", desc: "Mar–May", icon: <Flower2 size={16} strokeWidth={1.5} /> },
+    { id: "Summer", label: "Summer", desc: "Jun–Aug", icon: <Sun size={16} strokeWidth={1.5} /> },
+    { id: "Autumn", label: "Autumn", desc: "Sep–Nov", icon: <Leaf size={16} strokeWidth={1.5} /> },
   ];
 
   const handleBuildPlan = async () => {
@@ -86,12 +221,12 @@ export default function StepThree() {
   const minDate = new Date().toISOString().split("T")[0];
 
   return (
-    <div className="flex flex-col h-full gap-4">
-      <div className="flex-1 min-h-0 space-y-4 overflow-y-auto">
+    <div className="flex h-full min-h-0 flex-col gap-3">
+      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto">
         <StepSection title="When are you travelling?" subtitle="Pick your start date and season.">
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             <div>
-              <label htmlFor="start-date" className="block text-xs text-gray-400 mb-1.5">
+              <label htmlFor="start-date" className="mb-1 block text-xs text-muted">
                 Start date
               </label>
               <input
@@ -100,11 +235,11 @@ export default function StepThree() {
                 min={minDate}
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-black/25 px-4 py-2.5 text-sm text-white outline-none focus:border-[#F7EA00]/50"
+                className="w-full rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-foreground outline-none focus:border-foreground/40 dark:border-white/10 dark:bg-black/25 dark:text-white dark:focus:border-accent/50"
               />
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               {seasonOptions.map((option) => (
                 <OptionCard
                   key={option.id}
@@ -118,86 +253,15 @@ export default function StepThree() {
           </div>
         </StepSection>
 
-        <StepSection title="How many days?" subtitle="Slide to set your trip length.">
-          <div className="rounded-xl border border-white/10 bg-black/25 px-4 sm:px-6 py-5">
-            <div className="text-center mb-4">
-              <span className="text-4xl font-clash font-bold text-[#F7EA00]">{journeyLength}</span>
-              <span className="text-sm text-gray-400 ml-2">days</span>
-            </div>
-
-            <input
-              type="range"
-              min="1"
-              max="14"
-              value={journeyLength}
-              onChange={(e) => setJourneyLength(Number(e.target.value))}
-              className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer outline-none"
-              style={{
-                background: `linear-gradient(to right, #F7EA00 0%, #F7EA00 ${
-                  ((journeyLength - 1) / 13) * 100
-                }%, #374151 ${((journeyLength - 1) / 13) * 100}%, #374151 100%)`,
-              }}
-            />
-
-            <style
-              dangerouslySetInnerHTML={{
-                __html: `
-                  input[type=range]::-webkit-slider-thumb {
-                    -webkit-appearance: none;
-                    appearance: none;
-                    width: 20px;
-                    height: 20px;
-                    border-radius: 50%;
-                    background: #F7EA00;
-                    cursor: pointer;
-                    box-shadow: 0 0 10px rgba(247, 234, 0, 0.45);
-                  }
-                  input[type=range]::-moz-range-thumb {
-                    width: 20px;
-                    height: 20px;
-                    border-radius: 50%;
-                    background: #F7EA00;
-                    cursor: pointer;
-                    border: none;
-                    box-shadow: 0 0 10px rgba(247, 234, 0, 0.45);
-                  }
-                `,
-              }}
-            />
-
-            <div className="flex justify-between text-xs text-gray-500 mt-3 font-medium">
-              <span>1 day</span>
-              <span>2 weeks</span>
-            </div>
-          </div>
-        </StepSection>
-
-        <StepSection title="Travelers" subtitle="How many people are going?">
-          <div className="flex items-center gap-4 rounded-xl border border-white/10 bg-black/25 px-4 py-3">
-            <button
-              type="button"
-              onClick={() => setTravelersCount(Math.max(1, travelersCount - 1))}
-              className="w-9 h-9 rounded-lg border border-white/10 text-white hover:bg-white/5 transition-colors"
-            >
-              −
-            </button>
-            <span className="text-2xl font-clash font-bold text-[#F7EA00] flex-1 text-center">
-              {travelersCount}
-            </span>
-            <button
-              type="button"
-              onClick={() => setTravelersCount(Math.min(20, travelersCount + 1))}
-              className="w-9 h-9 rounded-lg border border-white/10 text-white hover:bg-white/5 transition-colors"
-            >
-              +
-            </button>
-          </div>
-        </StepSection>
+        <TripDurationTravelers
+          journeyLength={journeyLength}
+          setJourneyLength={setJourneyLength}
+          travelersCount={travelersCount}
+          setTravelersCount={setTravelersCount}
+        />
       </div>
 
-      {error && (
-        <p className="text-red-400 text-sm shrink-0">{error}</p>
-      )}
+      {error && <p className="shrink-0 text-sm text-red-400">{error}</p>}
 
       <StepFooter
         onBack={prevStep}

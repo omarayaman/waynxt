@@ -2,50 +2,66 @@
 
 import React from "react";
 import Image from "next/image";
+import { Sparkles } from "lucide-react";
+import NavbarHome from "@/app/(home)/NavbarHome";
 import TripWizard from "./components/TripWizard";
+
+function PlannerBackground() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      <Image
+        src="/images/worldmap.png"
+        alt=""
+        fill
+        className="hidden object-cover object-[55%_45%] opacity-0 dark:block dark:opacity-65"
+        priority
+      />
+      <div className="absolute inset-0 hidden dark:block bg-black/50" />
+      <div className="absolute inset-0 hidden bg-linear-to-r from-black/70 via-black/35 to-black/55 dark:block" />
+      <div className="absolute inset-0 hidden bg-linear-to-t from-black/80 via-transparent to-black/30 dark:block" />
+
+      <div className="absolute left-1/2 top-[38%] h-[420px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/12 blur-[120px] dark:bg-accent/15" />
+      <div className="absolute right-[8%] top-[55%] h-[280px] w-[320px] rounded-full bg-accent/8 blur-[90px] dark:bg-[#F7EA00]/10" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.09)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.09)_1px,transparent_1px)] bg-size-[48px_48px] mask-[radial-gradient(ellipse_at_center,black_40%,transparent_88%)] dark:bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] dark:mask-[radial-gradient(ellipse_at_center,black_25%,transparent_80%)]" />
+    </div>
+  );
+}
 
 export default function PlannerPage() {
   return (
-    <div className="fixed inset-0 text-white overflow-hidden">
-      {/* Full-page world map — more visible, Egypt/Africa in frame */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden>
-        <Image
-          src="/images/worldmap.png"
-          alt=""
-          fill
-          className="object-cover object-[55%_45%] scale-100 opacity-80"
-          priority
-        />
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute inset-0 bg-linear-to-r from-black/75 via-black/35 to-black/55" />
-        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-black/30" />
-      </div>
+    <div className="flex h-dvh flex-col overflow-hidden bg-background text-foreground font-poppins dark:bg-black">
+      <NavbarHome className="dark:bg-transparent dark:backdrop-blur-none" />
 
-      <div className="relative z-10 h-full flex items-center justify-center px-4 sm:px-6 py-5 sm:py-6">
-        {/* Unified glass panel — header + form feel like one piece */}
-        <div className="w-full max-w-7xl h-full max-h-[700px] flex flex-col lg:flex-row rounded-3xl border border-white/10 bg-black/35 backdrop-blur-md shadow-[0_8px_60px_rgba(0,0,0,0.55)] overflow-hidden min-h-0">
-          <header className="relative shrink-0 lg:w-[36%] xl:w-[34%] flex flex-col justify-center px-6 sm:px-8 py-6 lg:py-8 border-b lg:border-b-0 lg:border-r border-white/10">
-            <div className="absolute inset-0 bg-linear-to-br from-[#F7EA00]/5 via-transparent to-transparent pointer-events-none" />
+      <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden px-4 pb-5 pt-5 sm:px-6 sm:pb-6 sm:pt-6">
+        <PlannerBackground />
 
-            <div className="relative flex flex-col gap-3 sm:gap-4">
-              <div className="flex items-center gap-2 border border-[#F7EA00]/40 bg-[#F7EA00]/15 text-[#F7EA00] px-3 py-1.5 rounded-full text-[11px] font-bold tracking-widest uppercase w-fit">
-                <span>✨</span> AI Concierge
+        <div className="relative z-10 mx-auto mt-[50] flex max-h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_12px_48px_color-mix(in_srgb,var(--foreground)_10%,transparent)] dark:border-white/10 dark:bg-black/40 dark:backdrop-blur-md dark:shadow-[0_8px_60px_rgba(0,0,0,0.55)] lg:flex-row">
+          <header className="relative flex shrink-0 flex-col justify-center border-b border-border bg-surface-elevated px-5 py-5 sm:px-6 lg:w-[34%] lg:border-b-0 lg:border-r lg:py-6 dark:border-white/10 dark:bg-black/35">
+            <div className="absolute inset-0 hidden bg-linear-to-br from-accent/8 via-transparent to-transparent dark:block" />
+
+            <div className="relative flex flex-col gap-2.5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface text-foreground dark:border-accent/30 dark:bg-accent/10 dark:text-accent">
+                <Sparkles size={18} />
               </div>
 
-              <h1 className="text-xl sm:text-2xl lg:text-[1.65rem] xl:text-3xl font-clash font-bold leading-tight">
+              <div className="flex w-fit items-center gap-2 rounded-full border border-border bg-surface px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-muted dark:border-accent/40 dark:bg-accent/15 dark:text-accent">
+                AI Concierge
+              </div>
+
+              <h1 className="font-clash text-lg font-bold leading-tight text-foreground sm:text-xl dark:text-white">
                 Design Your Perfect{" "}
-                <span className="text-[#F7EA00] drop-shadow-[0_0_28px_rgba(247,234,0,0.35)]">
+                <span className="text-accent drop-shadow-[0_0_20px_color-mix(in_srgb,var(--accent)_35%,transparent)]">
                   Egyptian Escape
                 </span>
               </h1>
 
-              <p className="text-gray-300 font-poppins text-xs sm:text-sm leading-relaxed max-w-sm">
+              <p className="max-w-sm text-xs leading-relaxed text-muted sm:text-sm dark:text-gray-300">
                 Tell us your dreams, and our AI will weave them into an unforgettable itinerary.
               </p>
             </div>
           </header>
 
-          <div className="flex-1 min-h-0 min-w-0 flex flex-col p-4 sm:p-5 lg:p-6 bg-black/20">
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-background px-4 py-3 sm:px-5 sm:py-4 dark:bg-black/20">
             <TripWizard />
           </div>
         </div>

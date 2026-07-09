@@ -16,29 +16,28 @@ export default function TripWizard() {
   ];
 
   return (
-    <div className="flex-1 min-h-0 min-w-0 flex flex-col font-poppins w-full">
-      {/* Stepper */}
-      <div className="shrink-0 flex items-center justify-center mb-3 sm:mb-4">
-        <div className="flex items-center w-full max-w-md">
+    <div className="flex h-full min-h-0 flex-col font-poppins">
+      <div className="mb-3 flex shrink-0 items-center justify-center">
+        <div className="flex w-full max-w-xs items-center">
           {steps.map((s, idx) => {
             const isCompleted = step > s.num;
             const isActive = step === s.num;
 
             return (
               <React.Fragment key={s.num}>
-                <div className="flex flex-col items-center gap-1.5 shrink-0">
+                <div className="flex shrink-0 flex-col items-center gap-1">
                   <div
-                    className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all ${
+                    className={`flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs font-bold transition-colors ${
                       isCompleted || isActive
-                        ? "border-[#F7EA00] bg-[#F7EA00]/10 text-[#F7EA00]"
-                        : "border-gray-700 text-gray-600"
+                        ? "border-foreground bg-surface-elevated text-foreground dark:border-accent dark:bg-accent/10 dark:text-accent"
+                        : "border-border bg-surface text-muted dark:border-gray-700 dark:bg-transparent dark:text-gray-600"
                     }`}
                   >
                     {isCompleted ? "✓" : s.num}
                   </div>
                   <span
-                    className={`text-[10px] tracking-wide uppercase font-medium ${
-                      isActive ? "text-[#F7EA00]" : "text-gray-500"
+                    className={`text-[9px] font-medium uppercase tracking-wide ${
+                      isActive ? "text-foreground dark:text-accent" : "text-muted dark:text-gray-500"
                     }`}
                   >
                     {s.label}
@@ -47,8 +46,8 @@ export default function TripWizard() {
 
                 {idx < steps.length - 1 && (
                   <div
-                    className={`flex-1 h-0.5 mx-2 sm:mx-3 mb-5 rounded-full transition-colors ${
-                      step > s.num ? "bg-[#F7EA00]/50" : "bg-gray-800"
+                    className={`mx-2 mb-4 h-0.5 flex-1 rounded-full transition-colors ${
+                      step > s.num ? "bg-foreground/25 dark:bg-accent/50" : "bg-border dark:bg-gray-800"
                     }`}
                   />
                 )}
@@ -58,13 +57,12 @@ export default function TripWizard() {
         </div>
       </div>
 
-      {/* Wizard card — glass, lets map show through */}
-      <div className="flex-1 min-h-0 rounded-2xl border border-white/10 bg-black/30 backdrop-blur-sm p-4 sm:p-5 flex flex-col">
-        <div className="text-[#F7EA00] text-xs font-bold tracking-widest uppercase mb-3 sm:mb-4 shrink-0">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border bg-surface-elevated p-3 sm:p-4 dark:border-white/10 dark:bg-black/30 dark:backdrop-blur-sm">
+        <div className="mb-2 shrink-0 text-[10px] font-bold uppercase tracking-widest text-muted dark:text-accent">
           Step 0{step} / 3
         </div>
 
-        <div className="flex-1 min-h-0 flex flex-col">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
           {step === 1 && <StepOne />}
           {step === 2 && <StepTwo />}
           {step === 3 && <StepThree />}

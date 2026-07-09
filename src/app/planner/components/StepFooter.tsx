@@ -16,12 +16,12 @@ export default function StepFooter({
   continueDisabled = false,
 }: StepFooterProps) {
   return (
-    <div className="flex justify-between items-center pt-4 mt-auto border-t border-white/10 shrink-0">
+    <div className="mt-2 flex shrink-0 items-center justify-between border-t border-border pt-4 dark:border-white/10">
       <button
         type="button"
         onClick={onBack}
         disabled={backDisabled || !onBack}
-        className="text-gray-400 hover:text-white transition-colors text-sm px-4 py-2 rounded-lg border border-white/10 hover:bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-400 disabled:hover:bg-transparent"
+        className="rounded-lg border border-border px-3 py-1.5 text-sm text-muted transition-colors disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:text-gray-400"
       >
         &larr; Back
       </button>
@@ -29,7 +29,7 @@ export default function StepFooter({
         type="button"
         onClick={onContinue}
         disabled={continueDisabled}
-        className="bg-accent hover:bg-accent-hover text-accent-foreground font-bold text-sm px-6 py-2 rounded-xl transition-all duration-300 shadow-[0_0_12px_color-mix(in srgb, var(--accent) %, transparent)] hover:shadow-[0_0_18px_color-mix(in srgb, var(--accent) %, transparent)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
+        className="bg-accent hover:bg-accent-hover text-accent-foreground font-bold text-sm px-5 py-1.5 rounded-lg transition-all duration-300 shadow-[0_0_12px_color-mix(in_srgb,var(--accent)_25%,transparent)] hover:shadow-[0_0_18px_color-mix(in_srgb,var(--accent)_35%,transparent)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
       >
         {continueLabel}
       </button>
