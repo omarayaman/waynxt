@@ -6,6 +6,7 @@ export const PUBLIC_ASSETS = {
     fullLogo: "/icons/full_Logo.svg",
     fullLogoWhite: "/icons/full_logo_white.jpeg",
     rr: "/icons/rr.jpeg",
+    logoLight: "/images/white/logo light.svg",
   },
   images: {
     worldmap: "/images/worldmap.png",
@@ -18,6 +19,7 @@ export const PUBLIC_ASSETS = {
     siwa: "/images/siwa.png",
     dahab: "/images/dahab.png",
     luxorFestival: "/images/luxor_festival.png",
+    food: "/images/food.png",
     heroLight: {
       one: "/images/white/1.jpeg",
       two: "/images/white/2.jpeg",
@@ -32,6 +34,7 @@ export const PUBLIC_ASSETS = {
   backgrounds: {
     pharaoh: "/bg-pharaoh.png",
     register: "/bg-register.png",
+    loginDark: "/bg-login-dark.png",
   },
 } as const;
 
@@ -42,6 +45,10 @@ const CATEGORY_IMAGE_MAP: Record<string, string> = {
   beaches: PUBLIC_ASSETS.images.beaches,
   wellness: PUBLIC_ASSETS.images.wellness,
   religious: PUBLIC_ASSETS.images.religious,
+  food: PUBLIC_ASSETS.images.food,
+  adventure: PUBLIC_ASSETS.images.dahab,
+  art: PUBLIC_ASSETS.images.karnak,
+  nature: PUBLIC_ASSETS.images.siwa,
 };
 
 export function getCategoryImageUrl({

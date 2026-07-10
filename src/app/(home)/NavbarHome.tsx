@@ -111,12 +111,12 @@ export default function NavbarHome({className}: {className?: string}) {
             className="shrink-0 outline-none focus:outline-none flex items-center gap-2 mt-1"
             aria-label="WAYNX home">
             <Image
-              src={PUBLIC_ASSETS.icons.rr}
+              src={PUBLIC_ASSETS.icons.logoLight}
               alt="WAYNX"
-              width={80}
-              height={80}
+              width={720}
+              height={240}
               priority
-              className="h-12 w-auto object-cover dark:hidden"
+              className="h-48 w-auto object-cover dark:hidden"
             />
             <Image
               src={PUBLIC_ASSETS.icons.fullLogo}

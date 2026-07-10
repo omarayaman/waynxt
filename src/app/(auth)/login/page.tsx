@@ -79,8 +79,8 @@ function LoginPageContent() {
           priority
         />
         <Image
-          src={PUBLIC_ASSETS.backgrounds.pharaoh}
-          alt="Ancient Egyptian pharaoh statue in a modern museum"
+          src={PUBLIC_ASSETS.backgrounds.loginDark}
+          alt="Dark mode login background"
           fill
           className="hidden object-cover object-center dark:block"
           priority

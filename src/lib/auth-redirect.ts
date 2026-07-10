@@ -1,7 +1,15 @@
 export function getPostAuthRedirect(
   searchParams: Pick<URLSearchParams, "get"> | null
 ): string {
-  const redirect = searchParams?.get("redirect");
+  let redirect = searchParams?.get("redirect");
+
+  if (redirect) {
+    try {
+      redirect = decodeURIComponent(redirect);
+    } catch (e) {
+      // Ignore
+    }
+  }
 
   if (redirect && redirect.startsWith("/") && !redirect.startsWith("//")) {
     return redirect;
