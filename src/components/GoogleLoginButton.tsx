@@ -45,12 +45,18 @@ export function GoogleLoginButton({
 
         const { useAuthStore } = await import("@/store/useAuthStore");
         await useAuthStore.getState().fetchCurrentUser();
+        
+        const isAuthenticated = useAuthStore.getState().isAuthenticated;
+        if (!isAuthenticated) {
+          throw new Error("Google login succeeded but failed to fetch user profile.");
+        }
+
         router.push(redirectTo);
       } catch (error: unknown) {
         console.error("Backend auth error:", error);
-        const err = error as { response?: { data?: { message?: string } } };
+        const err = error as { response?: { data?: { message?: string } }, message?: string };
         onError?.(
-          err.response?.data?.message || "Backend rejected Google login. Please try again."
+          err.response?.data?.message || err.message || "Backend rejected Google login. Please try again."
         );
       } finally {
         setIsGoogleLoading(false);

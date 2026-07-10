@@ -16,8 +16,8 @@ export const authService = {
     const response = await api.post('/auth/register', data);
     const respData = response.data.data || response.data;
     
-    const token = respData.tokens?.access_token || respData.token || respData.access_token;
-    const refreshToken = respData.tokens?.refresh_token || respData.refresh_token;
+    const token = respData.tokens?.access_token || respData.token || respData.access_token || respData.accessToken || respData.access;
+    const refreshToken = respData.tokens?.refresh_token || respData.refresh_token || respData.refreshToken || respData.refresh;
 
     if (token) Cookies.set('accessToken', token, { expires: 1 });
     if (refreshToken) Cookies.set('refreshToken', refreshToken, { expires: 7 });
@@ -29,8 +29,8 @@ export const authService = {
     const response = await api.post('/auth/login', credentials);
     const respData = response.data.data || response.data;
 
-    const token = respData.tokens?.access_token || respData.token || respData.access_token;
-    const refreshToken = respData.tokens?.refresh_token || respData.refresh_token;
+    const token = respData.tokens?.access_token || respData.token || respData.access_token || respData.accessToken || respData.access;
+    const refreshToken = respData.tokens?.refresh_token || respData.refresh_token || respData.refreshToken || respData.refresh;
 
     if (token) Cookies.set('accessToken', token, { expires: 1 });
     if (refreshToken) Cookies.set('refreshToken', refreshToken, { expires: 7 });
@@ -42,8 +42,8 @@ export const authService = {
     const response = await api.post('/auth/google', payload);
     const respData = response.data.data || response.data;
 
-    const token = respData.tokens?.access_token || respData.token || respData.access_token;
-    const refreshToken = respData.tokens?.refresh_token || respData.refresh_token;
+    const token = respData.tokens?.access_token || respData.token || respData.access_token || respData.accessToken || respData.access;
+    const refreshToken = respData.tokens?.refresh_token || respData.refresh_token || respData.refreshToken || respData.refresh;
 
     if (token) Cookies.set('accessToken', token, { expires: 1 });
     if (refreshToken) Cookies.set('refreshToken', refreshToken, { expires: 7 });

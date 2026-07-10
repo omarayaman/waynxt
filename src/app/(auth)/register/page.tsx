@@ -57,12 +57,16 @@ function RegisterPageContent() {
       const { useAuthStore } = await import('@/store/useAuthStore');
       await useAuthStore.getState().fetchCurrentUser();
       
+      const isAuthenticated = useAuthStore.getState().isAuthenticated;
+      if (!isAuthenticated) {
+        throw new Error("Registration succeeded but failed to fetch user profile. Please try again.");
+      }
+      
       router.push(postAuthRedirect);
     } catch (error: unknown) {
-      const err = error as { response?: { data?: { message?: string } } };
-      setErrorMessage(
-        err.response?.data?.message || "An error occurred during registration. Please try again."
-      );
+      const err = error as { response?: { status?: number, data?: { message?: string } }, message?: string };
+      const msg = err.response?.data?.message || err.message || "An error occurred during registration. Please try again.";
+      setErrorMessage(msg);
     } finally {
       setIsLoading(false);
     }

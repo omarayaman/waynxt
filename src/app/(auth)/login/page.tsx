@@ -54,10 +54,15 @@ function LoginPageContent() {
       const { useAuthStore } = await import('@/store/useAuthStore');
       await useAuthStore.getState().fetchCurrentUser();
       
+      const isAuthenticated = useAuthStore.getState().isAuthenticated;
+      if (!isAuthenticated) {
+        throw new Error("Login succeeded but failed to fetch user profile. Please try again.");
+      }
+
       router.push(postAuthRedirect);
     } catch (error: unknown) {
-      const err = error as { response?: { status?: number, data?: { message?: string } } };
-      const msg = err.response?.data?.message || "An error occurred during login. Please try again.";
+      const err = error as { response?: { status?: number, data?: { message?: string } }, message?: string };
+      const msg = err.response?.data?.message || err.message || "An error occurred during login. Please try again.";
       setErrorMessage(msg);
       
       // Always show the sign up button on error since we might not get a specific "not found" message
