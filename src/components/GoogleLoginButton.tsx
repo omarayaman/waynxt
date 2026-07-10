@@ -51,7 +51,7 @@ export function GoogleLoginButton({
           throw new Error("Google login succeeded but failed to fetch user profile.");
         }
 
-        router.push(redirectTo);
+        window.location.href = redirectTo;
       } catch (error: unknown) {
         console.error("Backend auth error:", error);
         const err = error as { response?: { data?: { message?: string } }, message?: string };

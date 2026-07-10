@@ -59,7 +59,7 @@ function LoginPageContent() {
         throw new Error("Login succeeded but failed to fetch user profile. Please try again.");
       }
 
-      router.push(postAuthRedirect);
+      window.location.href = postAuthRedirect;
     } catch (error: unknown) {
       const err = error as { response?: { status?: number, data?: { message?: string } }, message?: string };
       const msg = err.response?.data?.message || err.message || "An error occurred during login. Please try again.";
