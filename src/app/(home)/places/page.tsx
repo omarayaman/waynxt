@@ -89,7 +89,7 @@ function PlacesContent() {
           ref={toolbarRef}
           className="sticky z-40 w-full bg-[var(--navbar-solid)] backdrop-blur-md border-b border-border"
           style={{top: NAVBAR_HEIGHT}}>
-          <div className="w-full px-4 sm:px-5 lg:pr-4 lg:pl-4 py-2.5 space-y-2.5">
+          <div className="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-2.5 space-y-2.5">
             {/* Row 1: title + search + actions */}
             <div className="flex items-center gap-3">
               <div className="hidden sm:block shrink-0">
@@ -222,7 +222,7 @@ function PlacesContent() {
               isSidebarOpen ? "w-52" : "w-28"
             }`}>
             <div
-              className="sticky flex flex-col px-4 py-4"
+              className="sticky flex flex-col px-4 sm:px-6 lg:pl-8 2xl:pl-12 py-4"
               style={{
                 top: stickyOffset,
                 maxHeight: `calc(100vh - ${stickyOffset}px)`,
@@ -268,7 +268,7 @@ function PlacesContent() {
             </div>
           </aside>
 
-          <main className="flex-1 min-w-0 px-4 sm:px-5 lg:pr-4 lg:pl-5 py-5 bg-[var(--navbar-solid)]/50 dark:bg-background">
+          <main className="flex-1 min-w-0 px-4 sm:px-6 lg:pr-8 2xl:pr-12 lg:pl-6 py-5 bg-[var(--navbar-solid)]/50 dark:bg-background">
             <section className="min-w-0">
               {error && (
                 <div className="mb-4 p-3 rounded-lg bg-red-500/5 border border-red-500/10 text-red-400 text-xs">
