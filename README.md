@@ -13,6 +13,9 @@ This README provides all the necessary details to understand the architecture, t
 - **Animations**: [Framer Motion](https://www.framer.com/motion/)
 - **Data Validation**: [Zod](https://zod.dev/)
 - **HTTP Client**: [Axios](https://axios-http.com/)
+- **Authentication**: [Google OAuth](https://react-oauth.vercel.app/)
+- **Carousels**: [Embla Carousel](https://www.embla-carousel.com/)
+- **Markdown Parsing**: [React Markdown](https://github.com/remarkjs/react-markdown)
 - **Icons**: [Lucide React](https://lucide.dev/)
 
 ## 📁 Project Structure
