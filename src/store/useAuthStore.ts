@@ -68,7 +68,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       useSavedPlacesStore.getState().reset();
       set({ user: null, isAuthenticated: false });
       if (typeof window !== 'undefined') {
-        window.location.href = '/login';
+        window.location.href = '/';
       }
     }
   },

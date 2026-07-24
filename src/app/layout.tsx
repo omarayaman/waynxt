@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Sora, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { PUBLIC_ASSETS } from "@/lib/public-assets";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const fontDisplay = Sora({
+  variable: "--font-sora",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const fontSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta-sans",
   subsets: ["latin"],
 });
 
@@ -42,7 +42,7 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
       data-scroll-behavior="smooth"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${fontDisplay.variable} ${fontSans.variable} h-full antialiased`}
     >
       <head>
         <ThemeScript />

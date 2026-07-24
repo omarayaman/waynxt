@@ -54,11 +54,11 @@ export default function AiSearchSection() {
             />
             <button
               onClick={handleSearch}
-              className="ml-4 text-accent hover:scale-110 transition-transform flex-shrink-0"
+              className="ml-4 w-10 h-10 flex items-center justify-center rounded-full bg-accent text-[#0a0a0a] hover:bg-accent/90 transition-all hover:scale-105 flex-shrink-0 shadow-sm"
             >
               <svg
-                width="24"
-                height="24"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"

@@ -20,6 +20,7 @@ export const authService = {
     const refreshToken = respData.tokens?.refresh_token || respData.refresh_token;
 
     if (token) Cookies.set('accessToken', token, { expires: 1 });
+    else throw new Error("No access token received from server");
     if (refreshToken) Cookies.set('refreshToken', refreshToken, { expires: 7 });
 
     return response.data;
@@ -33,6 +34,7 @@ export const authService = {
     const refreshToken = respData.tokens?.refresh_token || respData.refresh_token;
 
     if (token) Cookies.set('accessToken', token, { expires: 1 });
+    else throw new Error("No access token received from server");
     if (refreshToken) Cookies.set('refreshToken', refreshToken, { expires: 7 });
 
     return response.data;

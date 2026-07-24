@@ -61,7 +61,7 @@ export default function ChatSidebar({
       </div>
 
       <div className="flex-1 overflow-y-auto p-3 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        <p className="mb-2 px-2 text-[11px] font-medium uppercase tracking-wider text-muted">
+        <p className="mb-2 px-2 text-[11px] font-bold uppercase tracking-wider text-foreground/80">
           Recent chats
         </p>
 
@@ -70,7 +70,7 @@ export default function ChatSidebar({
             <Loader2 size={20} className="animate-spin text-accent" />
           </div>
         ) : sessions.length === 0 ? (
-          <p className="px-2 py-6 text-center text-xs text-muted">
+          <p className="px-2 py-6 text-center text-xs font-semibold text-foreground/70">
             No conversations yet. Start a new chat to ask about places or trips.
           </p>
         ) : (

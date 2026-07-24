@@ -201,13 +201,13 @@ function PlacesContent() {
   };
 
   return (
-    <div className="h-[100dvh] bg-[#050505] text-white font-poppins flex flex-col overflow-hidden">
+    <div className="h-[100dvh] bg-white dark:bg-[#050505] text-gray-900 dark:text-white font-poppins flex flex-col overflow-hidden">
       <main className="flex-1 w-full max-w-[1920px] mx-auto px-2 sm:px-4 lg:px-4 xl:px-4 pt-[70px] pb-4 flex flex-col overflow-hidden">
         {/* Top Header: Search and Categories */}
         <div className="w-full shrink-0 flex flex-col items-center">
           {/* Search Bar */}
           <div className="w-full max-w-[800px] mt-0 relative mx-auto">
-            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-[#666666]">
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-[#666666]">
               <Search size={20} strokeWidth={1.5} />
             </div>
             <input
@@ -215,9 +215,9 @@ function PlacesContent() {
               value={search}
               onChange={handleSearchChange}
               placeholder="Explore Egypt... e.g. 'Luxor temples' or 'Red Sea diving'"
-              className="w-full bg-[#0F0F0F] border border-[#222222] rounded-full py-4 pl-14 pr-16 text-sm text-white placeholder:text-[#666666] focus:outline-none focus:border-[#DFD616]/50 transition-colors"
+              className="w-full bg-gray-50 dark:bg-[#0F0F0F] border border-gray-200 dark:border-[#222222] rounded-full py-4 pl-14 pr-16 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-[#666666] focus:outline-none focus:border-[#F7EA00] dark:focus:border-[#F7EA00]/50 transition-colors"
             />
-            <button className="absolute right-2 top-1/2 -translate-y-1/2 w-[38px] h-[38px] rounded-full bg-[#1A1805] border border-[#DFD616]/30 flex items-center justify-center text-[#DFD616] hover:bg-[#2A2608] transition-colors">
+            <button className="absolute right-2 top-1/2 -translate-y-1/2 w-[38px] h-[38px] rounded-full bg-[#F7EA00] dark:bg-[#F7EA00] border border-[#F7EA00] dark:border-[#F7EA00] flex items-center justify-center text-[#0a0a0a] dark:text-[#0a0a0a] hover:bg-[#c2ba12] dark:hover:bg-[#c2ba12] transition-colors shadow-sm">
               {isLoading ? (
                 <Loader2 size={16} className="animate-spin" />
               ) : (
@@ -227,15 +227,15 @@ function PlacesContent() {
           </div>
 
           {/* Floating Category Dock */}
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] w-[95vw] sm:w-auto max-w-[1920px] overflow-x-auto custom-scrollbar rounded-[1.25rem]">
-            <div className="flex items-center gap-1.5 p-1.5 rounded-[1.25rem] bg-black/40 backdrop-blur-xl border border-white/10 w-max mx-auto shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] max-w-[95vw] rounded-[1.25rem] bg-white/80 dark:bg-black/40 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+            <div className="flex items-center gap-1.5 p-1.5 overflow-x-auto custom-scrollbar rounded-[1.25rem]">
               {/* All Experiences Button */}
               <button
                 onClick={() => setCategory("all")}
-                className={`px-5 py-2 rounded-xl flex items-center gap-2 text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
+                className={`shrink-0 px-5 py-2 rounded-xl flex items-center gap-2 text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
                   activeCategory === "all" || !activeCategory
-                    ? "bg-[#DFD616]/15 border border-[#DFD616]/50 text-[#DFD616] shadow-[0_0_15px_rgba(223,214,22,0.15)]"
-                    : "bg-transparent border border-transparent text-[#999999] hover:bg-white/10 hover:text-white"
+                    ? "bg-[#F7EA00] dark:bg-[#F7EA00] border border-[#F7EA00] dark:border-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] shadow-sm dark:shadow-[0_0_15px_rgba(223,214,22,0.25)] font-bold"
+                    : "bg-transparent border border-transparent text-gray-500 dark:text-[#999999] hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
                 }`}
               >
                 <ALL_EXPERIENCES.icon size={16} strokeWidth={1.5} />
@@ -248,7 +248,7 @@ function PlacesContent() {
                   {[...Array(4)].map((_, i) => (
                     <div
                       key={i}
-                      className="w-28 h-[38px] rounded-xl bg-white/5 border border-white/10 animate-pulse"
+                      className="w-28 h-[38px] rounded-xl bg-gray-200 dark:bg-white/5 border border-gray-200 dark:border-white/10 animate-pulse"
                     ></div>
                   ))}
                 </div>
@@ -262,10 +262,10 @@ function PlacesContent() {
                     <button
                       key={cat.category}
                       onClick={() => setCategory(cat.category)}
-                      className={`px-5 py-2 rounded-xl flex items-center gap-2 text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
+                      className={`shrink-0 px-5 py-2 rounded-xl flex items-center gap-2 text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
                         isActive
-                          ? "bg-[#DFD616]/15 border border-[#DFD616]/50 text-[#DFD616] shadow-[0_0_15px_rgba(223,214,22,0.15)]"
-                          : "bg-transparent border border-transparent text-[#999999] hover:bg-white/10 hover:text-white"
+                          ? "bg-[#F7EA00] dark:bg-[#F7EA00] border border-[#F7EA00] dark:border-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] shadow-sm dark:shadow-[0_0_15px_rgba(223,214,22,0.25)] font-bold"
+                          : "bg-transparent border border-transparent text-gray-500 dark:text-[#999999] hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
                       }`}
                     >
                       <Icon size={16} strokeWidth={1.5} />
@@ -281,16 +281,16 @@ function PlacesContent() {
         {/* Two-Column Content Layout */}
         <div className="w-full flex-1 flex gap-6 min-h-0 overflow-hidden">
           {/* Left: Advanced Filters Sidebar */}
-          <div className="hidden lg:block w-[180px] xl:w-[220px] shrink-0 bg-[#0a0a0a] border border-[#222222] rounded-3xl h-full overflow-y-auto custom-scrollbar relative">
+          <div className="hidden lg:block w-[180px] xl:w-[220px] shrink-0 bg-gray-50 dark:bg-[#0a0a0a] border border-gray-200 dark:border-[#222222] rounded-3xl h-full overflow-y-auto custom-scrollbar relative">
             {/* Sticky Header */}
-            <div className="sticky top-0 bg-[#0a0a0a] z-20 px-6 pt-6 pb-4">
+            <div className="sticky top-0 bg-gray-50 dark:bg-[#0a0a0a] z-20 px-6 pt-6 pb-4">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <SlidersHorizontal size={20} className="text-[#DFD616]" />
-                  <h2 className="text-xl font-semibold text-white font-clash flex items-center gap-2">
+                  <SlidersHorizontal size={20} className="text-[#F7EA00] dark:text-[#F7EA00]" />
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white font-clash flex items-center gap-2">
                     Filters
                     {activeSidebarFiltersCount > 0 && (
-                      <span className="flex items-center justify-center w-5 h-5 rounded-full bg-[#DFD616] text-[#0a0a0a] text-xs font-bold font-sans">
+                      <span className="flex items-center justify-center w-5 h-5 rounded-full bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] text-xs font-bold font-sans">
                         {activeSidebarFiltersCount}
                       </span>
                     )}
@@ -301,21 +301,21 @@ function PlacesContent() {
                   disabled={!hasActiveFilters}
                   className={`text-xs font-medium transition-colors ${
                     hasActiveFilters
-                      ? "text-[#DFD616] hover:text-white cursor-pointer"
-                      : "text-[#444] cursor-not-allowed"
+                      ? "text-[#F7EA00] dark:text-[#F7EA00] hover:text-gray-900 dark:hover:text-white cursor-pointer"
+                      : "text-gray-400 dark:text-[#444] cursor-not-allowed"
                   }`}
                 >
                   Reset
                 </button>
               </div>
-              <div className="w-full h-px bg-[#222222]"></div>
+              <div className="w-full h-px bg-gray-200 dark:bg-[#222222]"></div>
             </div>
 
             {/* Scrollable Filters Content */}
             <div className="px-6 pb-6 pt-2">
               {/* City */}
               <div className="mb-8">
-                <h3 className="text-white text-xs font-bold tracking-widest uppercase mb-4">
+                <h3 className="text-gray-800 dark:text-white text-xs font-bold tracking-widest uppercase mb-4">
                   CITY
                 </h3>
                 <div className="flex flex-col gap-3">
@@ -330,8 +330,8 @@ function PlacesContent() {
                         <div
                           className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${
                             isActive
-                              ? "border-[#DFD616] bg-[#DFD616]"
-                              : "border-[#333333] bg-transparent group-hover:border-[#555555]"
+                              ? "border-[#F7EA00] dark:border-[#F7EA00] bg-[#F7EA00] dark:bg-[#F7EA00]"
+                              : "border-gray-300 dark:border-[#333333] bg-transparent group-hover:border-gray-400 dark:group-hover:border-[#555555]"
                           }`}
                         >
                           {isActive && (
@@ -344,8 +344,8 @@ function PlacesContent() {
                         <span
                           className={`text-sm transition-colors ${
                             isActive
-                              ? "font-medium text-white"
-                              : "text-[#666666] group-hover:text-[#aaaaaa]"
+                              ? "font-medium text-gray-900 dark:text-white"
+                              : "text-gray-500 dark:text-[#666666] group-hover:text-gray-700 dark:group-hover:text-[#aaaaaa]"
                           }`}
                         >
                           {r}
@@ -357,7 +357,7 @@ function PlacesContent() {
                 {ALL_EGYPT_CITIES.length > 5 && (
                   <button
                     onClick={() => setShowAllCities(!showAllCities)}
-                    className="text-[#666666] text-xs flex items-center gap-1 mt-4 hover:text-white transition-colors"
+                    className="text-gray-500 dark:text-[#666666] text-xs flex items-center gap-1 mt-4 hover:text-gray-900 dark:hover:text-white transition-colors"
                   >
                     {showAllCities
                       ? "Show less"
@@ -372,7 +372,7 @@ function PlacesContent() {
 
               {/* Budget Range */}
               <div className="mb-8">
-                <h3 className="text-white text-xs font-bold tracking-widest uppercase mb-4">
+                <h3 className="text-gray-800 dark:text-white text-xs font-bold tracking-widest uppercase mb-4">
                   BUDGET
                 </h3>
                 <div className="flex flex-col gap-2.5">
@@ -384,8 +384,8 @@ function PlacesContent() {
                         onClick={() => toggleBudget(b.id)}
                         className={`w-fit text-left px-2 py-1 -ml-2 rounded-md text-sm transition-all border ${
                           isActive
-                            ? "text-[#DFD616] font-semibold border-[#DFD616]"
-                            : "text-[#888888] border-transparent hover:text-[#DFD616] hover:border-[#DFD616]"
+                            ? "bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-semibold border-[#F7EA00] dark:border-[#F7EA00]"
+                            : "text-gray-500 dark:text-[#888888] border-transparent hover:text-[#F7EA00] dark:hover:text-[#F7EA00] hover:border-[#F7EA00] dark:hover:border-[#F7EA00]"
                         }`}
                       >
                         {b.label}
@@ -397,7 +397,7 @@ function PlacesContent() {
 
               {/* Suitable For (Single Select) */}
               <div className="mb-8">
-                <h3 className="text-white text-xs font-bold tracking-widest uppercase mb-4">
+                <h3 className="text-gray-800 dark:text-white text-xs font-bold tracking-widest uppercase mb-4">
                   TRAVEL STYLE
                 </h3>
                 <div className="flex flex-col gap-2.5">
@@ -409,8 +409,8 @@ function PlacesContent() {
                         onClick={() => setSuitableFor(s.id)}
                         className={`w-fit text-left px-2 py-1 -ml-2 rounded-md text-sm transition-all border ${
                           isActive
-                            ? "text-[#DFD616] font-semibold border-[#DFD616]"
-                            : "text-[#888888] border-transparent hover:text-[#DFD616] hover:border-[#DFD616]"
+                            ? "bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-semibold border-[#F7EA00] dark:border-[#F7EA00]"
+                            : "text-gray-500 dark:text-[#888888] border-transparent hover:text-[#F7EA00] dark:hover:text-[#F7EA00] hover:border-[#F7EA00] dark:hover:border-[#F7EA00]"
                         }`}
                       >
                         {s.label}
@@ -422,7 +422,7 @@ function PlacesContent() {
 
               {/* Suitable Age (Single Select) */}
               <div className="mb-8">
-                <h3 className="text-white text-xs font-bold tracking-widest uppercase mb-4">
+                <h3 className="text-gray-800 dark:text-white text-xs font-bold tracking-widest uppercase mb-4">
                   AGE
                 </h3>
                 <div className="flex flex-col gap-2.5">
@@ -434,8 +434,8 @@ function PlacesContent() {
                         onClick={() => setAge(a.id)}
                         className={`w-fit text-left px-2 py-1 -ml-2 rounded-md text-sm transition-all border ${
                           isActive
-                            ? "text-[#DFD616] font-semibold border-[#DFD616]"
-                            : "text-[#888888] border-transparent hover:text-[#DFD616] hover:border-[#DFD616]"
+                            ? "bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-semibold border-[#F7EA00] dark:border-[#F7EA00]"
+                            : "text-gray-500 dark:text-[#888888] border-transparent hover:text-[#F7EA00] dark:hover:text-[#F7EA00] hover:border-[#F7EA00] dark:hover:border-[#F7EA00]"
                         }`}
                       >
                         {a.label}
@@ -447,7 +447,7 @@ function PlacesContent() {
 
               {/* Best Season (Single Select) */}
               <div className="mb-8">
-                <h3 className="text-white text-xs font-bold tracking-widest uppercase mb-4">
+                <h3 className="text-gray-800 dark:text-white text-xs font-bold tracking-widest uppercase mb-4">
                   SEASON
                 </h3>
                 <div className="flex flex-col gap-2.5">
@@ -459,8 +459,8 @@ function PlacesContent() {
                         onClick={() => setSeason(s.id)}
                         className={`w-fit text-left px-2 py-1 -ml-2 rounded-md text-sm transition-all border ${
                           isActive
-                            ? "text-[#DFD616] font-semibold border-[#DFD616]"
-                            : "text-[#888888] border-transparent hover:text-[#DFD616] hover:border-[#DFD616]"
+                            ? "bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-semibold border-[#F7EA00] dark:border-[#F7EA00]"
+                            : "text-gray-500 dark:text-[#888888] border-transparent hover:text-[#F7EA00] dark:hover:text-[#F7EA00] hover:border-[#F7EA00] dark:hover:border-[#F7EA00]"
                         }`}
                       >
                         {s.label}
@@ -472,7 +472,7 @@ function PlacesContent() {
 
               {/* Crowd Level (Single Select) */}
               <div>
-                <h3 className="text-white text-xs font-bold tracking-widest uppercase mb-4">
+                <h3 className="text-gray-800 dark:text-white text-xs font-bold tracking-widest uppercase mb-4">
                   CROWD
                 </h3>
                 <div className="flex flex-col gap-2.5">
@@ -484,8 +484,8 @@ function PlacesContent() {
                         onClick={() => setCrowdLevel(c.id)}
                         className={`w-fit text-left px-2 py-1 -ml-2 rounded-md text-sm transition-all border ${
                           isActive
-                            ? "text-[#DFD616] font-semibold border-[#DFD616]"
-                            : "text-[#888888] border-transparent hover:text-[#DFD616] hover:border-[#DFD616]"
+                            ? "bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-semibold border-[#F7EA00] dark:border-[#F7EA00]"
+                            : "text-gray-500 dark:text-[#888888] border-transparent hover:text-[#F7EA00] dark:hover:text-[#F7EA00] hover:border-[#F7EA00] dark:hover:border-[#F7EA00]"
                         }`}
                       >
                         {c.label}
@@ -502,23 +502,23 @@ function PlacesContent() {
             {/* Scrollable Content Area */}
             <div ref={scrollContainerRef} className="flex-1 overflow-y-auto custom-scrollbar pr-2 lg:pr-4 pb-28 mt-2">
               {/* Sticky Header Group */}
-              <div className="sticky top-0 bg-[#050505] z-40 py-2 -mt-2 mb-6 flex flex-col gap-4 relative">
+              <div className="sticky top-0 bg-white dark:bg-[#050505] z-40 py-2 -mt-2 mb-6 flex flex-col gap-4 relative">
                 {/* Title & Sort Row */}
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <h2 className="text-xl text-white font-medium relative z-10">
-                    Discover <span className="text-[#DFD616]">Egypt</span>
+                  <h2 className="text-xl text-gray-900 dark:text-white font-medium relative z-10">
+                    Discover <span className="text-[#F7EA00] dark:text-[#F7EA00]">Egypt</span>
                     {!isLoading && meta && (
-                      <span className="text-[#666666] text-sm font-normal ml-3">
+                      <span className="text-gray-500 dark:text-[#666666] text-sm font-normal ml-3">
                         Showing {meta.total} places
                       </span>
                     )}
                   </h2>
 
                   <div className="flex items-center gap-2 text-sm relative">
-                    <span className="text-[#666666]">Sort by:</span>
+                    <span className="text-gray-500 dark:text-[#666666]">Sort by:</span>
                     <button
                       onClick={() => setIsSortOpen(!isSortOpen)}
-                      className="bg-[#111111] border border-[#222222] text-white px-4 py-2.5 rounded-xl flex items-center gap-2 hover:bg-[#1a1a1a] transition-colors text-xs font-medium min-w-[140px] justify-between"
+                      className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-[#222222] text-gray-900 dark:text-white px-4 py-2.5 rounded-xl flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-[#1a1a1a] transition-colors text-xs font-medium min-w-[140px] justify-between"
                     >
                       {SORT_OPTIONS.find((s) => s.id === sortBy)?.label ||
                         "Select sort"}
@@ -527,7 +527,7 @@ function PlacesContent() {
 
                     {/* Sort Dropdown Menu */}
                     {isSortOpen && (
-                      <div className="absolute right-0 top-full mt-2 w-48 bg-[#111111] border border-[#222222] rounded-xl shadow-xl overflow-hidden z-50">
+                      <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-[#111111] border border-gray-200 dark:border-[#222222] rounded-xl shadow-xl overflow-hidden z-50">
                         {SORT_OPTIONS.map((opt) => (
                           <button
                             key={opt.id}
@@ -537,8 +537,8 @@ function PlacesContent() {
                             }}
                             className={`w-full text-left px-4 py-3 text-sm transition-colors ${
                               sortBy === opt.id
-                                ? "bg-[#1A1805] text-[#DFD616]"
-                                : "text-[#888888] hover:bg-[#1a1a1a] hover:text-white"
+                                ? "bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-medium"
+                                : "text-gray-600 dark:text-[#888888] hover:bg-gray-50 dark:hover:bg-[#1a1a1a] hover:text-gray-900 dark:hover:text-white"
                             }`}
                           >
                             {opt.label}
@@ -553,68 +553,68 @@ function PlacesContent() {
                 {activeSidebarFiltersCount > 0 && (
                   <div className="flex flex-wrap items-center gap-2">
                     {activeCities.map(city => (
-                      <div key={city} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#1A1805] text-[#DFD616] text-xs">
+                      <div key={city} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-medium text-xs">
                         {city}
-                        <button onClick={() => toggleCity(city)} className="hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+                        <button onClick={() => toggleCity(city)} className="hover:text-gray-900 dark:hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
                           <X size={12} />
                         </button>
                       </div>
                     ))}
                     
                     {activeBudgets.map(budget => (
-                      <div key={budget} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#1A1805] text-[#DFD616] text-xs">
+                      <div key={budget} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-medium text-xs">
                         {BUDGET_LEVELS.find(b => b.id === budget)?.label}
-                        <button onClick={() => toggleBudget(budget)} className="hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+                        <button onClick={() => toggleBudget(budget)} className="hover:text-gray-900 dark:hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
                           <X size={12} />
                         </button>
                       </div>
                     ))}
                     
                     {activeSuitableFor && (
-                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#1A1805] text-[#DFD616] text-xs">
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-medium text-xs">
                         {SUITABLE_FOR.find(s => s.id === activeSuitableFor)?.label}
-                        <button onClick={() => setSuitableFor("")} className="hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+                        <button onClick={() => setSuitableFor("")} className="hover:text-gray-900 dark:hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
                           <X size={12} />
                         </button>
                       </div>
                     )}
                     
                     {activeAge && (
-                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#1A1805] text-[#DFD616] text-xs">
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-medium text-xs">
                         {SUITABLE_AGES.find(a => a.id === activeAge)?.label}
-                        <button onClick={() => setAge("")} className="hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+                        <button onClick={() => setAge("")} className="hover:text-gray-900 dark:hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
                           <X size={12} />
                         </button>
                       </div>
                     )}
                     
                     {activeSeason && (
-                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#1A1805] text-[#DFD616] text-xs">
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-medium text-xs">
                         {SEASONS.find(s => s.id === activeSeason)?.label}
-                        <button onClick={() => setSeason("")} className="hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+                        <button onClick={() => setSeason("")} className="hover:text-gray-900 dark:hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
                           <X size={12} />
                         </button>
                       </div>
                     )}
                     
                     {activeCrowdLevel && (
-                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#1A1805] text-[#DFD616] text-xs">
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-medium text-xs">
                         {CROWD_LEVELS.find(c => c.id === activeCrowdLevel)?.label}
-                        <button onClick={() => setCrowdLevel("")} className="hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+                        <button onClick={() => setCrowdLevel("")} className="hover:text-gray-900 dark:hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
                           <X size={12} />
                         </button>
                       </div>
                     )}
 
                     {/* Clear All Button */}
-                    <button onClick={resetFilters} className="text-xs text-[#888888] hover:text-white ml-2 transition-colors">
+                    <button onClick={resetFilters} className="text-xs text-gray-500 dark:text-[#888888] hover:text-gray-900 dark:hover:text-white ml-2 transition-colors">
                       Clear
                     </button>
                   </div>
                 )}
                 
                 {/* Gradient Shadow Divider */}
-                <div className="absolute top-full left-0 right-0 h-6 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none" />
+                <div className="absolute top-full left-0 right-0 h-6 bg-gradient-to-b from-white dark:from-[#050505] to-transparent pointer-events-none" />
               </div>
 
               {/* Error Message */}
@@ -631,19 +631,19 @@ function PlacesContent() {
                   [...Array(6)].map((_, i) => (
                     <div
                       key={i}
-                      className="w-full h-[350px] rounded-[2rem] bg-[#111111] border border-[#222222] animate-pulse"
+                      className="w-full h-[350px] rounded-[2rem] bg-gray-100 dark:bg-[#111111] border border-gray-200 dark:border-[#222222] animate-pulse"
                     ></div>
                   ))
                 ) : places.length === 0 ? (
                   // Empty state
-                  <div className="col-span-full py-20 flex flex-col items-center justify-center text-[#666666]">
+                  <div className="col-span-full py-20 flex flex-col items-center justify-center text-gray-500 dark:text-[#666666]">
                     <Search size={40} className="mb-4 opacity-20" />
                     <p className="text-lg">
                       No places found matching your filters.
                     </p>
                     <button
                       onClick={() => usePlacesStore.getState().resetFilters()}
-                      className="mt-4 text-[#DFD616] hover:underline text-sm"
+                      className="mt-4 text-[#F7EA00] dark:text-[#F7EA00] hover:underline text-sm"
                     >
                       Clear all filters
                     </button>
@@ -657,7 +657,7 @@ function PlacesContent() {
                         href={`/places/${place.id}`}
                         key={place.id}
                         style={isNew ? { animationDelay: `${(index - animateFromIndex) * 100}ms` } : {}}
-                        className={`group relative w-full h-[350px] block rounded-[2rem] overflow-hidden border border-[#222222] hover:border-[#DFD616]/50 transition-all duration-300 cursor-pointer ${
+                        className={`group relative w-full h-[350px] block rounded-[2rem] overflow-hidden border border-gray-200 dark:border-[#222222] hover:border-[#F7EA00] dark:hover:border-[#F7EA00]/50 transition-all duration-300 cursor-pointer ${
                           isNew ? "animate-slide-stack" : ""
                         }`}
                       >
@@ -679,7 +679,7 @@ function PlacesContent() {
 
                       {/* Top Badges */}
                       <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
-                        <div className="bg-[#DFD616] text-[#0a0a0a] px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-bold shadow-lg">
+                        <div className="bg-[#F7EA00] text-[#0a0a0a] px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-bold shadow-lg">
                           <Sparkles size={12} strokeWidth={2.5} />
                           {place.rating > 0 ? `${place.rating} Rating` : "New"}
                         </div>
@@ -692,9 +692,9 @@ function PlacesContent() {
                           {place.name}
                         </h3>
 
-                        <div className="flex flex-wrap items-center gap-2 text-[#888] text-xs font-medium">
-                          <span className="flex items-center gap-1.5 text-[#ccc]">
-                            <MapPin size={12} className="text-[#DFD616]" />{" "}
+                        <div className="flex flex-wrap items-center gap-2 text-gray-300 dark:text-[#888] text-xs font-medium">
+                          <span className="flex items-center gap-1.5 text-gray-300 dark:text-[#ccc]">
+                            <MapPin size={12} className="text-[#F7EA00]" />{" "}
                             {place.city}
                           </span>
 
@@ -705,10 +705,10 @@ function PlacesContent() {
                                 CATEGORY_ICONS[place.category.toLowerCase()] ||
                                 Sparkles;
                               return (
-                                <span className="flex items-center gap-1.5 capitalize">
+                                <span className="flex items-center gap-1.5 capitalize text-gray-300 dark:text-[#ccc]">
                                   <CatIcon
                                     size={12}
-                                    className="text-[#DFD616]"
+                                    className="text-[#F7EA00]"
                                   />{" "}
                                   {place.category}
                                 </span>
@@ -719,8 +719,8 @@ function PlacesContent() {
                             <span>&middot;</span>
                           )}
                           {place.budget_level && (
-                            <span className="flex items-center gap-1.5 capitalize">
-                              <Diamond size={12} className="text-[#DFD616]" />{" "}
+                            <span className="flex items-center gap-1.5 capitalize text-gray-300 dark:text-[#ccc]">
+                              <Diamond size={12} className="text-[#F7EA00]" />{" "}
                               {place.budget_level}
                             </span>
                           )}
@@ -728,8 +728,8 @@ function PlacesContent() {
                           {(place.category || place.budget_level) &&
                             place.duration_needed > 0 && <span>&middot;</span>}
                           {place.duration_needed > 0 && (
-                            <span className="flex items-center gap-1.5">
-                              <Clock size={12} className="text-[#DFD616]" />{" "}
+                            <span className="flex items-center gap-1.5 text-gray-300 dark:text-[#ccc]">
+                              <Clock size={12} className="text-[#F7EA00]" />{" "}
                               {place.duration_needed}h
                             </span>
                           )}
@@ -747,13 +747,13 @@ function PlacesContent() {
                 className="w-full h-10 flex items-center justify-center mt-4 mb-8"
               >
                 {isLoadingMore && (
-                  <Loader2 size={24} className="animate-spin text-[#DFD616]" />
+                  <Loader2 size={24} className="animate-spin text-[#F7EA00]" />
                 )}
               </div>
 
               {/* View Interactive Map Button */}
               <div className="mt-12 flex justify-center relative z-10">
-                <button className="bg-[#DFD616] hover:bg-[#EAE121] text-[#0a0a0a] font-bold text-sm px-6 py-3 rounded-full flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(223,214,22,0.15)] hover:shadow-[0_0_20px_rgba(223,214,22,0.3)]">
+                <button className="bg-[#F7EA00] hover:bg-[#FCDF69] text-[#0a0a0a] font-bold text-sm px-6 py-3 rounded-full flex items-center gap-2 transition-all shadow-md dark:shadow-[0_0_15px_rgba(223,214,22,0.15)] hover:shadow-lg dark:hover:shadow-[0_0_20px_rgba(223,214,22,0.3)]">
                   <Map size={16} strokeWidth={2.5} />
                   View Interactive Map
                 </button>
@@ -785,8 +785,8 @@ export default function ExplorePlacesPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#050505] flex items-center justify-center text-white">
-          <Loader2 size={32} className="animate-spin text-[#DFD616]" />
+        <div className="min-h-[100dvh] bg-white dark:bg-[#050505] flex items-center justify-center text-gray-900 dark:text-white">
+          <Loader2 size={32} className="animate-spin text-[#F7EA00]" />
         </div>
       }
     >

@@ -31,8 +31,8 @@ export default function ChatInput({
   const isCentered = variant === "centered";
 
   const inputClassName = isCentered
-    ? "w-full rounded-full border border-border bg-surface py-4 pl-6 pr-14 text-base text-foreground shadow-sm placeholder:text-muted transition-colors focus:border-accent/40 focus:outline-none"
-    : "w-full rounded-full border border-border bg-surface/90 py-3.5 pl-5 pr-14 text-sm text-foreground shadow-sm backdrop-blur-sm placeholder:text-muted transition-colors focus:border-accent/40 focus:outline-none";
+    ? "w-full rounded-full border border-border bg-surface py-4 pl-6 pr-14 text-base font-semibold text-foreground shadow-sm placeholder:text-foreground/60 placeholder:font-semibold transition-colors focus:border-accent/40 focus:outline-none"
+    : "w-full rounded-full border border-border bg-surface/90 py-3.5 pl-5 pr-14 text-sm font-semibold text-foreground shadow-sm backdrop-blur-sm placeholder:text-foreground/60 placeholder:font-semibold transition-colors focus:border-accent/40 focus:outline-none";
 
   return (
     <div
@@ -79,7 +79,7 @@ export default function ChatInput({
 
       {showDisclaimer && (
         <p
-          className={`mx-auto text-center text-[10px] text-muted ${
+          className={`mx-auto text-center text-[10px] font-semibold text-foreground/70 ${
             isCentered ? "mt-4 max-w-md" : "mt-3 max-w-3xl"
           }`}
         >

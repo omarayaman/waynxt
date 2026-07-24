@@ -1,19 +1,20 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading, openAuthModal } = useAuthStore();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.replace("/");
-      openAuthModal('login');
+      // Open the login modal and tell it to redirect back here after login
+      openAuthModal('login', pathname);
     }
-  }, [isLoading, isAuthenticated, router, openAuthModal]);
+  }, [isLoading, isAuthenticated, openAuthModal, pathname]);
 
   if (isLoading) {
     return (

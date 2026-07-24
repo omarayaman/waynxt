@@ -12,17 +12,17 @@ export function AuthLogo() {
       <Image
         src={PUBLIC_ASSETS.icons.logoLight}
         alt="WAYNX"
-        width={720}
-        height={240}
+        width={740}
+        height={235}
         priority
-        className="h-48 w-auto object-cover dark:hidden"
+        className="h-8 sm:h-10 w-auto object-contain dark:hidden"
       />
       <Image
         src={PUBLIC_ASSETS.icons.fullLogo}
         alt="WAYNX"
-        width={180}
-        height={60}
-        className="hidden object-cover sm:h-12 dark:block"
+        width={740}
+        height={235}
+        className="hidden h-8 sm:h-10 w-auto object-contain dark:block"
       />
     </Link>
   );

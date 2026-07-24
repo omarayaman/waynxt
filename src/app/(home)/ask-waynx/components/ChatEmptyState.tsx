@@ -66,10 +66,10 @@ export default function ChatEmptyState({
           <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-accent/15 bg-accent/8 text-accent">
             <Sparkles size={24} />
           </div>
-          <h2 className="mb-2 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+          <h2 className="mb-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Where to next?
           </h2>
-          <p className="max-w-md text-sm leading-relaxed text-muted md:text-base">
+          <p className="max-w-md text-sm font-semibold leading-relaxed text-foreground md:text-base">
             Ask WAYNX about places, trips, and hidden gems across Egypt — powered
             by AI.
           </p>
@@ -86,7 +86,7 @@ export default function ChatEmptyState({
         />
 
         <div className="mt-10 w-full max-w-2xl">
-          <p className="mb-3 text-center text-xs text-muted">
+          <p className="mb-3 text-center text-xs font-bold text-foreground">
             Or try one of these
           </p>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -99,7 +99,7 @@ export default function ChatEmptyState({
                 dark:hover:border-accent/20 dark:hover:bg-accent/5 disabled:opacity-50"
               >
                 <Icon size={16} className="mt-0.5 shrink-0 text-accent" />
-                <span className="text-[13px] text-foreground/80">{label}</span>
+                <span className="text-[13px] font-bold text-foreground">{label}</span>
               </button>
             ))}
           </div>

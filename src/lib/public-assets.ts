@@ -6,7 +6,7 @@ export const PUBLIC_ASSETS = {
     fullLogo: "/icons/full_Logo.svg",
     fullLogoWhite: "/icons/full_logo_white.jpeg",
     rr: "/icons/rr.jpeg",
-    logoLight: "/images/white/logo light.svg",
+    logoLight: "/icons/logo_White.svg",
   },
   images: {
     worldmap: "/images/worldmap.png",
@@ -21,9 +21,9 @@ export const PUBLIC_ASSETS = {
     luxorFestival: "/images/luxor_festival.png",
     food: "/images/food.png",
     heroLight: {
-      one: "/images/white/1.jpeg",
-      two: "/images/white/2.jpeg",
-      three: "/images/white/3.jpeg",
+      one: "/images/white/1_yellow.jpeg",
+      two: "/images/white/2_yellow.jpeg",
+      three: "/images/white/3_yellow.jpeg",
     },
     heroDark: {
       one: "/images/hero-dark-1.png",

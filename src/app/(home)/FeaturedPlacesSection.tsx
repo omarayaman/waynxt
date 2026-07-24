@@ -40,7 +40,7 @@ export default function FeaturedPlacesSection() {
 
           <Link
             href="/places"
-            className="mt-6 inline-flex shrink-0 items-center gap-2 text-sm font-bold text-accent transition-colors hover:text-[var(--accent-hover)] sm:mt-0"
+            className="mt-6 inline-flex shrink-0 items-center gap-2 rounded-full bg-accent/20 dark:bg-accent/10 px-5 py-2 text-sm font-bold text-gray-900 dark:text-white transition-all hover:bg-accent hover:text-[#0a0a0a] sm:mt-0"
           >
             View all places
             <ArrowRight size={16} />
@@ -83,7 +83,7 @@ export default function FeaturedPlacesSection() {
           <div className="mt-12 flex justify-center">
             <Link
               href="/places"
-              className="inline-flex items-center gap-3 rounded-xl border border-accent/40 bg-accent-subtle px-8 py-4 text-sm font-bold text-accent transition-all hover:bg-accent hover:text-accent-foreground"
+              className="inline-flex items-center gap-3 rounded-xl bg-accent px-8 py-4 text-sm font-bold text-[#0a0a0a] transition-all hover:bg-accent/90 hover:scale-[1.02] shadow-sm"
             >
               Explore All {places.length}+ Places
               <ArrowRight size={16} />

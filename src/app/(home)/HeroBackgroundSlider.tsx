@@ -155,10 +155,15 @@ export default function HeroBackgroundSlider() {
         </AnimatePresence>
       )}
 
-      {isDark && (
+      {isDark ? (
         <>
           <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-r from-[#050505]/95 via-[#050505]/55 to-[#050505]/20" />
           <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-[#050505]/80 via-transparent to-[#050505]/30" />
+        </>
+      ) : (
+        <>
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-24 z-[2] bg-gradient-to-b from-background/90 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 z-[2] bg-gradient-to-t from-background/95 to-transparent" />
         </>
       )}
     </div>

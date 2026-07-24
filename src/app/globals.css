@@ -6,45 +6,45 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Brand palette: #9ede73 · #ffffff · #000000 · #f7ea00 · #fcdf69 */
+/* Brand palette: #9ede73 · #ffffff · #0F0F0F · #f7ea00 · #fcdf69 */
 :root {
   --brand-green: #9ede73;
   --brand-green-strong: #9ede73;
   --brand-white: #ffffff;
-  --brand-black: #000000;
+  --brand-black: #0F0F0F;
   --brand-yellow: #f7ea00;
   --brand-yellow-soft: #fcdf69;
 
-  /* Light mode — rich green + white */
-  --background: #ffffff;
+  /* Light mode — Neo-Grotesque Tech */
+  --background: #fcf9f8;
   --foreground: #000000;
-  --surface: #ffffff;
-  --surface-elevated: #dff5cf;
-  --surface-card: #eef8e6;
-  --muted: #1a2616;
-  --muted-foreground: #1a2616;
-  --border: #6fbf40;
-  --border-subtle: #b8e090;
-  --footer: #c8eca8;
-  --accent: #6fbf40;
-  --accent-hover: #5aad38;
-  --accent-foreground: #000000;
-  --accent-subtle: rgb(111 191 64 / 0.22);
-  --navbar-solid: #9ede73;
-  --navbar-mobile: #9ede73;
-  --navbar-foreground: #000000;
-  --navbar-muted: rgb(0 0 0 / 0.78);
-  --navbar-border: rgb(0 0 0 / 0.12);
-  --navbar-control-bg: rgb(0 0 0 / 0.06);
-  --navbar-control-border: rgb(0 0 0 / 0.15);
-  --navbar-control-text: #000000;
+  --surface: #fcf9f8;
+  --surface-elevated: #ffffff;
+  --surface-card: #ffffff;
+  --muted: #4a4732;
+  --muted-foreground: #4a4732;
+  --border: #dcd9d9;
+  --border-subtle: #f0edec;
+  --footer: #fcf9f8;
+  --accent: #f7ea00;
+  --accent-hover: #d6ca00;
+  --accent-foreground: #1e1c00;
+  --accent-subtle: #f6f3f2;
+  --navbar-solid: #ffffff;
+  --navbar-mobile: #ffffff;
+  --navbar-foreground: #1c1b1b;
+  --navbar-muted: #4a4732;
+  --navbar-border: #dcd9d9;
+  --navbar-control-bg: #f0edec;
+  --navbar-control-border: #dcd9d9;
+  --navbar-control-text: #1c1b1b;
   --input-bg: #ffffff;
-  --scrollbar-track: #dff5cf;
-  --scrollbar-thumb: #6fbf40;
-  --scrollbar-thumb-hover: #5aad38;
-  --overlay: rgb(0 0 0 / 0.35);
-  --hero-overlay-from: rgb(0 0 0 / 0.55);
-  --hero-overlay-via: rgb(0 0 0 / 0.25);
+  --scrollbar-track: #fcf9f8;
+  --scrollbar-thumb: #dcd9d9;
+  --scrollbar-thumb-hover: #7b785f;
+  --overlay: rgb(0 0 0 / 0.1);
+  --hero-overlay-from: rgb(0 0 0 / 0.15);
+  --hero-overlay-via: rgb(0 0 0 / 0.05);
 }
 
 .dark {
@@ -99,14 +99,14 @@ html {
   --color-brand-green-strong: var(--brand-green-strong);
   --color-brand-yellow: var(--brand-yellow);
   --color-brand-yellow-soft: var(--brand-yellow-soft);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-plus-jakarta-sans, system-ui, sans-serif);
+  --font-display: var(--font-sora, system-ui, sans-serif);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }
 
 html[data-boot="ready"] body {

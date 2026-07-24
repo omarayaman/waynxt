@@ -80,7 +80,6 @@ export default function NavbarHome({className}: {className?: string}) {
 
   const isHome = pathname === "/";
   const showSolidBg = !isHome || scrolled;
-  const useGreenNavbar = !isDark;
   const onHero = isDark && isHome && !showSolidBg;
   const navbarClassName = [getRouteNavbarClassName(pathname), className].filter(Boolean).join(" ");
 
@@ -90,18 +89,15 @@ export default function NavbarHome({className}: {className?: string}) {
 
   const askActive = isLinkActive(pathname, "/ask-waynx");
   const navLinkInactive =
-    useGreenNavbar || onHero
-      ? "text-[var(--navbar-muted)] hover:text-[var(--navbar-foreground)]"
-      : "text-muted hover:text-foreground";
-  const navLinkActive =
-    useGreenNavbar || onHero ? "text-[var(--navbar-foreground)]" : "text-accent";
-  const navIndicator = useGreenNavbar ? "bg-[var(--navbar-foreground)]" : "bg-accent";
+    "text-[var(--navbar-muted)] hover:text-[var(--navbar-foreground)]";
+  const navLinkActive = "text-[var(--navbar-foreground)]";
+  const navIndicator = "bg-accent";
 
   return (
     <>
       <header
         className={`fixed inset-x-0 top-0 z-[200] transition-[background-color,backdrop-filter] duration-300 ${navbarClassName} ${
-          useGreenNavbar || showSolidBg || !isHome
+          showSolidBg || !isHome
             ? "bg-[var(--navbar-solid)] backdrop-blur-xl"
             : "bg-transparent"
         }`}>
@@ -113,17 +109,17 @@ export default function NavbarHome({className}: {className?: string}) {
             <Image
               src={PUBLIC_ASSETS.icons.logoLight}
               alt="WAYNX"
-              width={720}
-              height={240}
+              width={740}
+              height={235}
               priority
-              className="h-48 w-auto object-cover dark:hidden"
+              className="h-8 sm:h-10 w-auto object-contain dark:hidden"
             />
             <Image
               src={PUBLIC_ASSETS.icons.fullLogo}
               alt="WAYNX"
-              width={180}
-              height={60}
-              className="hidden object-cover sm:h-12 dark:block"
+              width={740}
+              height={235}
+              className="hidden h-8 sm:h-10 w-auto object-contain dark:block"
             />
           </Link>
 
@@ -153,18 +149,12 @@ export default function NavbarHome({className}: {className?: string}) {
               href="/ask-waynx"
               className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[18px] font-medium transition-colors ${
                 askActive
-                  ? useGreenNavbar
-                    ? "bg-white/15 text-[var(--navbar-foreground)]"
-                    : "bg-accent/12 text-accent"
-                  : useGreenNavbar || onHero
-                    ? "text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]"
-                    : "text-muted hover:bg-accent-subtle hover:text-foreground"
+                  ? "bg-accent/12 text-accent"
+                  : "text-[var(--navbar-muted)] hover:bg-[var(--navbar-control-bg)] hover:text-[var(--navbar-foreground)]"
               }`}>
               <Sparkles
                 size={18}
-                className={
-                  useGreenNavbar || onHero ? "text-[var(--navbar-foreground)]" : "text-accent"
-                }
+                className={askActive ? "text-accent" : "text-[var(--navbar-foreground)]"}
               />
               Ask Waynx
             </Link>
@@ -182,12 +172,8 @@ export default function NavbarHome({className}: {className?: string}) {
                 title={user.full_name}
                 className={`relative h-10 w-10 overflow-hidden rounded-full transition-all duration-200 ${
                   pathname === "/profile"
-                    ? useGreenNavbar || onHero
-                      ? "ring-2 ring-white/70 ring-offset-2 ring-offset-[var(--navbar-solid)]"
-                      : "ring-2 ring-accent/70 ring-offset-2 ring-offset-background"
-                    : useGreenNavbar || onHero
-                      ? "ring-2 ring-white/25 hover:ring-white/50"
-                      : "ring-2 ring-border hover:ring-accent/45"
+                    ? "ring-2 ring-accent/70 ring-offset-2 ring-offset-background"
+                    : "ring-2 ring-[var(--navbar-border)] hover:ring-accent/45"
                 }`}>
                 {user.avatar_url ? (
                   <Image
@@ -199,11 +185,7 @@ export default function NavbarHome({className}: {className?: string}) {
                   />
                 ) : (
                   <div
-                    className={`flex h-full w-full items-center justify-center text-sm font-semibold ${
-                      useGreenNavbar || onHero
-                        ? "bg-white/15 text-[var(--navbar-foreground)]"
-                        : "bg-linear-to-br from-accent-subtle to-surface-elevated text-accent"
-                    }`}>
+                    className={`flex h-full w-full items-center justify-center text-sm font-semibold bg-linear-to-br from-[var(--navbar-control-bg)] to-[var(--surface-elevated)] text-[var(--navbar-foreground)]`}>
                     {getInitials(user.full_name) || "U"}
                   </div>
                 )}
@@ -213,21 +195,13 @@ export default function NavbarHome({className}: {className?: string}) {
                 <button
                   type="button"
                   onClick={() => openAuthModal('login')}
-                  className={`text-[15px] font-medium transition-colors ${
-                    useGreenNavbar || onHero
-                      ? "text-[var(--navbar-muted)] hover:text-[var(--navbar-foreground)]"
-                      : "text-muted hover:text-foreground"
-                  }`}>
+                  className="text-[15px] font-medium transition-colors text-[var(--navbar-muted)] hover:text-[var(--navbar-foreground)]">
                   Log in
                 </button>
                 <button
                   type="button"
                   onClick={() => openAuthModal('register')}
-                  className={`rounded-xl px-6 py-2.5 text-[15px] font-bold transition-colors ${
-                    useGreenNavbar
-                      ? "bg-white/60 hover:bg-white/90"
-                      : "bg-accent text-accent-foreground hover:bg-accent-hover"
-                  }`}>
+                  className="rounded-xl px-6 py-2.5 text-[15px] font-bold transition-colors bg-[var(--navbar-foreground)] text-[var(--background)] hover:opacity-90">
                   Sign up
                 </button>
               </div>
@@ -236,11 +210,7 @@ export default function NavbarHome({className}: {className?: string}) {
             <button
               type="button"
               onClick={() => setMobileOpen((prev) => !prev)}
-              className={`rounded-lg p-2 transition-colors lg:hidden ${
-                useGreenNavbar || onHero
-                  ? "text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]"
-                  : "text-muted hover:bg-foreground/5 hover:text-foreground"
-              }`}
+              className="rounded-lg p-2 transition-colors lg:hidden text-[var(--navbar-muted)] hover:bg-[var(--navbar-control-bg)] hover:text-[var(--navbar-foreground)]"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileOpen}>
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
@@ -276,8 +246,8 @@ export default function NavbarHome({className}: {className?: string}) {
                       href={link.href}
                       className={`rounded-xl px-4 py-3 text-base font-medium transition-colors ${
                         isActive
-                          ? "bg-white/15 text-[var(--navbar-foreground)]"
-                          : "text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]"
+                          ? "bg-[var(--navbar-control-bg)] text-[var(--navbar-foreground)]"
+                          : "text-[var(--navbar-muted)] hover:bg-[var(--navbar-control-bg)] hover:text-[var(--navbar-foreground)]"
                       }`}>
                       {link.name}
                     </Link>
@@ -288,8 +258,8 @@ export default function NavbarHome({className}: {className?: string}) {
                   href="/ask-waynx"
                   className={`mt-1 flex items-center gap-2 rounded-xl px-4 py-3 text-base font-medium transition-colors ${
                     askActive
-                      ? "bg-white/15 text-[var(--navbar-foreground)]"
-                      : "text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]"
+                      ? "bg-[var(--navbar-control-bg)] text-[var(--navbar-foreground)]"
+                      : "text-[var(--navbar-muted)] hover:bg-[var(--navbar-control-bg)] hover:text-[var(--navbar-foreground)]"
                   }`}>
                   <Sparkles size={16} className="text-[var(--navbar-foreground)]" />
                   Ask Waynx
@@ -303,7 +273,7 @@ export default function NavbarHome({className}: {className?: string}) {
                         setMobileOpen(false);
                         openAuthModal('login');
                       }}
-                      className="rounded-xl px-4 py-3 text-center text-base font-medium text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]">
+                      className="rounded-xl px-4 py-3 text-center text-base font-medium text-[var(--navbar-muted)] hover:bg-[var(--navbar-control-bg)] hover:text-[var(--navbar-foreground)]">
                       Log in
                     </button>
                     <button
@@ -312,7 +282,7 @@ export default function NavbarHome({className}: {className?: string}) {
                         setMobileOpen(false);
                         openAuthModal('register');
                       }}
-                      className="rounded-xl bg-white px-4 py-3 text-center text-base font-bold text-brand-green-strong hover:bg-white/90">
+                      className="rounded-xl bg-[var(--navbar-foreground)] px-4 py-3 text-center text-base font-bold text-[var(--background)] hover:opacity-90">
                       Sign up
                     </button>
                   </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, MapPin, Star } from "lucide-react";
 import { SavePlaceButton } from "@/components/SavePlaceButton";
@@ -33,6 +34,36 @@ export function PlaceDetailsView({
   const askHref = buildPlaceAskUrl({ name: place.name, city: place.city });
   const fallbackImage =
     "https://images.unsplash.com/photo-1539667468225-eebb663053e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80";
+
+  useEffect(() => {
+    const duration = 800; // Duration in milliseconds
+    const start = window.scrollY;
+    const startTime = performance.now();
+
+    function easeInOutQuad(t: number, b: number, c: number, d: number) {
+      t /= d / 2;
+      if (t < 1) return (c / 2) * t * t + b;
+      t--;
+      return (-c / 2) * (t * (t - 2) - 1) + b;
+    }
+
+    function animateScroll(currentTime: number) {
+      const timeElapsed = currentTime - startTime;
+      const nextScroll = easeInOutQuad(timeElapsed, start, -start, duration);
+
+      window.scrollTo(0, nextScroll);
+
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animateScroll);
+      } else {
+        window.scrollTo(0, 0); // Ensure it reaches exactly 0
+      }
+    }
+
+    if (start > 0) {
+      requestAnimationFrame(animateScroll);
+    }
+  }, [place.id]);
 
   return (
     <main className="relative z-10 flex-1 overflow-x-hidden pb-20">

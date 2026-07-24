@@ -13,11 +13,8 @@ export function middleware(request: NextRequest) {
   const isProtected = protectedRoutes.some((route) => pathname.startsWith(route));
 
   if (isProtected && !token) {
-    // Redirect unauthenticated users to the login page
-    const loginUrl = new URL('/login', request.url);
-    // Append the original url as a redirect parameter so we can redirect them back after successful login
-    loginUrl.searchParams.set('redirect', pathname);
-    return NextResponse.redirect(loginUrl);
+    // We let the client-side ProtectedRoute component handle showing the login modal
+    // instead of doing a hard redirect to the deleted /login page.
   }
 
   // Continue the request if authenticated or route is not protected

@@ -118,8 +118,7 @@ export default function InterestsSection() {
                         alt={interest.category}
                         fill
                         sizes="(max-width: 768px) 280px, 300px"
-                        className="object-cover transition-transform duration-700 ease-out group-hover/card:scale-110 
-                        opacity-85 group-hover/card:opacity-95"
+                        className="object-cover transition-transform duration-700 ease-out group-hover/card:scale-110"
                       />
 
                       <div className="absolute inset-0 bg-linear-to-t from-black/50 via-black/30 to-transparent transition-opacity 
