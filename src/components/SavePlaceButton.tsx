@@ -14,7 +14,7 @@ interface SavePlaceButtonProps {
 
 export function SavePlaceButton({ placeId, className = "", iconSize = 14 }: SavePlaceButtonProps) {
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, openAuthModal } = useAuthStore();
   const isSaved = useSavedPlacesStore((s) => s.isSaved(placeId));
   const isToggling = useSavedPlacesStore((s) => s.isToggling(placeId));
   const hydrateSavedIds = useSavedPlacesStore((s) => s.hydrateSavedIds);
@@ -31,7 +31,7 @@ export function SavePlaceButton({ placeId, className = "", iconSize = 14 }: Save
     e.stopPropagation();
 
     if (!isAuthenticated) {
-      router.push("/login");
+      openAuthModal('login');
       return;
     }
 

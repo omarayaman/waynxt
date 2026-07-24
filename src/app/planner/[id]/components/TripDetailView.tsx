@@ -109,9 +109,17 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
 
   const handleRegenerate = async () => {
     setIsRegenerating(true);
+    const oldFinishIndex = stops.length - 1;
+
     try {
       const updated = await tripService.regenerateItinerary(tripId);
       setTrip((prev) => (prev ? { ...prev, ...updated } : updated));
+      
+      const newStops = buildRoadmapStops(updated.destinations || []);
+      if (oldFinishIndex >= 0 && oldFinishIndex < newStops.length) {
+        setActiveStopId(newStops[oldFinishIndex].id);
+      }
+      
       toast.success("Itinerary regenerated");
     } catch (err) {
       const message = isAxiosError(err)

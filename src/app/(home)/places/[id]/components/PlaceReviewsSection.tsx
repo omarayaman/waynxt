@@ -33,7 +33,7 @@ export function PlaceReviewsSection({
   initialReviews,
   initialMeta,
 }: PlaceReviewsSectionProps) {
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, openAuthModal } = useAuthStore();
   const [reviews, setReviews] = useState<Review[]>(initialReviews);
   const [meta, setMeta] = useState<PaginationMeta | undefined>(initialMeta);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -163,12 +163,12 @@ export function PlaceReviewsSection({
         Add review
       </button>
     ) : !isAuthenticated ? (
-      <Link
-        href="/login"
+      <button
+        onClick={() => openAuthModal('login')}
         className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-accent/30 hover:text-foreground"
       >
         Sign in to review
-      </Link>
+      </button>
     ) : null;
 
   return (

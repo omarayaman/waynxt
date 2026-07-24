@@ -54,7 +54,7 @@ function getRouteNavbarClassName(pathname: string): string {
 
 export default function NavbarHome({className}: {className?: string}) {
   const pathname = usePathname();
-  const {user, isAuthenticated, isLoading} = useAuthStore();
+  const {user, isAuthenticated, isLoading, openAuthModal} = useAuthStore();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -210,24 +210,26 @@ export default function NavbarHome({className}: {className?: string}) {
               </Link>
             ) : (
               <div className="hidden items-center gap-5 sm:flex">
-                <Link
-                  href="/login"
+                <button
+                  type="button"
+                  onClick={() => openAuthModal('login')}
                   className={`text-[15px] font-medium transition-colors ${
                     useGreenNavbar || onHero
                       ? "text-[var(--navbar-muted)] hover:text-[var(--navbar-foreground)]"
                       : "text-muted hover:text-foreground"
                   }`}>
                   Log in
-                </Link>
-                <Link
-                  href="/register"
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openAuthModal('register')}
                   className={`rounded-xl px-6 py-2.5 text-[15px] font-bold transition-colors ${
                     useGreenNavbar
                       ? "bg-white/60 hover:bg-white/90"
                       : "bg-accent text-accent-foreground hover:bg-accent-hover"
                   }`}>
                   Sign up
-                </Link>
+                </button>
               </div>
             )}
 
@@ -295,16 +297,24 @@ export default function NavbarHome({className}: {className?: string}) {
 
                 {!isLoading && !isAuthenticated && (
                   <div className="mt-4 flex flex-col gap-2 border-t border-[var(--navbar-border)] pt-4">
-                    <Link
-                      href="/login"
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMobileOpen(false);
+                        openAuthModal('login');
+                      }}
                       className="rounded-xl px-4 py-3 text-center text-base font-medium text-[var(--navbar-muted)] hover:bg-white/10 hover:text-[var(--navbar-foreground)]">
                       Log in
-                    </Link>
-                    <Link
-                      href="/register"
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMobileOpen(false);
+                        openAuthModal('register');
+                      }}
                       className="rounded-xl bg-white px-4 py-3 text-center text-base font-bold text-brand-green-strong hover:bg-white/90">
                       Sign up
-                    </Link>
+                    </button>
                   </div>
                 )}
               </nav>

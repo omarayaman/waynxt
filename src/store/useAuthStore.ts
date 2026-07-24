@@ -25,14 +25,26 @@ interface AuthState {
   fetchCurrentUser: () => Promise<void>;
   logout: () => Promise<void>;
   setUser: (user: User | null) => void;
+  // Modal State
+  isAuthModalOpen: boolean;
+  authModalView: 'login' | 'register';
+  redirectAfterAuth?: string;
+  openAuthModal: (view?: 'login' | 'register', redirect?: string) => void;
+  closeAuthModal: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   isAuthenticated: false,
   isLoading: true,
+  isAuthModalOpen: false,
+  authModalView: 'login',
+  redirectAfterAuth: undefined,
 
   setUser: (user) => set({ user, isAuthenticated: !!user }),
+
+  openAuthModal: (view = 'login', redirect) => set({ isAuthModalOpen: true, authModalView: view, redirectAfterAuth: redirect }),
+  closeAuthModal: () => set({ isAuthModalOpen: false, redirectAfterAuth: undefined }),
 
   fetchCurrentUser: async () => {
     set({ isLoading: true });

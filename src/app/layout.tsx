@@ -30,6 +30,7 @@ import { BootScreen } from "@/components/BootScreen";
 import { BootSplash } from "@/components/BootSplash";
 import { GoogleOAuthProviderWrapper } from "@/providers/GoogleOAuthProviderWrapper";
 import NavbarHome from "@/app/(home)/NavbarHome";
+import { AuthModal } from "@/components/AuthModal";
 
 export default function RootLayout({
   children,
@@ -57,6 +58,7 @@ export default function RootLayout({
                 {children}
                 <FloatingAiButton />
                 <ToasterProvider />
+                <AuthModal />
               </AuthProvider>
             </ThemeProvider>
           </GoogleOAuthProviderWrapper>

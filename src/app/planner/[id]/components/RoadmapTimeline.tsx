@@ -87,9 +87,11 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
     }));
   }, [layout.points, layout.height, dimensions.height]);
 
-  const activeIndex = activeStopId
-    ? stops.findIndex((s) => s.id === activeStopId)
-    : stops.length - 1;
+  let activeIndex = 0; // Default to Start for new trips
+  if (activeStopId) {
+    const idx = stops.findIndex((s) => s.id === activeStopId);
+    if (idx !== -1) activeIndex = idx;
+  }
 
   // Scroll to active node
   useEffect(() => {

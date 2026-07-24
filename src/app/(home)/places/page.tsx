@@ -27,6 +27,7 @@ import {
   Activity,
   Sun,
   Clock,
+  X,
 } from "lucide-react";
 import { SavePlaceButton } from "@/components/SavePlaceButton";
 
@@ -141,9 +142,6 @@ function PlacesContent() {
     setAge,
     sortBy,
     setSortBy,
-    currentPage,
-    setCurrentPage,
-    perPage,
     resetFilters,
   } = usePlacesStore();
 
@@ -156,7 +154,15 @@ function PlacesContent() {
     activeAge !== "" ||
     (activeCategory !== "all" && activeCategory !== "");
 
-  const { places, meta, isLoading, isLoadingMore, error } = usePlaces();
+  const activeSidebarFiltersCount =
+    activeCities.length +
+    activeBudgets.length +
+    (activeSuitableFor !== "" ? 1 : 0) +
+    (activeAge !== "" ? 1 : 0) +
+    (activeSeason !== "" ? 1 : 0) +
+    (activeCrowdLevel !== "" ? 1 : 0);
+
+  const { places, meta, isLoading, isLoadingMore, error, hasMore, loadMore, animateFromIndex } = usePlaces();
   const { categories, isLoading: isCategoriesLoading } = useCategories();
 
   const [isSortOpen, setIsSortOpen] = useState(false);
@@ -166,30 +172,29 @@ function PlacesContent() {
     ? ALL_EGYPT_CITIES
     : ALL_EGYPT_CITIES.slice(0, 5);
 
-  const totalPages = meta ? Math.ceil(meta.total / perPage) : 1;
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!sentinelRef.current || !meta) return;
+    if (!sentinelRef.current || !scrollContainerRef.current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         if (
           entries[0].isIntersecting &&
+          hasMore &&
           !isLoading &&
-          !isLoadingMore &&
-          currentPage < totalPages &&
-          places.length < 150
+          !isLoadingMore
         ) {
-          setCurrentPage(currentPage + 1);
+          loadMore();
         }
       },
-      { rootMargin: "400px", threshold: 0.1 },
+      { root: scrollContainerRef.current, rootMargin: "400px", threshold: 0.1 },
     );
 
     observer.observe(sentinelRef.current);
     return () => observer.disconnect();
-  }, [isLoading, isLoadingMore, meta, currentPage, totalPages, setCurrentPage]);
+  }, [isLoading, isLoadingMore, hasMore, loadMore]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -221,53 +226,55 @@ function PlacesContent() {
             </button>
           </div>
 
-          {/* Filter Chips Top (Category) */}
-          <div className="w-full mt-6 mb-4 flex flex-wrap items-center justify-center gap-3 md:gap-4">
-            {/* All Experiences Button */}
-            <button
-              onClick={() => setCategory("all")}
-              className={`px-5 py-2.5 rounded-full flex items-center gap-2 text-xs md:text-sm font-medium transition-colors ${
-                activeCategory === "all" || !activeCategory
-                  ? "bg-[#1A1805] border border-[#DFD616] text-[#DFD616]"
-                  : "bg-transparent border border-[#222222] text-[#888888] hover:text-white hover:border-[#444444]"
-              }`}
-            >
-              <ALL_EXPERIENCES.icon size={16} strokeWidth={1.5} />
-              {ALL_EXPERIENCES.label}
-            </button>
+          {/* Floating Category Dock */}
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] w-[95vw] sm:w-auto max-w-[1920px] overflow-x-auto custom-scrollbar rounded-[1.25rem]">
+            <div className="flex items-center gap-1.5 p-1.5 rounded-[1.25rem] bg-black/40 backdrop-blur-xl border border-white/10 w-max mx-auto shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+              {/* All Experiences Button */}
+              <button
+                onClick={() => setCategory("all")}
+                className={`px-5 py-2 rounded-xl flex items-center gap-2 text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
+                  activeCategory === "all" || !activeCategory
+                    ? "bg-[#DFD616]/15 border border-[#DFD616]/50 text-[#DFD616] shadow-[0_0_15px_rgba(223,214,22,0.15)]"
+                    : "bg-transparent border border-transparent text-[#999999] hover:bg-white/10 hover:text-white"
+                }`}
+              >
+                <ALL_EXPERIENCES.icon size={16} strokeWidth={1.5} />
+                {ALL_EXPERIENCES.label}
+              </button>
 
-            {/* Dynamic Categories */}
-            {isCategoriesLoading ? (
-              <div className="flex gap-3">
-                {[...Array(4)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="w-28 h-10 rounded-full bg-[#111111] border border-[#222222] animate-pulse"
-                  ></div>
-                ))}
-              </div>
-            ) : (
-              categories.map((cat) => {
-                const isActive = activeCategory === cat.category;
-                const Icon =
-                  CATEGORY_ICONS[cat.category.toLowerCase()] || Diamond;
+              {/* Dynamic Categories */}
+              {isCategoriesLoading ? (
+                <div className="flex gap-1.5">
+                  {[...Array(4)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-28 h-[38px] rounded-xl bg-white/5 border border-white/10 animate-pulse"
+                    ></div>
+                  ))}
+                </div>
+              ) : (
+                categories.map((cat) => {
+                  const isActive = activeCategory === cat.category;
+                  const Icon =
+                    CATEGORY_ICONS[cat.category.toLowerCase()] || Diamond;
 
-                return (
-                  <button
-                    key={cat.category}
-                    onClick={() => setCategory(cat.category)}
-                    className={`px-5 py-2.5 rounded-full flex items-center gap-2 text-xs md:text-sm font-medium transition-colors ${
-                      isActive
-                        ? "bg-[#1A1805] border border-[#DFD616] text-[#DFD616]"
-                        : "bg-transparent border border-[#222222] text-[#888888] hover:text-white hover:border-[#444444]"
-                    }`}
-                  >
-                    <Icon size={16} strokeWidth={1.5} />
-                    <span className="capitalize">{cat.category}</span>
-                  </button>
-                );
-              })
-            )}
+                  return (
+                    <button
+                      key={cat.category}
+                      onClick={() => setCategory(cat.category)}
+                      className={`px-5 py-2 rounded-xl flex items-center gap-2 text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
+                        isActive
+                          ? "bg-[#DFD616]/15 border border-[#DFD616]/50 text-[#DFD616] shadow-[0_0_15px_rgba(223,214,22,0.15)]"
+                          : "bg-transparent border border-transparent text-[#999999] hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      <Icon size={16} strokeWidth={1.5} />
+                      <span className="capitalize">{cat.category}</span>
+                    </button>
+                  );
+                })
+              )}
+            </div>
           </div>
         </div>
 
@@ -280,8 +287,13 @@ function PlacesContent() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <SlidersHorizontal size={20} className="text-[#DFD616]" />
-                  <h2 className="text-xl font-semibold text-white font-clash">
+                  <h2 className="text-xl font-semibold text-white font-clash flex items-center gap-2">
                     Filters
+                    {activeSidebarFiltersCount > 0 && (
+                      <span className="flex items-center justify-center w-5 h-5 rounded-full bg-[#DFD616] text-[#0a0a0a] text-xs font-bold font-sans">
+                        {activeSidebarFiltersCount}
+                      </span>
+                    )}
                   </h2>
                 </div>
                 <button
@@ -488,52 +500,121 @@ function PlacesContent() {
           {/* Right Main Area */}
           <div className="flex-1 h-full flex flex-col relative w-full lg:pr-2">
             {/* Scrollable Content Area */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 lg:pr-4 pb-6 mt-2">
-              {/* Grid Header */}
-              <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4 sticky top-0 bg-[#050505] z-40 py-2 -mt-2">
-                <div className="absolute top-full left-0 right-0 h-6 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none" />
-                <h2 className="text-xl text-white font-medium relative z-10">
-                  Discover <span className="text-[#DFD616]">Egypt</span>
-                  {!isLoading && meta && (
-                    <span className="text-[#666666] text-sm font-normal ml-3">
-                      Showing {meta.total} places
-                    </span>
-                  )}
-                </h2>
+            <div ref={scrollContainerRef} className="flex-1 overflow-y-auto custom-scrollbar pr-2 lg:pr-4 pb-28 mt-2">
+              {/* Sticky Header Group */}
+              <div className="sticky top-0 bg-[#050505] z-40 py-2 -mt-2 mb-6 flex flex-col gap-4 relative">
+                {/* Title & Sort Row */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <h2 className="text-xl text-white font-medium relative z-10">
+                    Discover <span className="text-[#DFD616]">Egypt</span>
+                    {!isLoading && meta && (
+                      <span className="text-[#666666] text-sm font-normal ml-3">
+                        Showing {meta.total} places
+                      </span>
+                    )}
+                  </h2>
 
-                <div className="flex items-center gap-2 text-sm relative">
-                  <span className="text-[#666666]">Sort by:</span>
-                  <button
-                    onClick={() => setIsSortOpen(!isSortOpen)}
-                    className="bg-[#111111] border border-[#222222] text-white px-4 py-2.5 rounded-xl flex items-center gap-2 hover:bg-[#1a1a1a] transition-colors text-xs font-medium min-w-[140px] justify-between"
-                  >
-                    {SORT_OPTIONS.find((s) => s.id === sortBy)?.label ||
-                      "Select sort"}
-                    <ChevronDown size={14} className="text-gray-400" />
-                  </button>
+                  <div className="flex items-center gap-2 text-sm relative">
+                    <span className="text-[#666666]">Sort by:</span>
+                    <button
+                      onClick={() => setIsSortOpen(!isSortOpen)}
+                      className="bg-[#111111] border border-[#222222] text-white px-4 py-2.5 rounded-xl flex items-center gap-2 hover:bg-[#1a1a1a] transition-colors text-xs font-medium min-w-[140px] justify-between"
+                    >
+                      {SORT_OPTIONS.find((s) => s.id === sortBy)?.label ||
+                        "Select sort"}
+                      <ChevronDown size={14} className="text-gray-400" />
+                    </button>
 
-                  {/* Sort Dropdown Menu */}
-                  {isSortOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-48 bg-[#111111] border border-[#222222] rounded-xl shadow-xl overflow-hidden z-50">
-                      {SORT_OPTIONS.map((opt) => (
-                        <button
-                          key={opt.id}
-                          onClick={() => {
-                            setSortBy(opt.id);
-                            setIsSortOpen(false);
-                          }}
-                          className={`w-full text-left px-4 py-3 text-sm transition-colors ${
-                            sortBy === opt.id
-                              ? "bg-[#1A1805] text-[#DFD616]"
-                              : "text-[#888888] hover:bg-[#1a1a1a] hover:text-white"
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                    {/* Sort Dropdown Menu */}
+                    {isSortOpen && (
+                      <div className="absolute right-0 top-full mt-2 w-48 bg-[#111111] border border-[#222222] rounded-xl shadow-xl overflow-hidden z-50">
+                        {SORT_OPTIONS.map((opt) => (
+                          <button
+                            key={opt.id}
+                            onClick={() => {
+                              setSortBy(opt.id);
+                              setIsSortOpen(false);
+                            }}
+                            className={`w-full text-left px-4 py-3 text-sm transition-colors ${
+                              sortBy === opt.id
+                                ? "bg-[#1A1805] text-[#DFD616]"
+                                : "text-[#888888] hover:bg-[#1a1a1a] hover:text-white"
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
+
+                {/* Active Filter Chips */}
+                {activeSidebarFiltersCount > 0 && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    {activeCities.map(city => (
+                      <div key={city} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#1A1805] text-[#DFD616] text-xs">
+                        {city}
+                        <button onClick={() => toggleCity(city)} className="hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+                          <X size={12} />
+                        </button>
+                      </div>
+                    ))}
+                    
+                    {activeBudgets.map(budget => (
+                      <div key={budget} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#1A1805] text-[#DFD616] text-xs">
+                        {BUDGET_LEVELS.find(b => b.id === budget)?.label}
+                        <button onClick={() => toggleBudget(budget)} className="hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+                          <X size={12} />
+                        </button>
+                      </div>
+                    ))}
+                    
+                    {activeSuitableFor && (
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#1A1805] text-[#DFD616] text-xs">
+                        {SUITABLE_FOR.find(s => s.id === activeSuitableFor)?.label}
+                        <button onClick={() => setSuitableFor("")} className="hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+                          <X size={12} />
+                        </button>
+                      </div>
+                    )}
+                    
+                    {activeAge && (
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#1A1805] text-[#DFD616] text-xs">
+                        {SUITABLE_AGES.find(a => a.id === activeAge)?.label}
+                        <button onClick={() => setAge("")} className="hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+                          <X size={12} />
+                        </button>
+                      </div>
+                    )}
+                    
+                    {activeSeason && (
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#1A1805] text-[#DFD616] text-xs">
+                        {SEASONS.find(s => s.id === activeSeason)?.label}
+                        <button onClick={() => setSeason("")} className="hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+                          <X size={12} />
+                        </button>
+                      </div>
+                    )}
+                    
+                    {activeCrowdLevel && (
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#1A1805] text-[#DFD616] text-xs">
+                        {CROWD_LEVELS.find(c => c.id === activeCrowdLevel)?.label}
+                        <button onClick={() => setCrowdLevel("")} className="hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+                          <X size={12} />
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Clear All Button */}
+                    <button onClick={resetFilters} className="text-xs text-[#888888] hover:text-white ml-2 transition-colors">
+                      Clear
+                    </button>
+                  </div>
+                )}
+                
+                {/* Gradient Shadow Divider */}
+                <div className="absolute top-full left-0 right-0 h-6 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none" />
               </div>
 
               {/* Error Message */}
@@ -569,13 +650,18 @@ function PlacesContent() {
                   </div>
                 ) : (
                   // Places
-                  places.map((place) => (
-                    <Link
-                      href={`/places/${place.id}`}
-                      key={place.id}
-                      className="group relative w-full h-[350px] block rounded-[2rem] overflow-hidden border border-[#222222] hover:border-[#DFD616]/50 transition-all duration-300 cursor-pointer animate-in fade-in zoom-in-95 duration-500 fill-mode-both"
-                    >
-                      {/* Background Image */}
+                  places.map((place, index) => {
+                    const isNew = index >= animateFromIndex;
+                    return (
+                      <Link
+                        href={`/places/${place.id}`}
+                        key={place.id}
+                        style={isNew ? { animationDelay: `${(index - animateFromIndex) * 100}ms` } : {}}
+                        className={`group relative w-full h-[350px] block rounded-[2rem] overflow-hidden border border-[#222222] hover:border-[#DFD616]/50 transition-all duration-300 cursor-pointer ${
+                          isNew ? "animate-slide-stack" : ""
+                        }`}
+                      >
+                        {/* Background Image */}
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={
@@ -583,6 +669,9 @@ function PlacesContent() {
                           "https://images.unsplash.com/photo-1539667468225-eebb663053e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                         }
                         alt={place.name}
+                        loading={index < 4 ? "eager" : "lazy"}
+                        fetchPriority={index < 4 ? "high" : "auto"}
+                        decoding="async"
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                       {/* Dark Gradient Overlay */}
@@ -647,7 +736,8 @@ function PlacesContent() {
                         </div>
                       </div>
                     </Link>
-                  ))
+                    );
+                  })
                 )}
               </div>
 

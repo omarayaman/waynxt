@@ -29,7 +29,7 @@ export default function AskWaynxNavbar({
   onToggleDesktopSidebar,
 }: AskWaynxNavbarProps) {
   const pathname = usePathname();
-  const { user, isAuthenticated, isLoading } = useAuthStore();
+  const { user, isAuthenticated, isLoading, openAuthModal } = useAuthStore();
 
   return (
     <header className="relative z-50 flex h-14 shrink-0 items-center gap-3 border-b border-border bg-background px-4 lg:px-6">
@@ -118,12 +118,12 @@ export default function AskWaynxNavbar({
             )}
           </Link>
         ) : (
-          <Link
-            href="/login"
+          <button
+            onClick={() => openAuthModal('login')}
             className="rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground transition-colors hover:bg-accent-hover"
           >
             Log in
-          </Link>
+          </button>
         )}
       </div>
     </header>

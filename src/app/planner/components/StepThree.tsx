@@ -151,7 +151,7 @@ function TripDurationTravelers({
 
 export default function StepThree() {
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, openAuthModal } = useAuthStore();
   const {
     season,
     setSeason,
@@ -184,7 +184,7 @@ export default function StepThree() {
   const handleBuildPlan = async () => {
     if (!isAuthenticated) {
       toast.error("Please log in to create a trip plan");
-      router.push("/login?redirect=/planner");
+      openAuthModal('login', '/planner');
       return;
     }
 
