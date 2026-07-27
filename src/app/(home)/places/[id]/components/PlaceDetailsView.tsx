@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, MapPin, Star } from "lucide-react";
+import { ArrowLeft, MapPin, Star, Map, X } from "lucide-react";
+import { InteractiveMap } from "@/components/MapWrapper";
 import { SavePlaceButton } from "@/components/SavePlaceButton";
 import type { PaginationMeta, Place, Review } from "@/types/places";
 import { buildPlaceAskUrl } from "@/lib/placeAskPrompt";
@@ -34,6 +35,8 @@ export function PlaceDetailsView({
   const askHref = buildPlaceAskUrl({ name: place.name, city: place.city });
   const fallbackImage =
     "https://images.unsplash.com/photo-1539667468225-eebb663053e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80";
+
+  const [showMap, setShowMap] = useState(false);
 
   useEffect(() => {
     const duration = 800; // Duration in milliseconds
@@ -115,6 +118,13 @@ export function PlaceDetailsView({
                   <MapPin size={14} className="text-accent" />
                   {place.city}, Egypt
                 </p>
+                <button 
+                  onClick={() => setShowMap(true)}
+                  className="mt-4 flex w-fit items-center gap-2 rounded-full bg-[#F7EA00] px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-[#FCDF69] shadow-sm"
+                >
+                  <Map size={16} />
+                  View on Map
+                </button>
               </div>
               <SavePlaceButton
                 placeId={place.id}
@@ -176,6 +186,27 @@ export function PlaceDetailsView({
           />
         )}
       </div>
+
+      {/* Map Modal */}
+      {showMap && (
+        <div className="fixed inset-0 z-[9999] bg-white dark:bg-[#050505] flex flex-col animate-in fade-in zoom-in-95 duration-200 text-gray-900 dark:text-white">
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-[#222]">
+            <h2 className="text-xl font-bold flex items-center gap-2 font-clash">
+              <Map size={24} className="text-[#F7EA00]" />
+              Location on Map
+            </h2>
+            <button 
+              onClick={() => setShowMap(false)}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#111] transition-colors"
+            >
+              <X size={24} />
+            </button>
+          </div>
+          <div className="flex-1 w-full relative z-0">
+            <InteractiveMap places={[place]} />
+          </div>
+        </div>
+      )}
     </main>
   );
 }

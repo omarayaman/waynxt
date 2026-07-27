@@ -11,11 +11,18 @@ export default function Footer() {
         {/* Column 1 - Logo */}
         <div className="flex flex-col max-w-[250px]">
           <Image
+            src={PUBLIC_ASSETS.icons.fullLogoBlack}
+            alt="Waynx Logo"
+            width={160}
+            height={50}
+            className="object-contain dark:hidden"
+          />
+          <Image
             src={PUBLIC_ASSETS.icons.fullLogo}
             alt="Waynx Logo"
             width={160}
             height={50}
-            className="object-contain"
+            className="object-contain hidden dark:block"
           />
         </div>
 

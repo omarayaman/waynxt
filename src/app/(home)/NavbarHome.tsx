@@ -194,13 +194,13 @@ export default function NavbarHome({className}: {className?: string}) {
               <div className="hidden items-center gap-5 sm:flex">
                 <button
                   type="button"
-                  onClick={() => openAuthModal('login')}
+                  onClick={() => openAuthModal('login', '/planner')}
                   className="text-[15px] font-medium transition-colors text-[var(--navbar-muted)] hover:text-[var(--navbar-foreground)]">
                   Log in
                 </button>
                 <button
                   type="button"
-                  onClick={() => openAuthModal('register')}
+                  onClick={() => openAuthModal('register', '/planner')}
                   className="rounded-xl px-6 py-2.5 text-[15px] font-bold transition-colors bg-[var(--navbar-foreground)] text-[var(--background)] hover:opacity-90">
                   Sign up
                 </button>
@@ -271,7 +271,7 @@ export default function NavbarHome({className}: {className?: string}) {
                       type="button"
                       onClick={() => {
                         setMobileOpen(false);
-                        openAuthModal('login');
+                        openAuthModal('login', '/planner');
                       }}
                       className="rounded-xl px-4 py-3 text-center text-base font-medium text-[var(--navbar-muted)] hover:bg-[var(--navbar-control-bg)] hover:text-[var(--navbar-foreground)]">
                       Log in
@@ -280,7 +280,7 @@ export default function NavbarHome({className}: {className?: string}) {
                       type="button"
                       onClick={() => {
                         setMobileOpen(false);
-                        openAuthModal('register');
+                        openAuthModal('register', '/planner');
                       }}
                       className="rounded-xl bg-[var(--navbar-foreground)] px-4 py-3 text-center text-base font-bold text-[var(--background)] hover:opacity-90">
                       Sign up

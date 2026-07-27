@@ -4,6 +4,7 @@ export const PUBLIC_ASSETS = {
     waynxt: "/icons/waynxt.svg",
     logo: "/icons/logo.svg",
     fullLogo: "/icons/full_Logo.svg",
+    fullLogoBlack: "/icons/full_logo_black.svg",
     fullLogoWhite: "/icons/full_logo_white.jpeg",
     rr: "/icons/rr.jpeg",
     logoLight: "/icons/logo_White.svg",

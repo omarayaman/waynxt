@@ -30,6 +30,7 @@ import {
   X,
 } from "lucide-react";
 import { SavePlaceButton } from "@/components/SavePlaceButton";
+import { InteractiveMap } from "@/components/MapWrapper";
 
 // We keep the static All Experiences icon for the "all" button
 const ALL_EXPERIENCES = { id: "all", label: "All Experiences", icon: Sparkles };
@@ -167,6 +168,7 @@ function PlacesContent() {
 
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [showAllCities, setShowAllCities] = useState(false);
+  const [showMap, setShowMap] = useState(false);
 
   const displayedCities = showAllCities
     ? ALL_EGYPT_CITIES
@@ -205,24 +207,33 @@ function PlacesContent() {
       <main className="flex-1 w-full max-w-[1920px] mx-auto px-2 sm:px-4 lg:px-4 xl:px-4 pt-[70px] pb-4 flex flex-col overflow-hidden">
         {/* Top Header: Search and Categories */}
         <div className="w-full shrink-0 flex flex-col items-center">
-          {/* Search Bar */}
-          <div className="w-full max-w-[800px] mt-0 relative mx-auto">
-            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-[#666666]">
-              <Search size={20} strokeWidth={1.5} />
+          {/* Search Bar & Map Button */}
+          <div className="w-full max-w-[800px] mt-0 flex items-center gap-3 mx-auto">
+            <div className="relative flex-1">
+              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-[#666666]">
+                <Search size={20} strokeWidth={1.5} />
+              </div>
+              <input
+                type="text"
+                value={search}
+                onChange={handleSearchChange}
+                placeholder="Explore Egypt... e.g. 'Luxor temples' or 'Red Sea diving'"
+                className="w-full bg-gray-50 dark:bg-[#0F0F0F] border border-gray-200 dark:border-[#222222] rounded-full py-4 pl-14 pr-16 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-[#666666] focus:outline-none focus:border-[#F7EA00] dark:focus:border-[#F7EA00]/50 transition-colors"
+              />
+              <button className="absolute right-2 top-1/2 -translate-y-1/2 w-[38px] h-[38px] rounded-full bg-[#F7EA00] dark:bg-[#F7EA00] border border-[#F7EA00] dark:border-[#F7EA00] flex items-center justify-center text-[#0a0a0a] dark:text-[#0a0a0a] hover:bg-[#c2ba12] dark:hover:bg-[#c2ba12] transition-colors shadow-sm">
+                {isLoading ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Sparkles size={16} strokeWidth={1.5} />
+                )}
+              </button>
             </div>
-            <input
-              type="text"
-              value={search}
-              onChange={handleSearchChange}
-              placeholder="Explore Egypt... e.g. 'Luxor temples' or 'Red Sea diving'"
-              className="w-full bg-gray-50 dark:bg-[#0F0F0F] border border-gray-200 dark:border-[#222222] rounded-full py-4 pl-14 pr-16 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-[#666666] focus:outline-none focus:border-[#F7EA00] dark:focus:border-[#F7EA00]/50 transition-colors"
-            />
-            <button className="absolute right-2 top-1/2 -translate-y-1/2 w-[38px] h-[38px] rounded-full bg-[#F7EA00] dark:bg-[#F7EA00] border border-[#F7EA00] dark:border-[#F7EA00] flex items-center justify-center text-[#0a0a0a] dark:text-[#0a0a0a] hover:bg-[#c2ba12] dark:hover:bg-[#c2ba12] transition-colors shadow-sm">
-              {isLoading ? (
-                <Loader2 size={16} className="animate-spin" />
-              ) : (
-                <Sparkles size={16} strokeWidth={1.5} />
-              )}
+            
+            <button 
+              onClick={() => setShowMap(true)}
+              className="shrink-0 bg-[#F7EA00] dark:bg-[#F7EA00] hover:bg-[#FCDF69] dark:hover:bg-[#FCDF69] text-[#0a0a0a] dark:text-[#0a0a0a] border border-[#F7EA00] dark:border-[#F7EA00] rounded-full h-[54px] w-[54px] sm:w-auto sm:px-4 flex items-center justify-center sm:gap-2 transition-colors shadow-sm font-bold">
+              <Map size={18} strokeWidth={2.5} />
+              <span className="hidden sm:inline text-sm pr-1">Map View</span>
             </button>
           </div>
 
@@ -751,17 +762,32 @@ function PlacesContent() {
                 )}
               </div>
 
-              {/* View Interactive Map Button */}
-              <div className="mt-12 flex justify-center relative z-10">
-                <button className="bg-[#F7EA00] hover:bg-[#FCDF69] text-[#0a0a0a] font-bold text-sm px-6 py-3 rounded-full flex items-center gap-2 transition-all shadow-md dark:shadow-[0_0_15px_rgba(223,214,22,0.15)] hover:shadow-lg dark:hover:shadow-[0_0_20px_rgba(223,214,22,0.3)]">
-                  <Map size={16} strokeWidth={2.5} />
-                  View Interactive Map
-                </button>
-              </div>
+
             </div>
           </div>
         </div>
       </main>
+
+      {/* Map Modal */}
+      {showMap && (
+        <div className="fixed inset-0 z-[9999] bg-white dark:bg-[#050505] flex flex-col animate-in fade-in zoom-in-95 duration-200">
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-[#222]">
+            <h2 className="text-xl font-bold flex items-center gap-2 font-clash">
+              <Map size={24} className="text-[#F7EA00]" />
+              Interactive Map
+            </h2>
+            <button 
+              onClick={() => setShowMap(false)}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#111] transition-colors"
+            >
+              <X size={24} />
+            </button>
+          </div>
+          <div className="flex-1 w-full relative z-0">
+            <InteractiveMap places={places} />
+          </div>
+        </div>
+      )}
 
       <style
         dangerouslySetInnerHTML={{
