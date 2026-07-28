@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState, useMemo } from "react";
+import Image from "next/image";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import type { RoadmapStop, RoadmapPoint } from "@/lib/trip-roadmap";
 import {
@@ -273,13 +274,12 @@ export function RoadmapTimeline({ stops, activeStopId, onSelectStop }: RoadmapTi
                         {i === 0 ? "Start" : "Finish"}
                       </div>
                     )}
-                    <img
+                    <Image
                       src={imgUrl}
                       alt={stop.activity.activity_name}
-                      className="w-full h-full rounded-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1539650116574-8efeb43e2b50?q=80&w=300&auto=format&fit=crop";
-                      }}
+                      fill
+                      sizes="96px"
+                      className="rounded-full object-cover"
                     />
                     {!isActive && !isPast && (
                       <div className="absolute inset-0 rounded-full bg-foreground/20 transition-colors group-hover:bg-foreground/10 dark:bg-black/50 dark:group-hover:bg-black/20" />

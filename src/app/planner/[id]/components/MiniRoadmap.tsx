@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import type { TripDestination } from "@/types/trip";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 interface MiniRoadmapProps {
   destinations: TripDestination[];
@@ -43,22 +44,22 @@ export function MiniRoadmap({ destinations, activeDayNumber, onSelectDay }: Mini
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setCanScrollPrev(emblaApi.canScrollPrev());
-    setCanScrollNext(emblaApi.canScrollNext());
-  }, [emblaApi]);
-
   useEffect(() => {
     if (!emblaApi) return;
-    onSelect();
-    emblaApi.on("select", onSelect);
-    emblaApi.on("reInit", onSelect);
-    return () => {
-      emblaApi.off("select", onSelect);
-      emblaApi.off("reInit", onSelect);
+    
+    const updateScrollState = () => {
+      setCanScrollPrev(emblaApi.canScrollPrev());
+      setCanScrollNext(emblaApi.canScrollNext());
     };
-  }, [emblaApi, onSelect]);
+
+    requestAnimationFrame(updateScrollState);
+    emblaApi.on("select", updateScrollState);
+    emblaApi.on("reInit", updateScrollState);
+    return () => {
+      emblaApi.off("select", updateScrollState);
+      emblaApi.off("reInit", updateScrollState);
+    };
+  }, [emblaApi]);
 
   // Optionally scroll to the active day automatically
   useEffect(() => {
@@ -128,13 +129,12 @@ export function MiniRoadmap({ destinations, activeDayNumber, onSelectDay }: Mini
                         : "border-border bg-[#111] group-hover/item:border-accent/50"
                       }`}
                   >
-                    <img 
+                    <Image 
                       src={imgUrl} 
-                      alt={dest.city} 
-                      className={`w-full h-full object-cover transition-transform duration-500 ${isActive ? 'scale-110' : 'group-hover/item:scale-110'}`}
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=300&auto=format&fit=crop";
-                      }}
+                      alt={dest.city}
+                      fill
+                      sizes="64px"
+                      className={`object-cover transition-transform duration-500 ${isActive ? 'scale-110' : 'group-hover/item:scale-110'}`}
                     />
                     
                     {/* Dark overlay when not active */}

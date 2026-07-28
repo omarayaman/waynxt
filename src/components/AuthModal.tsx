@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { authService } from "@/services/auth.service";
 import { z } from "zod";
@@ -32,16 +32,25 @@ export function AuthModal() {
   const [errorMessage, setErrorMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{name?: string, email?: string, password?: string}>({});
 
-  // Reset state when modal opens/closes or view changes
-  useEffect(() => {
+  const [prevView, setPrevView] = useState(authModalView);
+  const [prevIsOpen, setPrevIsOpen] = useState(isAuthModalOpen);
+
+  if (prevView !== authModalView) {
+    setPrevView(authModalView);
     setErrorMessage("");
     setFieldErrors({});
+  }
+
+  if (prevIsOpen !== isAuthModalOpen) {
+    setPrevIsOpen(isAuthModalOpen);
     if (!isAuthModalOpen) {
       setName("");
       setEmail("");
       setPassword("");
+      setErrorMessage("");
+      setFieldErrors({});
     }
-  }, [isAuthModalOpen, authModalView]);
+  }
 
   if (!isAuthModalOpen) return null;
 

@@ -11,7 +11,6 @@ import ChatInput from "./components/ChatInput";
 import AskWaynxNavbar from "./components/AskWaynxNavbar";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { useChatStore } from "@/store/chatStore";
-import PlannerBackground from "@/app/planner/components/PlannerBackground";
 
 function AskWaynxContent() {
   const router = useRouter();

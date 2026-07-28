@@ -1,99 +1,91 @@
 "use client";
 
-import {useEffect, useRef} from "react";
-import {motion} from "framer-motion";
-import {Loader2} from "lucide-react";
-import {PlaceCard} from "./PlaceCard";
-import type {Place} from "@/types/places";
+import React, { useEffect, useRef } from "react";
+import { Loader2, Search } from "lucide-react";
+import { PlaceCard } from "./PlaceCard";
+import type { Place } from "@/types/places";
+import { usePlacesStore } from "@/store/usePlacesStore";
 
 interface PlacesGridProps {
   places: Place[];
+  isLoading: boolean;
+  isLoadingMore: boolean;
+  hasMore: boolean;
+  loadMore: () => void;
   animateFromIndex?: number;
-  isLoadingMore?: boolean;
-  hasMore?: boolean;
-  onLoadMore: () => void;
-  sidebarOpen?: boolean;
-}
-
-function PlaceCardSkeleton() {
-  return (
-    <div className="rounded-2xl border border-border overflow-hidden animate-pulse">
-      <div className="h-[280px] bg-surface-elevated" />
-    </div>
-  );
 }
 
 export function PlacesGrid({
   places,
-  animateFromIndex = 0,
+  isLoading,
   isLoadingMore,
   hasMore,
-  onLoadMore,
-  sidebarOpen = true,
+  loadMore,
+  animateFromIndex = 0,
 }: PlacesGridProps) {
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel || !hasMore) return;
+    if (!sentinelRef.current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0]?.isIntersecting && !isLoadingMore) {
-          onLoadMore();
+        if (entries[0].isIntersecting && hasMore && !isLoading && !isLoadingMore) {
+          loadMore();
         }
       },
-      {rootMargin: "240px", threshold: 0.1},
+      { rootMargin: "400px", threshold: 0.1 }
     );
 
-    observer.observe(sentinel);
+    observer.observe(sentinelRef.current);
     return () => observer.disconnect();
-  }, [hasMore, isLoadingMore, onLoadMore]);
+  }, [isLoading, isLoadingMore, hasMore, loadMore]);
 
   return (
     <>
-      <div
-        className={`grid gap-4 ${
-          sidebarOpen
-            ? "grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
-            : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
-        }`}>
-        {places.map((place, index) => {
-          const shouldAnimate = index >= animateFromIndex;
-          const staggerIndex = shouldAnimate ? index - animateFromIndex : 0;
-
-          return (
-            <motion.div
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 relative z-10 w-full pb-10">
+        {isLoading ? (
+          // Skeletons
+          [...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              className="w-full h-[350px] rounded-[2rem] bg-gray-100 dark:bg-[#111111] border border-gray-200 dark:border-[#222222] animate-pulse"
+            ></div>
+          ))
+        ) : places.length === 0 ? (
+          // Empty state
+          <div className="col-span-full py-20 flex flex-col items-center justify-center text-gray-500 dark:text-[#666666]">
+            <Search size={40} className="mb-4 opacity-20" />
+            <p className="text-lg">No places found matching your filters.</p>
+            <button
+              onClick={() => usePlacesStore.getState().resetFilters()}
+              className="mt-4 text-[#F7EA00] dark:text-[#F7EA00] hover:underline text-sm"
+            >
+              Clear all filters
+            </button>
+          </div>
+        ) : (
+          // Places
+          places.map((place, index) => (
+            <PlaceCard
               key={place.id}
-              initial={shouldAnimate ? {opacity: 0, y: 14, filter: "blur(4px)"} : false}
-              animate={{opacity: 1, y: 0, filter: "blur(0px)"}}
-              transition={{
-                duration: 0.45,
-                delay: Math.min(staggerIndex * 0.05, 0.4),
-                ease: [0.22, 1, 0.36, 1],
-              }}>
-              <PlaceCard place={place} />
-            </motion.div>
-          );
-        })}
-
-        {isLoadingMore &&
-          [...Array(3)].map((_, i) => (
-            <motion.div
-              key={`skeleton-${i}`}
-              initial={{opacity: 0}}
-              animate={{opacity: 1}}
-              transition={{duration: 0.3, delay: i * 0.06}}>
-              <PlaceCardSkeleton />
-            </motion.div>
-          ))}
+              place={place}
+              index={index}
+              animateFromIndex={animateFromIndex}
+            />
+          ))
+        )}
       </div>
 
-      {hasMore && (
-        <div ref={sentinelRef} className="w-full h-10 flex items-center justify-center mt-4">
-          {isLoadingMore && <Loader2 size={24} className="animate-spin text-accent" />}
-        </div>
-      )}
+      {/* Pagination / Sentinel */}
+      <div
+        ref={sentinelRef}
+        className="w-full h-10 flex items-center justify-center mt-4 mb-8"
+      >
+        {isLoadingMore && (
+          <Loader2 size={24} className="animate-spin text-[#F7EA00]" />
+        )}
+      </div>
     </>
   );
 }

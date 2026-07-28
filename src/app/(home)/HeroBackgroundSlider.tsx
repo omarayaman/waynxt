@@ -53,7 +53,10 @@ export default function HeroBackgroundSlider() {
   }, [slides.length]);
 
   useEffect(() => {
-    setCurrent(0);
+    const timer = setTimeout(() => {
+      setCurrent(0);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [isDark]);
 
   useEffect(() => {

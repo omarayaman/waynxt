@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -57,21 +57,14 @@ function MapUpdater({ activeRegionId }: { activeRegionId: string }) {
 }
 
 function LabelsLayer() {
-  const [showLabels, setShowLabels] = useState(false);
-  const map = useMapEvents({
+  const map = useMap();
+  const [showLabels, setShowLabels] = useState(() => map.getZoom() > 6);
+
+  useMapEvents({
     zoomend: () => {
-      setShowLabels(map.getZoom() > 6);
-    },
-    // Also check initially if map loads with zoom > 6
-    load: () => {
       setShowLabels(map.getZoom() > 6);
     }
   });
-
-  // Ensure it sets initially if already zoomed
-  useEffect(() => {
-    setShowLabels(map.getZoom() > 6);
-  }, [map]);
 
   return showLabels ? (
     <TileLayer

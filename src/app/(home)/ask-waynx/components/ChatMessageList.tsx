@@ -7,7 +7,6 @@ import {Check, CheckCircle2, Copy, RefreshCw, Share2, MapPin, Sparkles} from "lu
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {motion} from "framer-motion";
-import PlannerBackground from "@/app/planner/components/PlannerBackground";
 
 function MessageActionBar({msg, onReload}: {msg: ChatMessage; onReload?: () => void}) {
   const [copied, setCopied] = useState(false);

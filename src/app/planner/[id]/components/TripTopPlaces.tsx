@@ -2,13 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { 
-  Loader2, MapPin, Star, Sparkles, Landmark, Waves, 
+  Loader2, MapPin, Sparkles, Landmark, Waves, 
   Diamond, Moon, Building2, Tent, TreePine, Utensils, 
   Activity, Sun, Clock 
 } from "lucide-react";
 import { placesService } from "@/services/places.service";
 import Link from "next/link";
 import { SavePlaceButton } from "@/components/SavePlaceButton";
+import Image from "next/image";
 import type { Place } from "@/types/places";
 import type { Trip } from "@/types/trip";
 
@@ -40,8 +41,6 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
   useEffect(() => {
     const fetchTopPlaces = async () => {
       try {
-        setIsLoading(true);
-        setError(null);
         const cities = trip.destinations?.map(d => d.city) || [];
         
         const payload = {
@@ -57,8 +56,9 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
         const response = await placesService.recommendPlaces(payload);
         
         setPlaces(response.data || []);
-      } catch (err: any) {
-        setError(err.message || "Failed to load top places for this trip.");
+      } catch (err: unknown) {
+        const error = err as { message?: string };
+        setError(error.message || "Failed to load top places for this trip.");
         console.error("Error fetching top places:", err);
       } finally {
         setIsLoading(false);
@@ -95,7 +95,7 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
         </div>
         <p className="mb-1 font-medium text-foreground dark:text-white">No places found</p>
         <p className="max-w-sm text-sm text-muted">
-          We couldn't find any AI recommendations for this trip at the moment.
+          We couldn&apos;t find any AI recommendations for this trip at the moment.
         </p>
       </div>
     );
@@ -116,13 +116,11 @@ export function TripTopPlaces({ trip }: TripTopPlacesProps) {
         {places.map((place, index) => (
           <Link href={place.id ? `/places/${place.id}` : '#'} key={place.id || `place-${index}`} className="group relative w-full h-[380px] block rounded-[2rem] overflow-hidden border border-border hover:border-accent/50 transition-all duration-300 cursor-pointer">
             {/* Background Image */}
-            <img 
-              src={place.thumbnail_url || (place as any).image_url || "https://images.unsplash.com/photo-1539667468225-eebb663053e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"} 
+            <Image 
+              src={place.thumbnail_url || (place as { image_url?: string }).image_url || "https://images.unsplash.com/photo-1539667468225-eebb663053e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"} 
               alt={place.name}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1539667468225-eebb663053e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
-              }}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
             {/* Dark Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent"></div>

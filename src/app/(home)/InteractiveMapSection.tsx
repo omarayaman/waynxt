@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, MapPin } from "lucide-react";
+import Image from "next/image";
 import { RegionMap } from "@/components/RegionMap";
 
 interface MapRegion {
@@ -13,6 +14,7 @@ interface MapRegion {
   tagline: string;
   description: string;
   highlights: string[];
+  imageUrl: string;
 }
 
 const MAP_REGIONS: MapRegion[] = [
@@ -24,6 +26,7 @@ const MAP_REGIONS: MapRegion[] = [
     description:
       "Home to the Pyramids of Giza, the Egyptian Museum, and the vibrant streets of Islamic Cairo — where ancient wonders meet modern energy.",
     highlights: ["Pyramids of Giza", "Khan el-Khalili", "Citadel of Saladin"],
+    imageUrl: "/images/history.png",
   },
   {
     id: "alexandria",
@@ -33,6 +36,7 @@ const MAP_REGIONS: MapRegion[] = [
     description:
       "A coastal city of Greek-Roman heritage, grand libraries, and Mediterranean charm on Egypt's northern shore.",
     highlights: ["Bibliotheca Alexandrina", "Qaitbay Citadel", "Montaza Palace"],
+    imageUrl: "/images/alexandria.jpg",
   },
   {
     id: "luxor",
@@ -42,6 +46,7 @@ const MAP_REGIONS: MapRegion[] = [
     description:
       "Walk through 4,000 years of pharaonic history across the temples of Karnak, the Valley of the Kings, and the Avenue of Sphinxes.",
     highlights: ["Karnak Temple", "Valley of the Kings", "Luxor Temple"],
+    imageUrl: "/images/karnak.png",
   },
   {
     id: "aswan",
@@ -51,6 +56,7 @@ const MAP_REGIONS: MapRegion[] = [
     description:
       "A serene Nile city of granite quarries, colorful Nubian villages, and the majestic Abu Simbel temples.",
     highlights: ["Abu Simbel", "Philae Temple", "Nubian Village"],
+    imageUrl: "/images/aswan.jpg",
   },
   {
     id: "hurghada",
@@ -60,6 +66,7 @@ const MAP_REGIONS: MapRegion[] = [
     description:
       "Crystal-clear waters, world-class diving, and golden beaches along Egypt's stunning Red Sea Riviera.",
     highlights: ["Giftun Island", "Diving & Snorkeling", "Marina Boulevard"],
+    imageUrl: "/images/hurghada.jpg",
   },
   {
     id: "sharm",
@@ -69,6 +76,7 @@ const MAP_REGIONS: MapRegion[] = [
     description:
       "A resort haven between desert mountains and coral reefs — perfect for diving, relaxation, and desert adventures.",
     highlights: ["Ras Mohammed", "Naama Bay", "Mount Sinai"],
+    imageUrl: "/images/sharm.jpg",
   },
   {
     id: "siwa",
@@ -78,6 +86,7 @@ const MAP_REGIONS: MapRegion[] = [
     description:
       "A hidden Berber oasis in the Western Desert — salt lakes, ancient oracle temples, and starlit desert skies.",
     highlights: ["Temple of the Oracle", "Salt Lakes", "Great Sand Sea"],
+    imageUrl: "/images/siwa_oasis.jpg",
   },
 ];
 
@@ -102,7 +111,7 @@ export default function InteractiveMapSection() {
           </p>
         </div>
 
-        <div className="grid items-stretch gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="grid items-stretch gap-8 lg:grid-cols-[1.5fr_1fr] xl:grid-cols-[1.8fr_1fr]">
           {/* Map */}
           <div className="relative flex flex-col overflow-hidden rounded-3xl border border-border bg-surface-elevated shadow-lg dark:bg-[#0a0a0a] dark:border-white/10 dark:shadow-2xl">
             <div className="relative aspect-[4/3] w-full lg:aspect-auto lg:min-h-[480px] flex-1">
@@ -114,7 +123,7 @@ export default function InteractiveMapSection() {
             </div>
 
             {/* Region chips - Now visible on all screens since we removed the floating map buttons */}
-            <div className="flex gap-2 overflow-x-auto border-t border-border p-4 dark:border-white/5 bg-background/80 backdrop-blur-sm z-10">
+            <div className="flex flex-wrap gap-2 justify-center border-t border-border p-4 dark:border-white/5 bg-background/80 backdrop-blur-sm z-10">
               {MAP_REGIONS.map((region) => (
                 <button
                   key={region.id}
@@ -143,6 +152,15 @@ export default function InteractiveMapSection() {
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="flex flex-col gap-6"
               >
+                <div className="relative w-full h-40 sm:h-48 mb-2 overflow-hidden rounded-2xl">
+                  <Image 
+                    src={activeRegion.imageUrl} 
+                    alt={activeRegion.name} 
+                    fill 
+                    className="object-cover" 
+                  />
+                  <div className="absolute inset-0 bg-black/10" />
+                </div>
                 <div>
                   <p className="mb-2 text-xs font-bold uppercase tracking-widest text-accent">
                     {activeRegion.tagline}

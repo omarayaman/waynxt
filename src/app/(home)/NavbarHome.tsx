@@ -68,7 +68,10 @@ export default function NavbarHome({className}: {className?: string}) {
   }, []);
 
   useEffect(() => {
-    setMobileOpen(false);
+    const timer = setTimeout(() => {
+      setMobileOpen(false);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   useEffect(() => {
@@ -80,7 +83,6 @@ export default function NavbarHome({className}: {className?: string}) {
 
   const isHome = pathname === "/";
   const showSolidBg = !isHome || scrolled;
-  const onHero = isDark && isHome && !showSolidBg;
   const navbarClassName = [getRouteNavbarClassName(pathname), className].filter(Boolean).join(" ");
 
   if (shouldHideNavbar(pathname)) {

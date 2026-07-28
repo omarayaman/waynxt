@@ -2,7 +2,6 @@
 
 import React, { useEffect } from "react";
 import { Heart, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useSavedPlacesStore } from "@/store/useSavedPlacesStore";
 
@@ -13,7 +12,6 @@ interface SavePlaceButtonProps {
 }
 
 export function SavePlaceButton({ placeId, className = "", iconSize = 14 }: SavePlaceButtonProps) {
-  const router = useRouter();
   const { isAuthenticated, openAuthModal } = useAuthStore();
   const isSaved = useSavedPlacesStore((s) => s.isSaved(placeId));
   const isToggling = useSavedPlacesStore((s) => s.isToggling(placeId));

@@ -141,7 +141,7 @@ export function PlaceExploreCarousel({
   useEffect(() => {
     if (!emblaApi) return;
 
-    updateScrollState();
+    requestAnimationFrame(updateScrollState);
     emblaApi.on("select", updateScrollState);
     emblaApi.on("reInit", updateScrollState);
 

@@ -45,7 +45,10 @@ export function ExpensesSection({ tripId, onExpensesChange }: ExpensesSectionPro
   }, [tripId, onExpensesChange]);
 
   useEffect(() => {
-    fetchExpenses();
+    const timer = setTimeout(() => {
+      fetchExpenses();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [fetchExpenses]);
 
   const totalByCurrency = useMemo(() => {

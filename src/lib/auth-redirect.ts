@@ -6,7 +6,7 @@ export function getPostAuthRedirect(
   if (redirect) {
     try {
       redirect = decodeURIComponent(redirect);
-    } catch (e) {
+    } catch {
       // Ignore
     }
   }

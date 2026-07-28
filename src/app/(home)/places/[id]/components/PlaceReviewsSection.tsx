@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, MessageSquarePlus, Pencil, Trash2, X } from "lucide-react";
 import { toast } from "sonner";

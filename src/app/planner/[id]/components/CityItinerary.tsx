@@ -3,7 +3,7 @@
 import React, { useRef, useEffect } from "react";
 import type { TripDestination } from "@/types/trip";
 import type { RoadmapStop } from "@/lib/trip-roadmap";
-import { MapPin, Clock } from "lucide-react";
+
 
 interface CityItineraryProps {
   destinations: TripDestination[];
@@ -12,7 +12,7 @@ interface CityItineraryProps {
   stops: RoadmapStop[];
 }
 
-export function CityItinerary({ destinations, activeStopId, onSelectStop, stops }: CityItineraryProps) {
+export function CityItinerary({ destinations, activeStopId, onSelectStop }: CityItineraryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Scroll active activity into view
@@ -27,10 +27,8 @@ export function CityItinerary({ destinations, activeStopId, onSelectStop, stops 
 
   return (
     <div className="space-y-4" ref={containerRef}>
-      {destinations.map((dest, destIdx) => {
+      {destinations.map((dest) => {
         const days = [...(dest.trip_days ?? [])].sort((a, b) => a.day_number - b.day_number);
-        const destColor = destIdx % 2 === 0 ? "var(--accent)" : "#FF5D7A"; // Cycle pin colors or use standard gold
-        
         return (
           <div key={dest.id} className="bg-[#0d0d0d] border border-border rounded-2xl overflow-hidden">
             {/* City Header */}

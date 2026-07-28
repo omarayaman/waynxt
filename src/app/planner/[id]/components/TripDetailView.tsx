@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState, useMemo } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { isAxiosError } from "axios";
 import {
@@ -47,7 +47,6 @@ function statusStyle(status: string): string {
 
 export function TripDetailView({ tripId }: TripDetailViewProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [trip, setTrip] = useState<Trip | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("plan");
   const [isLoading, setIsLoading] = useState(true);
@@ -62,7 +61,7 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
   const stops = useMemo(() => {
     if (!trip?.destinations) return [];
     return buildRoadmapStops(trip.destinations);
-  }, [trip?.destinations]);
+  }, [trip]);
 
   // Derived stats
   const totalDays = trip?.destinations?.reduce((acc, dest) => acc + (dest.days_allocated || 0), 0) || 0;
@@ -91,8 +90,6 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
   }, []);
 
   const fetchTrip = useCallback(async () => {
-    setIsLoading(true);
-    setError("");
     try {
       const data = await tripService.getTrip(tripId);
       setTrip(data);
@@ -104,7 +101,10 @@ export function TripDetailView({ tripId }: TripDetailViewProps) {
   }, [tripId]);
 
   useEffect(() => {
-    fetchTrip();
+    const timer = setTimeout(() => {
+      fetchTrip();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [fetchTrip]);
 
   const handleRegenerate = async () => {

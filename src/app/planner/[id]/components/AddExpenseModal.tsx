@@ -52,19 +52,22 @@ export function AddExpenseModal({
 
   React.useEffect(() => {
     if (isOpen) {
-      setForm(
-        initialData
-          ? {
-              amount: String(initialData.amount),
-              currency: initialData.currency ?? "EGP",
-              category: (initialData.category as ExpenseCategory) ?? "other",
-              description: initialData.description ?? "",
-              date: initialData.date
-                ? new Date(initialData.date).toISOString().split("T")[0]
-                : new Date().toISOString().split("T")[0],
-            }
-          : defaultForm()
-      );
+      const timer = setTimeout(() => {
+        setForm(
+          initialData
+            ? {
+                amount: String(initialData.amount),
+                currency: initialData.currency ?? "EGP",
+                category: (initialData.category as ExpenseCategory) ?? "other",
+                description: initialData.description ?? "",
+                date: initialData.date
+                  ? new Date(initialData.date).toISOString().split("T")[0]
+                  : new Date().toISOString().split("T")[0],
+              }
+            : defaultForm()
+        );
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [isOpen, initialData]);
 

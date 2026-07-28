@@ -58,7 +58,10 @@ export function ChatHistorySection({ totalCount }: ChatHistorySectionProps) {
   }, []);
 
   useEffect(() => {
-    fetchSessions(page);
+    const timer = setTimeout(() => {
+      fetchSessions(page);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [page, fetchSessions]);
 
   const handleDelete = async (id: string) => {

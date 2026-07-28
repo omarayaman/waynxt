@@ -116,7 +116,7 @@ export const chatService = {
               } else if (parsed.event === 'chunk' || typeof parsed.text === 'string') {
                 onChunk(parsed.text || '');
               }
-            } catch (e) {
+            } catch {
               // ignore parse error
             }
           }

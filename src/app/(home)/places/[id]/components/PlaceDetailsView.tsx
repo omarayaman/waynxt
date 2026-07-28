@@ -72,7 +72,6 @@ export function PlaceDetailsView({
     <main className="relative z-10 flex-1 overflow-x-hidden pb-20">
       {/* Hero */}
       <div className="relative h-[48vh] min-h-[360px] max-h-[560px] w-full overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <motion.img
           src={place.thumbnail_url || fallbackImage}
           alt={place.name}

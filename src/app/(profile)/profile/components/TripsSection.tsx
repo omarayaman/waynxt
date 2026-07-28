@@ -63,7 +63,10 @@ export function TripsSection({ totalCount }: TripsSectionProps) {
   }, []);
 
   useEffect(() => {
-    fetchTrips(page);
+    const timer = setTimeout(() => {
+      fetchTrips(page);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [page, fetchTrips]);
 
   const handleDelete = async (id: string) => {

@@ -199,6 +199,37 @@ html[data-boot="ready"] body {
   background: var(--foreground);
 }
 
+/* Yellow scrollbar, hidden until hover */
+.yellow-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.yellow-scroll:hover {
+  scrollbar-color: var(--accent) transparent;
+}
+
+.yellow-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.yellow-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.yellow-scroll::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 999px;
+}
+
+.yellow-scroll:hover::-webkit-scrollbar-thumb {
+  background: var(--accent);
+}
+
+.yellow-scroll:hover::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-hover);
+}
+
 @keyframes hero-progress {
   from {
     width: 0%;

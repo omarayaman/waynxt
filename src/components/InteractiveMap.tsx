@@ -86,19 +86,14 @@ function MapUpdater({ places }: { places: Place[] }) {
 }
 
 function LabelsLayer() {
-  const [showLabels, setShowLabels] = useState(false);
-  const map = useMapEvents({
+  const map = useMap();
+  const [showLabels, setShowLabels] = useState(() => map.getZoom() > 6);
+
+  useMapEvents({
     zoomend: () => {
-      setShowLabels(map.getZoom() > 6);
-    },
-    load: () => {
       setShowLabels(map.getZoom() > 6);
     }
   });
-
-  useEffect(() => {
-    setShowLabels(map.getZoom() > 6);
-  }, [map]);
 
   return showLabels ? (
     <TileLayer

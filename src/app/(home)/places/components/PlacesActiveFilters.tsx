@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { usePlacesStore } from "@/store/usePlacesStore";
+import { BUDGET_LEVELS, SUITABLE_FOR, SUITABLE_AGES, SEASONS, CROWD_LEVELS } from "../constants";
 
 interface ActiveFilter {
   key: string;
@@ -11,10 +12,6 @@ interface ActiveFilter {
 
 export function PlacesActiveFilters() {
   const {
-    search,
-    setSearch,
-    activeCategory,
-    setCategory,
     activeCities,
     toggleCity,
     activeBudgets,
@@ -30,69 +27,73 @@ export function PlacesActiveFilters() {
     resetFilters,
   } = usePlacesStore();
 
-  const filters: ActiveFilter[] = [];
+  const activeSidebarFiltersCount =
+    activeCities.length +
+    activeBudgets.length +
+    (activeSuitableFor !== "" ? 1 : 0) +
+    (activeAge !== "" ? 1 : 0) +
+    (activeSeason !== "" ? 1 : 0) +
+    (activeCrowdLevel !== "" ? 1 : 0);
 
-  if (search.trim()) {
-    filters.push({ key: "search", label: `"${search.trim()}"`, onRemove: () => setSearch("") });
-  }
-  if (activeCategory && activeCategory !== "all") {
-    filters.push({
-      key: "category",
-      label: activeCategory,
-      onRemove: () => setCategory("all"),
-    });
-  }
-  activeCities.forEach((city) => {
-    filters.push({ key: `city-${city}`, label: city, onRemove: () => toggleCity(city) });
-  });
-  activeBudgets.forEach((budget) => {
-    filters.push({
-      key: `budget-${budget}`,
-      label: budget,
-      onRemove: () => toggleBudget(budget),
-    });
-  });
-  if (activeSuitableFor) {
-    filters.push({
-      key: "suitable",
-      label: activeSuitableFor,
-      onRemove: () => setSuitableFor(activeSuitableFor),
-    });
-  }
-  if (activeAge) {
-    filters.push({ key: "age", label: activeAge, onRemove: () => setAge(activeAge) });
-  }
-  if (activeSeason) {
-    filters.push({ key: "season", label: activeSeason, onRemove: () => setSeason(activeSeason) });
-  }
-  if (activeCrowdLevel) {
-    filters.push({
-      key: "crowd",
-      label: activeCrowdLevel,
-      onRemove: () => setCrowdLevel(activeCrowdLevel),
-    });
-  }
-
-  if (filters.length === 0) return null;
+  if (activeSidebarFiltersCount === 0) return null;
 
   return (
-    <div className="flex flex-wrap items-center gap-1.5">
-      {filters.map((filter) => (
-        <button
-          key={filter.key}
-          type="button"
-          onClick={filter.onRemove}
-          className="inline-flex items-center gap-1 pl-2 pr-1.5 py-0.5 rounded-md dark:bg-accent-subtle bg-white/70 text-[10px] text-muted hover:text-foreground transition-colors capitalize border border-border"
-        >
-          {filter.label}
-          <X size={10} className="text-muted" />
-        </button>
+    <div className="flex flex-wrap items-center gap-2">
+      {activeCities.map((city) => (
+        <div key={city} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-medium text-xs">
+          {city}
+          <button onClick={() => toggleCity(city)} className="hover:text-gray-900 dark:hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+            <X size={12} />
+          </button>
+        </div>
       ))}
-      <button
-        type="button"
-        onClick={resetFilters}
-        className="text-[10px] text-muted hover:text-accent px-1"
-      >
+      
+      {activeBudgets.map((budget) => (
+        <div key={budget} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-medium text-xs">
+          {BUDGET_LEVELS.find((b) => b.id === budget)?.label}
+          <button onClick={() => toggleBudget(budget)} className="hover:text-gray-900 dark:hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+            <X size={12} />
+          </button>
+        </div>
+      ))}
+      
+      {activeSuitableFor && (
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-medium text-xs">
+          {SUITABLE_FOR.find((s) => s.id === activeSuitableFor)?.label}
+          <button onClick={() => setSuitableFor("")} className="hover:text-gray-900 dark:hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+            <X size={12} />
+          </button>
+        </div>
+      )}
+      
+      {activeAge && (
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-medium text-xs">
+          {SUITABLE_AGES.find((a) => a.id === activeAge)?.label}
+          <button onClick={() => setAge("")} className="hover:text-gray-900 dark:hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+            <X size={12} />
+          </button>
+        </div>
+      )}
+      
+      {activeSeason && (
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-medium text-xs">
+          {SEASONS.find((s) => s.id === activeSeason)?.label}
+          <button onClick={() => setSeason("")} className="hover:text-gray-900 dark:hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+            <X size={12} />
+          </button>
+        </div>
+      )}
+      
+      {activeCrowdLevel && (
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#F7EA00] dark:bg-[#F7EA00] text-[#0a0a0a] dark:text-[#0a0a0a] font-medium text-xs">
+          {CROWD_LEVELS.find((c) => c.id === activeCrowdLevel)?.label}
+          <button onClick={() => setCrowdLevel("")} className="hover:text-gray-900 dark:hover:text-white ml-1 opacity-70 hover:opacity-100 transition-opacity">
+            <X size={12} />
+          </button>
+        </div>
+      )}
+
+      <button onClick={resetFilters} className="text-xs text-gray-500 dark:text-[#888888] hover:text-gray-900 dark:hover:text-white ml-2 transition-colors">
         Clear
       </button>
     </div>

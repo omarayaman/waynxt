@@ -57,7 +57,6 @@ export const CROWD_LEVELS = [
 ];
 
 export const SUITABLE_AGES = [
-  { id: "kid", label: "Kids" },
   { id: "teen", label: "Teens" },
   { id: "adult", label: "Adults" },
   { id: "senior", label: "Seniors" },

@@ -22,6 +22,7 @@ export default function UpcomingEvents() {
               src={PUBLIC_ASSETS.images.luxorFestival}
               alt="Luxor Sphinx Festival"
               fill
+              sizes="100vw"
               className="object-cover"
             />
             {/* Dark gradient for text readability */}

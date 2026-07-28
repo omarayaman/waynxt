@@ -71,7 +71,10 @@ function ProfilePageContent() {
   const [avatarError, setAvatarError] = useState("");
 
   useEffect(() => {
-    setActiveSection(parseSection(searchParams.get("tab")));
+    const timer = setTimeout(() => {
+      setActiveSection(parseSection(searchParams.get("tab")));
+    }, 0);
+    return () => clearTimeout(timer);
   }, [searchParams]);
 
   const fetchStats = useCallback(async () => {
@@ -87,12 +90,18 @@ function ProfilePageContent() {
 
   useEffect(() => {
     if (!user) return;
-    fetchStats();
+    const timer = setTimeout(() => {
+      fetchStats();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [user, fetchStats]);
 
   useEffect(() => {
     if (!user || activeSection !== "saved-places") return;
-    fetchSavedPlaces({ page: placesPage, perPage: PLACES_PER_PAGE });
+    const timer = setTimeout(() => {
+      fetchSavedPlaces({ page: placesPage, perPage: PLACES_PER_PAGE });
+    }, 0);
+    return () => clearTimeout(timer);
   }, [user, activeSection, placesPage, fetchSavedPlaces]);
 
   const handleAvatarChange = async (file: File) => {
