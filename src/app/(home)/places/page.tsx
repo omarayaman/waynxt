@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { Search, Sparkles, Map, Loader2, X } from "lucide-react";
 import { usePlacesStore } from "@/store/usePlacesStore";
 import { usePlaces } from "@/hooks/usePlaces";
@@ -12,7 +12,7 @@ import { PlacesActiveFilters } from "./components/PlacesActiveFilters";
 import { PlacesGrid } from "./components/PlacesGrid";
 import { InteractiveMap } from "@/components/MapWrapper";
 
-export default function PlacesContent() {
+function PlacesPageContent() {
   const { search, setSearch, activeCategory, activeCities, activeBudgets, activeSuitableFor, activeSeason, activeCrowdLevel, activeAge } = usePlacesStore();
   const { places, meta, isLoading, isLoadingMore, error, hasMore, loadMore, animateFromIndex } = usePlaces();
 
@@ -106,7 +106,7 @@ export default function PlacesContent() {
           {/* Map Header with Close Button */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-[#222222] bg-white dark:bg-[#0a0a0a]">
             <div className="flex items-center gap-2">
-              <Map size={20} className="text-[#c2ba12] dark:text-[#F7EA00]" />
+              <Map size={20} className="text-[#F7EA00]" />
               <h3 className="font-bold text-gray-900 dark:text-white text-lg font-sans">Interactive Map</h3>
             </div>
             <button 
@@ -123,5 +123,13 @@ export default function PlacesContent() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function PlacesPage() {
+  return (
+    <Suspense fallback={<div className="h-[100dvh] bg-white dark:bg-[#050505] flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-accent" /></div>}>
+      <PlacesPageContent />
+    </Suspense>
   );
 }

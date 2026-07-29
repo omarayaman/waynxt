@@ -31,6 +31,7 @@ interface MapRegion {
   tagline: string;
   description: string;
   highlights: string[];
+  imageUrl: string;
 }
 
 const REGION_COORDS: Record<string, [number, number]> = {
