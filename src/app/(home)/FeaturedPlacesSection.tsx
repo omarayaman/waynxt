@@ -68,7 +68,7 @@ export default function FeaturedPlacesSection() {
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
-                  <PlaceCard place={place} />
+                  <PlaceCard place={place} index={index} />
                 </motion.div>
               ))}
         </div>

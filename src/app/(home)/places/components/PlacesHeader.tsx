@@ -6,7 +6,7 @@ import { usePlacesStore } from "@/store/usePlacesStore";
 import { SORT_OPTIONS } from "../constants";
 
 interface PlacesHeaderProps {
-  meta: any;
+  meta: { total: number } | null;
   placesCount: number;
   isLoading: boolean;
   setIsMobileFiltersOpen: (val: boolean) => void;
