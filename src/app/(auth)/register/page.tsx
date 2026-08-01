@@ -9,7 +9,9 @@ import NavbarRegister from "./NavbarRegister";
 import { z } from "zod";
 import { GoogleLoginButton } from "@/components/GoogleLoginButton";
 import { isGoogleOAuthConfigured } from "@/lib/google-oauth";
+import { PUBLIC_ASSETS } from "@/lib/public-assets";
 import { getPostAuthRedirect } from "@/lib/auth-redirect";
+import { GsapButton } from "@/components/GsapButton";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -72,14 +74,14 @@ function RegisterPageContent() {
       {/* Full-screen Background Image */}
       <div className="absolute inset-0 z-0 dark:opacity-80">
         <Image
-          src="/images/white/(3).jpeg"
+          src={PUBLIC_ASSETS.images.heroLight.two}
           alt="Green pyramids illustration on a light background"
           fill
           className="object-cover object-center dark:hidden"
           priority
         />
         <Image
-          src="/bg-register.png"
+          src={PUBLIC_ASSETS.backgrounds.register}
           alt="Ancient Egyptian ruins background"
           fill
           className="hidden object-cover object-center dark:block"
@@ -278,10 +280,12 @@ function RegisterPageContent() {
             </div>
 
             {/* Continue Button */}
-            <button
+            <GsapButton
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-accent-foreground font-bold text-[15px] py-4 rounded-xl mt-4 transition-all duration-300 shadow-[0_0_15px_color-mix(in srgb, var(--accent) %, transparent)] hover:shadow-[0_0_20px_color-mix(in srgb, var(--accent) %, transparent)] disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-accent after:absolute after:inset-0 after:rounded-xl after:border-2 after:border-accent after:pointer-events-none after:z-[10] text-accent font-medium dark:font-semibold text-[15px] py-4 rounded-xl mt-4 shadow-[0_0_15px_color-mix(in_srgb,var(--accent)_35%,transparent)] hover:shadow-[0_0_20px_color-mix(in_srgb,var(--accent)_45%,transparent)] disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+              innerBg="#0a0a0a"
+              magneticFill={true}
             >
               {isLoading ? (
                 <>
@@ -310,7 +314,7 @@ function RegisterPageContent() {
               </svg>
             </>
           )}
-        </button>
+        </GsapButton>
 
             {/* OR Separator */}
             {isGoogleOAuthConfigured && (

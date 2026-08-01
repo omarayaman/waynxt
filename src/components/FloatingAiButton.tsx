@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Send } from "lucide-react";
 
-const HIDDEN_PATHS = ["/planner", "/ask-waynx"];
+const HIDDEN_PATHS = ["/planner", "/ask-waynx", "/login", "/register"];
 
 export default function FloatingAiButton() {
   const pathname = usePathname();

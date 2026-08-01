@@ -13,11 +13,7 @@ export default function NavbarRegister({ step }: NavbarRegisterProps) {
         <AuthLogo />
       </div>
 
-      {step && (
-        <span className="absolute left-1/2 -translate-x-1/2 text-sm text-muted tracking-wide">
-          Step {step} of 2
-        </span>
-      )}
+
 
       <div className="flex items-center gap-4 text-sm z-20">
         <ThemeToggle />

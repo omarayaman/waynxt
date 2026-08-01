@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSAP Directional Button</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #111;
+      font-family: sans-serif;
+    }
+
+    .gsap-btn {
+      position: relative;
+      overflow: hidden;
+      border-radius: 9999px;
+      padding: 1.25rem 3rem;
+      background-color: #f7ea00; /* Waynx yellow */
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      outline: none;
+      min-width: 200px;
+    }
+
+    .gsap-btn .text {
+      position: relative;
+      z-index: 2;
+      color: #1c1b1b;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .blob {
+      position: absolute;
+      /* Make it a circle large enough to cover the button */
+      width: 250%;
+      padding-bottom: 250%;
+      background-color: #1c1b1b;
+      border-radius: 50%;
+      z-index: 1;
+      pointer-events: none;
+      
+      /* Center the transform origin */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+    }
+  </style>
+</head>
+<body>
+
+  <button class="gsap-btn">
+    <span class="text">Get GSAP</span>
+    <div class="blob"></div>
+  </button>
+
+  <script>
+    const btn = document.querySelector('.gsap-btn');
+    const blob = btn.querySelector('.blob');
+    const text = btn.querySelector('.text');
+
+    // Utility to find the closest edge of the button to the mouse cursor
+    function getClosestEdge(mouseX, mouseY, rect) {
+      const distLeft = Math.abs(mouseX - rect.left);
+      const distRight = Math.abs(mouseX - rect.right);
+      const distTop = Math.abs(mouseY - rect.top);
+      const distBottom = Math.abs(mouseY - rect.bottom);
+
+      const min = Math.min(distLeft, distRight, distTop, distBottom);
+
+      if (min === distLeft) return 'left';
+      if (min === distRight) return 'right';
+      if (min === distTop) return 'top';
+      return 'bottom';
+    }
+
+    btn.addEventListener('mouseenter', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const edge = getClosestEdge(e.clientX, e.clientY, rect);
+      
+      // Calculate start position relative to the center (which is 0,0 due to translate(-50%, -50%))
+      // The blob's center is at the button's center. We need to shift it outside the button.
+      let startX = 0;
+      let startY = 0;
+      const offset = rect.width; // Push it outside
+
+      if (edge === 'left') startX = -offset;
+      else if (edge === 'right') startX = offset;
+      else if (edge === 'top') startY = -offset;
+      else if (edge === 'bottom') startY = offset;
+
+      // Instantly position the blob outside the button on the entry side
+      gsap.set(blob, {
+        x: startX,
+        y: startY,
+        scale: 0
+      });
+
+      // Animate it to the center and scale it up to cover the button
+      gsap.to(blob, {
+        duration: 0.6,
+        x: 0,
+        y: 0,
+        scale: 1,
+        ease: "power3.out"
+      });
+
+      // Animate text color
+      gsap.to(text, { 
+        color: "#f7ea00",
+        duration: 0.3,
+        ease: "power2.out"
+      });
+    });
+
+    btn.addEventListener('mouseleave', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const edge = getClosestEdge(e.clientX, e.clientY, rect);
+
+      let endX = 0;
+      let endY = 0;
+      const offset = rect.width;
+
+      if (edge === 'left') endX = -offset;
+      else if (edge === 'right') endX = offset;
+      else if (edge === 'top') endY = -offset;
+      else if (edge === 'bottom') endY = offset;
+
+      // Animate the blob out towards the exit side
+      gsap.to(blob, {
+        duration: 0.6,
+        x: endX,
+        y: endY,
+        scale: 0,
+        ease: "power3.out"
+      });
+
+      // Restore text color
+      gsap.to(text, { 
+        color: "#1c1b1b",
+        duration: 0.3,
+        ease: "power2.in"
+      });
+    });
+  </script>
+</body>
+</html>

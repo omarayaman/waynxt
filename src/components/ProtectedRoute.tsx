@@ -5,24 +5,15 @@ import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isLoading, openAuthModal, isAuthModalOpen } = useAuthStore();
+  const { isAuthenticated, isLoading } = useAuthStore();
   const router = useRouter();
   const pathname = usePathname();
-  const hasPrompted = useRef(false);
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && !hasPrompted.current) {
-      // Open the login modal and tell it to redirect back here after login
-      openAuthModal('login', pathname);
-      hasPrompted.current = true;
+    if (!isLoading && !isAuthenticated) {
+      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
     }
-  }, [isLoading, isAuthenticated, openAuthModal, pathname]);
-
-  useEffect(() => {
-    if (hasPrompted.current && !isAuthModalOpen && !isAuthenticated && !isLoading) {
-      router.push("/");
-    }
-  }, [isAuthModalOpen, isAuthenticated, isLoading, router]);
+  }, [isLoading, isAuthenticated, pathname, router]);
 
   if (isLoading) {
     return (

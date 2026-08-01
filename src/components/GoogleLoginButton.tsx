@@ -45,7 +45,6 @@ export function GoogleLoginButton({
 
         const { useAuthStore } = await import("@/store/useAuthStore");
         await useAuthStore.getState().fetchCurrentUser();
-        useAuthStore.getState().closeAuthModal();
         router.push(redirectTo);
       } catch (error: unknown) {
         console.error("Backend auth error:", error);

@@ -33,9 +33,9 @@ export const PUBLIC_ASSETS = {
     },
   },
   backgrounds: {
-    pharaoh: "/bg-pharaoh.png",
-    register: "/bg-register.png",
-    loginDark: "/bg-login-dark.png",
+    pharaoh: "/images/login_bg_dark.png",
+    register: "/images/register_bg_dark.png",
+    loginDark: "/images/login_bg_dark.png",
   },
 } as const;
 

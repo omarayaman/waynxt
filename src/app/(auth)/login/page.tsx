@@ -8,8 +8,11 @@ import { authService } from "@/services/auth.service";
 import Navbar from "@/app/(auth)/login/Navbar";
 import { z } from "zod";
 import { GoogleLoginButton } from "@/components/GoogleLoginButton";
+import { GsapButton } from "@/components/GsapButton";
 import { isGoogleOAuthConfigured } from "@/lib/google-oauth";
 import { getPostAuthRedirect } from "@/lib/auth-redirect";
+import { PUBLIC_ASSETS } from "@/lib/public-assets";
+import { Loader2 } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email("Please enter a valid email address."),
@@ -71,14 +74,14 @@ function LoginPageContent() {
       {/* Full-screen Background Image */}
       <div className="absolute inset-0 z-0 dark:opacity-80">
         <Image
-          src="/images/white/(3).jpeg"
+          src={PUBLIC_ASSETS.images.heroLight.three}
           alt="Green pyramids illustration on a light background"
           fill
           className="object-cover object-center dark:hidden"
           priority
         />
         <Image
-          src="/bg-pharaoh.png"
+          src={PUBLIC_ASSETS.backgrounds.pharaoh}
           alt="Ancient Egyptian pharaoh statue in a modern museum"
           fill
           className="hidden object-cover object-center dark:block"
@@ -245,39 +248,22 @@ function LoginPageContent() {
             </div>
 
             {/* Login Button */}
-            <button
+            <GsapButton
               type="submit"
               disabled={isLoading}
-              className="w-full bg-accent hover:bg-accent-hover text-accent-foreground font-bold text-[15px] py-4 rounded-xl mt-4 transition-all duration-300 shadow-[0_0_15px_color-mix(in srgb, var(--accent) %, transparent)] hover:shadow-[0_0_20px_color-mix(in srgb, var(--accent) %, transparent)] disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+              className="w-full bg-accent after:absolute after:inset-0 after:rounded-xl after:border-2 after:border-accent after:pointer-events-none after:z-[10] text-accent font-medium dark:font-semibold text-[15px] py-4 rounded-xl mt-4 shadow-[0_0_15px_color-mix(in_srgb,var(--accent)_35%,transparent)] hover:shadow-[0_0_20px_color-mix(in_srgb,var(--accent)_45%,transparent)] disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+              innerBg="#0a0a0a"
+              magneticFill={true}
             >
               {isLoading ? (
                 <>
-                  <svg
-                    className="animate-spin h-5 w-5 text-accent-foreground"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
+                  <Loader2 size={20} className="animate-spin" />
                   Logging in...
                 </>
               ) : (
                 "Log in"
               )}
-            </button>
+            </GsapButton>
 
             {/* OR Separator */}
             {isGoogleOAuthConfigured && (

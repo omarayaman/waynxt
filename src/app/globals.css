@@ -254,6 +254,54 @@ html[data-boot="ready"] body {
   display: none;
 }
 
+@layer components {
+  .btn-swipe {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    background-color: transparent !important;
+    transition: color 0.4s ease-out, box-shadow 0.4s ease-out, transform 0.4s ease-out;
+  }
+
+  .btn-swipe::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--accent);
+    z-index: -2;
+  }
+  
+  .btn-swipe::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: var(--accent-foreground);
+    border-radius: 0 0 50% 50%;
+    transition: height 0.4s ease-out, border-radius 0.4s ease-out;
+    z-index: -1;
+  }
+  
+  .btn-swipe:hover::before {
+    height: 200%;
+    border-radius: 0;
+  }
+  
+  .btn-swipe:hover {
+    color: var(--accent) !important;
+  }
+
+  .btn-swipe svg {
+    transition: color 0.4s ease-out, transform 0.3s ease-out;
+  }
+  
+  .btn-swipe:hover svg {
+    color: var(--accent) !important;
+  }
+}
+
 /* Boot splash — minimal aurora loader */
 #waynxt-boot {
   overflow: hidden;

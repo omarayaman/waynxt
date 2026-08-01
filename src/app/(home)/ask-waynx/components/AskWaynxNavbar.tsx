@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { PanelLeft, User } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -29,7 +29,8 @@ export default function AskWaynxNavbar({
   onToggleDesktopSidebar,
 }: AskWaynxNavbarProps) {
   const pathname = usePathname();
-  const { user, isAuthenticated, isLoading, openAuthModal } = useAuthStore();
+  const { user, isAuthenticated, isLoading } = useAuthStore();
+  const router = useRouter();
 
   return (
     <header className="relative z-50 flex h-14 shrink-0 items-center gap-3 border-b border-border bg-background px-4 lg:px-6">
@@ -119,7 +120,7 @@ export default function AskWaynxNavbar({
           </Link>
         ) : (
           <button
-            onClick={() => openAuthModal('login')}
+            onClick={() => router.push('/login?redirect=/ask-waynx')}
             className="rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground transition-colors hover:bg-accent-hover"
           >
             Log in

@@ -3,11 +3,12 @@
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
-import {usePathname} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import {AnimatePresence, motion} from "framer-motion";
 import {Menu, Sparkles, X} from "lucide-react";
 import {useAuthStore} from "@/store/useAuthStore";
 import {ThemeToggle} from "@/components/ThemeToggle";
+import {GsapButton} from "@/components/GsapButton";
 import {useIsDark} from "@/store/useThemeStore";
 import { PUBLIC_ASSETS } from "@/lib/public-assets";
 
@@ -54,7 +55,8 @@ function getRouteNavbarClassName(pathname: string): string {
 
 export default function NavbarHome({className}: {className?: string}) {
   const pathname = usePathname();
-  const {user, isAuthenticated, isLoading, openAuthModal} = useAuthStore();
+  const {user, isAuthenticated, isLoading} = useAuthStore();
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -132,34 +134,39 @@ export default function NavbarHome({className}: {className?: string}) {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`relative py-1 text-[18px] font-medium transition-colors ${
+                  className={`group relative py-1 text-[18px] font-medium transition-colors ${
                     isActive ? navLinkActive : navLinkInactive
                   }`}>
                   {link.name}
                   {isActive && (
                     <motion.span
                       layoutId={`navbar-indicator-${link.href}`}
-                      className={`absolute -bottom-1 left-0 right-0 mx-auto h-[2px] w-full rounded-full ${navIndicator}`}
+                      className={`absolute -bottom-1 left-0 right-0 mx-auto h-[2px] w-full rounded-full bg-[#d6ca00] dark:bg-accent shadow-[0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-none`}
                       transition={{type: "spring", bounce: 0.15, duration: 0.45}}
                     />
+                  )}
+                  {!isActive && (
+                    <span className="absolute -bottom-1 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full bg-[#d6ca00] dark:bg-accent shadow-[0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-none transition-all duration-300 group-hover:w-full" />
                   )}
                 </Link>
               );
             })}
 
-            <Link
+            <GsapButton
               href="/ask-waynx"
-              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[18px] font-medium transition-colors ${
+              blobColor="var(--navbar-control-bg)"
+              textColorHover="var(--navbar-foreground)"
+              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[18px] font-medium ${
                 askActive
                   ? "bg-accent/12 text-accent"
-                  : "text-[var(--navbar-muted)] hover:bg-[var(--navbar-control-bg)] hover:text-[var(--navbar-foreground)]"
+                  : "text-[var(--navbar-muted)]"
               }`}>
               <Sparkles
                 size={18}
                 className={askActive ? "text-accent" : "text-[var(--navbar-foreground)]"}
               />
               Ask Waynx
-            </Link>
+            </GsapButton>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -196,16 +203,17 @@ export default function NavbarHome({className}: {className?: string}) {
               <div className="hidden items-center gap-5 sm:flex">
                 <button
                   type="button"
-                  onClick={() => openAuthModal('login', '/planner')}
+                  onClick={() => router.push('/login?redirect=/planner')}
                   className="text-[15px] font-medium transition-colors text-[var(--navbar-muted)] hover:text-[var(--navbar-foreground)]">
                   Log in
                 </button>
-                <button
-                  type="button"
-                  onClick={() => openAuthModal('register', '/planner')}
-                  className="rounded-xl px-6 py-2.5 text-[15px] font-bold transition-colors bg-[var(--navbar-foreground)] text-[var(--background)] hover:opacity-90">
+                <GsapButton
+                  onClick={() => router.push('/register?redirect=/planner')}
+                  blobColor="var(--accent)"
+                  textColorHover="var(--accent-foreground)"
+                  className="rounded-xl px-6 py-2.5 text-[15px] font-medium dark:font-semibold bg-[var(--navbar-foreground)] text-[var(--background)] border-none">
                   Sign up
-                </button>
+                </GsapButton>
               </div>
             )}
 
@@ -256,16 +264,22 @@ export default function NavbarHome({className}: {className?: string}) {
                   );
                 })}
 
-                <Link
+                <GsapButton
                   href="/ask-waynx"
-                  className={`mt-1 flex items-center gap-2 rounded-xl px-4 py-3 text-base font-medium transition-colors ${
+                  blobColor="var(--navbar-control-bg)"
+                  textColorHover="var(--navbar-foreground)"
+                  className={`inline-flex items-center gap-2 rounded-xl p-3 text-lg font-medium ${
                     askActive
-                      ? "bg-[var(--navbar-control-bg)] text-[var(--navbar-foreground)]"
-                      : "text-[var(--navbar-muted)] hover:bg-[var(--navbar-control-bg)] hover:text-[var(--navbar-foreground)]"
-                  }`}>
-                  <Sparkles size={16} className="text-[var(--navbar-foreground)]" />
+                      ? "bg-accent/10 text-accent"
+                      : "text-[var(--navbar-muted)]"
+                  }`}
+                  onClick={() => setMobileOpen(false)}>
+                  <Sparkles
+                    size={20}
+                    className={askActive ? "text-accent" : "text-[var(--navbar-foreground)]"}
+                  />
                   Ask Waynx
-                </Link>
+                </GsapButton>
 
                 {!isLoading && !isAuthenticated && (
                   <div className="mt-4 flex flex-col gap-2 border-t border-[var(--navbar-border)] pt-4">
@@ -273,7 +287,7 @@ export default function NavbarHome({className}: {className?: string}) {
                       type="button"
                       onClick={() => {
                         setMobileOpen(false);
-                        openAuthModal('login', '/planner');
+                        router.push('/login?redirect=/planner');
                       }}
                       className="rounded-xl px-4 py-3 text-center text-base font-medium text-[var(--navbar-muted)] hover:bg-[var(--navbar-control-bg)] hover:text-[var(--navbar-foreground)]">
                       Log in
@@ -282,9 +296,9 @@ export default function NavbarHome({className}: {className?: string}) {
                       type="button"
                       onClick={() => {
                         setMobileOpen(false);
-                        openAuthModal('register', '/planner');
+                        router.push('/register?redirect=/planner');
                       }}
-                      className="rounded-xl bg-[var(--navbar-foreground)] px-4 py-3 text-center text-base font-bold text-[var(--background)] hover:opacity-90">
+                      className="rounded-xl bg-[var(--navbar-foreground)] px-4 py-3 text-center text-base font-medium dark:font-semibold text-[var(--background)] hover:opacity-90">
                       Sign up
                     </button>
                   </div>

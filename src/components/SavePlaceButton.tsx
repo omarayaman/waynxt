@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import { Heart, Loader2 } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useSavedPlacesStore } from "@/store/useSavedPlacesStore";
 
@@ -12,7 +13,9 @@ interface SavePlaceButtonProps {
 }
 
 export function SavePlaceButton({ placeId, className = "", iconSize = 14 }: SavePlaceButtonProps) {
-  const { isAuthenticated, openAuthModal } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
+  const router = useRouter();
+  const pathname = usePathname();
   const isSaved = useSavedPlacesStore((s) => s.isSaved(placeId));
   const isToggling = useSavedPlacesStore((s) => s.isToggling(placeId));
   const hydrateSavedIds = useSavedPlacesStore((s) => s.hydrateSavedIds);
@@ -29,7 +32,7 @@ export function SavePlaceButton({ placeId, className = "", iconSize = 14 }: Save
     e.stopPropagation();
 
     if (!isAuthenticated) {
-      openAuthModal('login');
+      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
       return;
     }
 

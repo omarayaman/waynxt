@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, MessageSquarePlus, Pencil, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
@@ -32,7 +33,9 @@ export function PlaceReviewsSection({
   initialReviews,
   initialMeta,
 }: PlaceReviewsSectionProps) {
-  const { user, isAuthenticated, openAuthModal } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
+  const router = useRouter();
+  const pathname = usePathname();
   const [reviews, setReviews] = useState<Review[]>(initialReviews);
   const [meta, setMeta] = useState<PaginationMeta | undefined>(initialMeta);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -163,7 +166,7 @@ export function PlaceReviewsSection({
       </button>
     ) : !isAuthenticated ? (
       <button
-        onClick={() => openAuthModal('login')}
+        onClick={() => router.push(`/login?redirect=${encodeURIComponent(pathname)}`)}
         className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-accent/30 hover:text-foreground"
       >
         Sign in to review
