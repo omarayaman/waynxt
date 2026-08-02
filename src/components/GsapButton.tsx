@@ -9,9 +9,12 @@ interface GsapButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   href?: string;
   blobColor?: string;
+  blobClass?: string;
   textColorHover?: string;
   innerBg?: string;
+  innerBgClass?: string;
   magneticFill?: boolean;
+  magneticBlend?: boolean;
 }
 
 export function GsapButton({
@@ -19,9 +22,12 @@ export function GsapButton({
   className,
   href,
   blobColor = "var(--accent)",
+  blobClass,
   textColorHover = "var(--accent-foreground)",
   innerBg,
+  innerBgClass,
   magneticFill = false,
+  magneticBlend = true,
   ...props
 }: GsapButtonProps) {
   const containerRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
@@ -197,15 +203,15 @@ export function GsapButton({
 
   const content = (
     <>
-      <span ref={textRef} className={`relative z-[2] flex items-center justify-center gap-2 ${magneticFill ? "mix-blend-difference text-[#ffe600]" : ""}`}>
+      <span ref={textRef} className={`relative z-[2] flex items-center justify-center gap-2 ${magneticFill && magneticBlend ? "text-black mix-blend-normal dark:mix-blend-difference dark:text-[#ffe600]" : ""}`}>
         {children}
       </span>
       <span className="absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none z-[1]">
-        {innerBg && <div className="absolute inset-0" style={{ backgroundColor: innerBg }} />}
+        <div className={`absolute inset-0 ${innerBgClass || ""}`} style={innerBg ? { backgroundColor: innerBg } : undefined} />
         <div
           ref={blobRef}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] rounded-full pointer-events-none"
-          style={{ backgroundColor: blobColor }}
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] rounded-full pointer-events-none ${blobClass || ""}`}
+          style={!blobClass ? { backgroundColor: blobColor } : undefined}
         />
       </span>
     </>

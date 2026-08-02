@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { GsapButton } from "@/components/GsapButton";
 import {
   Globe2,
   Landmark,
@@ -141,9 +142,12 @@ export default function EgyptTourismSection() {
           <p className="max-w-[560px] text-sm italic leading-relaxed text-muted md:text-base">
             {"\u201cEgypt is not a country you visit once \u2014 it\u2019s a place that stays with you forever.\u201d"}
           </p>
-          <Link
+          <GsapButton
             href="/places"
-            className="inline-flex items-center gap-2 rounded-xl border border-accent/40 bg-accent-subtle px-7 py-3.5 text-sm font-bold text-accent transition-all hover:bg-accent hover:text-accent-foreground"
+            className="group inline-flex items-center gap-2 bg-accent after:absolute after:inset-0 after:border-2 after:border-accent after:rounded-xl after:pointer-events-none after:z-[10] font-normal dark:font-medium text-sm px-7 py-3.5 rounded-xl dark:shadow-[0_4px_24px_color-mix(in_srgb,var(--accent)_35%,transparent)] dark:hover:shadow-[0_6px_32px_color-mix(in_srgb,var(--accent)_45%,transparent)]"
+            innerBgClass="bg-accent dark:bg-[#0a0a0a]"
+            blobClass="bg-white dark:bg-accent"
+            magneticFill={true}
           >
             Start Your Egyptian Journey
             <svg
@@ -156,11 +160,12 @@ export default function EgyptTourismSection() {
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
+              className="transition-transform group-hover:translate-x-1"
             >
               <path d="M5 12h14" />
               <path d="m12 5 7 7-7 7" />
             </svg>
-          </Link>
+          </GsapButton>
         </motion.div>
       </div>
     </section>

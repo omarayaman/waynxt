@@ -72,26 +72,30 @@ function RegisterPageContent() {
   return (
     <div className="relative min-h-screen bg-surface-card text-foreground font-sans overflow-hidden">
       {/* Full-screen Background Image */}
-      <div className="absolute inset-0 z-0 dark:opacity-80">
+      <div className="absolute inset-0 z-0 dark:opacity-80 bg-black">
         <Image
-          src={PUBLIC_ASSETS.images.heroLight.two}
-          alt="Green pyramids illustration on a light background"
+          src="/images/auth/pharaonic-light-register.jpg"
+          alt="Beautiful bright view of the Great Sphinx of Giza and Pyramids"
           fill
-          className="object-cover object-center dark:hidden"
+          quality={100}
+          sizes="100vw"
+          className="object-cover object-right lg:object-center dark:hidden brightness-90"
           priority
         />
         <Image
-          src={PUBLIC_ASSETS.backgrounds.register}
-          alt="Ancient Egyptian ruins background"
+          src="/images/auth/pharaonic-night.jpg"
+          alt="Majestic night view of the Pyramids of Giza"
           fill
-          className="hidden object-cover object-center dark:block"
+          quality={100}
+          sizes="100vw"
+          className="hidden object-cover object-right lg:object-center dark:block brightness-[0.80]"
           priority
         />
       </div>
 
       {/* Theme-aware gradient overlay */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-surface-card/95 from-40% via-surface-card/40 to-transparent dark:hidden" />
-      <div className="absolute inset-0 z-[1] hidden bg-gradient-to-r from-black/90 from-40% via-black/65 to-transparent dark:block" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-surface-card/95 from-[35%] via-surface-card/50 via-[50%] to-transparent to-[65%] dark:hidden" />
+      <div className="absolute inset-0 z-[1] hidden bg-gradient-to-r from-black/95 from-[35%] via-black/60 via-[50%] to-transparent to-[65%] dark:block" />
       {/* Top Navigation */}
       <NavbarRegister step={1} />
       {/* Form Content */}
@@ -283,8 +287,9 @@ function RegisterPageContent() {
             <GsapButton
               type="submit"
               disabled={isLoading}
-              className="w-full bg-accent after:absolute after:inset-0 after:rounded-xl after:border-2 after:border-accent after:pointer-events-none after:z-[10] text-accent font-medium dark:font-semibold text-[15px] py-4 rounded-xl mt-4 shadow-[0_0_15px_color-mix(in_srgb,var(--accent)_35%,transparent)] hover:shadow-[0_0_20px_color-mix(in_srgb,var(--accent)_45%,transparent)] disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
-              innerBg="#0a0a0a"
+              className="w-full bg-accent after:absolute after:inset-0 after:rounded-xl after:border-2 after:border-accent after:pointer-events-none after:z-[10] font-normal dark:font-medium text-[15px] py-4 rounded-xl mt-4 dark:shadow-[0_0_15px_color-mix(in_srgb,var(--accent)_35%,transparent)] dark:hover:shadow-[0_0_20px_color-mix(in_srgb,var(--accent)_45%,transparent)] disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+              innerBgClass="bg-accent dark:bg-[#0a0a0a]"
+              blobClass="bg-white dark:bg-accent"
               magneticFill={true}
             >
               {isLoading ? (

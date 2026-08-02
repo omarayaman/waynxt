@@ -53,37 +53,31 @@ export function PlaceCard({ place, index, animateFromIndex = 0 }: PlaceCardProps
           {place.name}
         </h3>
 
-        <div className="flex flex-wrap items-center gap-2 text-gray-300 dark:text-[#888] text-xs font-medium">
-          <span className="flex items-center gap-1.5 text-gray-300 dark:text-[#ccc]">
-            <MapPin size={12} className="text-[#F7EA00]" /> {place.city}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-gray-300 dark:text-[#888] text-xs font-medium mt-1">
+          <span className="flex items-center gap-1.5 text-gray-300 dark:text-[#ccc] whitespace-nowrap">
+            <MapPin size={12} className="text-[#F7EA00] shrink-0" /> {place.city}
           </span>
 
-          {place.category && <span>&middot;</span>}
           {place.category &&
             (() => {
               const CatIcon =
                 CATEGORY_ICONS[place.category.toLowerCase()] || Sparkles;
               return (
-                <span className="flex items-center gap-1.5 capitalize text-gray-300 dark:text-[#ccc]">
-                  <CatIcon size={12} className="text-[#F7EA00]" /> {place.category}
+                <span className="flex items-center gap-1.5 capitalize text-gray-300 dark:text-[#ccc] whitespace-nowrap">
+                  <CatIcon size={12} className="text-[#F7EA00] shrink-0" /> {place.category}
                 </span>
               );
             })()}
 
-          {place.category && place.budget_level && <span>&middot;</span>}
           {place.budget_level && (
-            <span className="flex items-center gap-1.5 capitalize text-gray-300 dark:text-[#ccc]">
-              <Diamond size={12} className="text-[#F7EA00]" /> {place.budget_level}
+            <span className="flex items-center gap-1.5 capitalize text-gray-300 dark:text-[#ccc] whitespace-nowrap">
+              <Diamond size={12} className="text-[#F7EA00] shrink-0" /> {place.budget_level}
             </span>
           )}
 
-          {(place.category || place.budget_level) &&
-            place.duration_needed && place.duration_needed > 0 && (
-              <span>&middot;</span>
-            )}
           {place.duration_needed && place.duration_needed > 0 && (
-            <span className="flex items-center gap-1.5 text-gray-300 dark:text-[#ccc]">
-              <Clock size={12} className="text-[#F7EA00]" /> {place.duration_needed}h
+            <span className="flex items-center gap-1.5 text-gray-300 dark:text-[#ccc] whitespace-nowrap">
+              <Clock size={12} className="text-[#F7EA00] shrink-0" /> {place.duration_needed}h
             </span>
           )}
         </div>

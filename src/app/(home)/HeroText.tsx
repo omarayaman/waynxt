@@ -86,8 +86,9 @@ export default function HeroText() {
       <div ref={buttonRef} className="opacity-0">
         <GsapButton
           href="/places"
-          className="group inline-flex items-center gap-3 bg-accent after:absolute after:inset-0 after:border-2 after:border-accent after:rounded-xl after:pointer-events-none after:z-[10] text-accent font-medium dark:font-semibold text-[16px] px-8 py-4 rounded-xl shadow-[0_4px_24px_color-mix(in_srgb,var(--accent)_35%,transparent)] hover:shadow-[0_6px_32px_color-mix(in_srgb,var(--accent)_45%,transparent)]"
-          innerBg="#0a0a0a"
+          className="group inline-flex items-center gap-3 bg-accent after:absolute after:inset-0 after:border-2 after:border-accent after:rounded-xl after:pointer-events-none after:z-[10] font-normal dark:font-medium text-[16px] px-8 py-4 rounded-xl dark:shadow-[0_4px_24px_color-mix(in_srgb,var(--accent)_35%,transparent)] dark:hover:shadow-[0_6px_32px_color-mix(in_srgb,var(--accent)_45%,transparent)]"
+          innerBgClass="bg-accent dark:bg-[#0a0a0a]"
+          blobClass="bg-white dark:bg-accent"
           magneticFill={true}
         >
           Start Exploring
