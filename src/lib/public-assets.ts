@@ -21,6 +21,8 @@ export const PUBLIC_ASSETS = {
     dahab: "/images/dahab.png",
     luxorFestival: "/images/luxor_festival.png",
     food: "/images/food.png",
+    abuSimbel: "/images/abu-simbel.jpg",
+    abuSimbelInterior: "/images/abu-simbel-interior.jpg",
     heroLight: {
       one: "/images/white/1_yellow.jpeg",
       two: "/images/white/2_yellow.jpeg",

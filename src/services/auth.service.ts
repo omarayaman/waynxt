@@ -11,45 +11,43 @@ interface LoginCredentials {
   [key: string]: unknown;
 }
 
+interface AuthResponse {
+  data?: AuthResponse;
+  tokens?: {
+    access_token?: string;
+    refresh_token?: string;
+  };
+  token?: string;
+  access_token?: string;
+  refresh_token?: string;
+}
+
+function setAuthCookies(responseData: AuthResponse) {
+  const respData = responseData.data || responseData;
+  const token = respData.tokens?.access_token || respData.token || respData.access_token;
+  const refreshToken = respData.tokens?.refresh_token || respData.refresh_token;
+
+  if (token) Cookies.set('accessToken', token, { expires: 1 });
+  else throw new Error("No access token received from server");
+  if (refreshToken) Cookies.set('refreshToken', refreshToken, { expires: 7 });
+}
+
 export const authService = {
   async register(data: RegisterData) {
     const response = await api.post('/auth/register', data);
-    const respData = response.data.data || response.data;
-    
-    const token = respData.tokens?.access_token || respData.token || respData.access_token;
-    const refreshToken = respData.tokens?.refresh_token || respData.refresh_token;
-
-    if (token) Cookies.set('accessToken', token, { expires: 1 });
-    else throw new Error("No access token received from server");
-    if (refreshToken) Cookies.set('refreshToken', refreshToken, { expires: 7 });
-
+    setAuthCookies(response.data);
     return response.data;
   },
   
   async login(credentials: LoginCredentials) {
     const response = await api.post('/auth/login', credentials);
-    const respData = response.data.data || response.data;
-
-    const token = respData.tokens?.access_token || respData.token || respData.access_token;
-    const refreshToken = respData.tokens?.refresh_token || respData.refresh_token;
-
-    if (token) Cookies.set('accessToken', token, { expires: 1 });
-    else throw new Error("No access token received from server");
-    if (refreshToken) Cookies.set('refreshToken', refreshToken, { expires: 7 });
-
+    setAuthCookies(response.data);
     return response.data;
   },
 
-  async googleLogin(payload: { email: string; full_name: string; provider_id: string }) {
+  async googleLogin(payload: { email: string; full_name: string; provider_id: string; access_token?: string }) {
     const response = await api.post('/auth/google', payload);
-    const respData = response.data.data || response.data;
-
-    const token = respData.tokens?.access_token || respData.token || respData.access_token;
-    const refreshToken = respData.tokens?.refresh_token || respData.refresh_token;
-
-    if (token) Cookies.set('accessToken', token, { expires: 1 });
-    if (refreshToken) Cookies.set('refreshToken', refreshToken, { expires: 7 });
-
+    setAuthCookies(response.data);
     return response.data;
   },
 

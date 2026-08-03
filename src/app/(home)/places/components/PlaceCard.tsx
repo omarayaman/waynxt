@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Sparkles, MapPin, Diamond, Clock } from "lucide-react";
 import { SavePlaceButton } from "@/components/SavePlaceButton";
@@ -13,15 +15,34 @@ interface PlaceCardProps {
 
 export function PlaceCard({ place, index, animateFromIndex = 0 }: PlaceCardProps) {
   const isNew = index >= animateFromIndex;
+  const [isClicked, setIsClicked] = useState(false);
+
+  useEffect(() => {
+    if (isClicked) {
+      const timer = setTimeout(() => setIsClicked(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [isClicked]);
 
   return (
     <Link
       href={`/places/${place.id}`}
+      onClick={() => setIsClicked(true)}
       style={isNew ? { animationDelay: `${(index - animateFromIndex) * 100}ms` } : {}}
-      className={`group relative w-full h-[350px] block rounded-[2rem] overflow-hidden border border-gray-200 dark:border-[#222222] hover:border-[#F7EA00] dark:hover:border-[#F7EA00]/50 transition-all duration-300 cursor-pointer ${
+      className={`group relative w-full h-[350px] block rounded-[2rem] overflow-hidden p-[3px] transition-all duration-300 cursor-pointer ${
         isNew ? "animate-slide-stack" : ""
       }`}
     >
+      {/* Default static border */}
+      <div className={`absolute inset-0 rounded-[2rem] border border-gray-200 dark:border-[#222222] group-hover:border-[#F7EA00] dark:group-hover:border-[#F7EA00]/50 transition-colors z-[1] ${isClicked ? 'opacity-0' : 'opacity-100'}`} />
+      
+      {/* Animated spinning border on click */}
+      <div className={`absolute inset-0 z-[0] transition-opacity duration-300 ${isClicked ? "opacity-100" : "opacity-0"}`}>
+        <div className="absolute inset-[-100%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,#000_50%,transparent_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,#F7EA00_50%,transparent_100%)]" />
+      </div>
+
+      {/* Inner Card Content */}
+      <div className="relative z-10 w-full h-full rounded-[calc(2rem-3px)] overflow-hidden bg-background">
       {/* Background Image */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -81,6 +102,7 @@ export function PlaceCard({ place, index, animateFromIndex = 0 }: PlaceCardProps
             </span>
           )}
         </div>
+      </div>
       </div>
     </Link>
   );

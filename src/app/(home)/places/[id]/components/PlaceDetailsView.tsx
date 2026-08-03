@@ -188,18 +188,21 @@ export function PlaceDetailsView({
 
       {/* Map Modal */}
       {showMap && (
-        <div className="fixed inset-0 z-[9999] bg-white dark:bg-[#050505] flex flex-col animate-in fade-in zoom-in-95 duration-200 text-gray-900 dark:text-white">
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-[#222]">
-            <h2 className="text-xl font-bold flex items-center gap-2 font-clash">
-              <Map size={24} className="text-[#F7EA00]" />
-              Location on Map
-            </h2>
-            <button 
-              onClick={() => setShowMap(false)}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#111] transition-colors"
-            >
-              <X size={24} />
-            </button>
+        <div className="fixed inset-0 z-[9999] bg-white dark:bg-[#050505] flex flex-col animate-in fade-in zoom-in-95 duration-200 text-gray-900 dark:text-white pt-[70px]">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-[#222222] bg-white dark:bg-[#0a0a0a]">
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={() => setShowMap(false)}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 transition-colors text-gray-900 dark:text-white font-medium shadow-sm"
+              >
+                <ArrowLeft size={18} />
+                Back to {place.name}
+              </button>
+            </div>
+            <div className="flex items-center gap-2">
+              <Map size={20} className="text-accent" />
+              <h3 className="font-bold text-gray-900 dark:text-white text-lg font-sans hidden sm:block">Location on Map</h3>
+            </div>
           </div>
           <div className="flex-1 w-full relative z-0">
             <InteractiveMap places={[place]} />

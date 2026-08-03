@@ -26,7 +26,7 @@ export default function FeaturedPlacesSection() {
       <div className="mx-auto max-w-[1200px]">
         <div className="mb-12 flex flex-col items-center text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
           <div>
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent-subtle px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-accent">
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-accent bg-accent-subtle px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-black dark:text-accent">
               Top Destinations
             </span>
             <h2 className="mb-3 text-4xl font-bold text-foreground md:text-[44px]">
@@ -40,10 +40,10 @@ export default function FeaturedPlacesSection() {
 
           <Link
             href="/places"
-            className="mt-6 inline-flex shrink-0 items-center gap-2 rounded-full bg-accent/20 dark:bg-accent/10 px-5 py-2 text-sm font-bold text-gray-900 dark:text-white transition-all hover:bg-accent hover:text-[#0a0a0a] sm:mt-0"
+            className="group mt-6 sm:mt-0 relative inline-flex shrink-0 items-center gap-2 rounded-full bg-accent px-5 py-2 text-sm font-bold text-black transition-all"
           >
             View all places
-            <ArrowRight size={16} />
+            <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
 

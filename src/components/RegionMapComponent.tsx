@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 
 // Create modern HTML markers
 const createModernIcon = (isActive: boolean) => {

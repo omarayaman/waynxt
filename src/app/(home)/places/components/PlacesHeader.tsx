@@ -36,11 +36,7 @@ export function PlacesHeader({
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white leading-tight tracking-wide font-sans">
             Discover <span className="text-[#F7EA00] dark:text-[#F7EA00]">Egypt</span>
           </h2>
-          {meta && (
-            <span className={`text-xs text-gray-500 dark:text-[#666666] font-medium transition-opacity ${isLoading ? "opacity-50" : "opacity-100"}`}>
-              {placesCount} of {meta.total}
-            </span>
-          )}
+
         </div>
         
         {/* Mobile Filters Toggle (Visible only on mobile) */}

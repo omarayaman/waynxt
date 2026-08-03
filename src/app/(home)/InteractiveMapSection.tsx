@@ -99,7 +99,7 @@ export default function InteractiveMapSection() {
     <section className="relative w-full overflow-hidden bg-background py-24 px-4">
       <div className="relative z-10 mx-auto max-w-[1200px]">
         <div className="mb-12 text-center">
-          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent-subtle px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-accent">
+          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-accent bg-accent-subtle px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-black dark:text-accent">
             <MapPin size={14} />
             Explore by Region
           </span>
@@ -162,7 +162,7 @@ export default function InteractiveMapSection() {
                   <div className="absolute inset-0 bg-black/10" />
                 </div>
                 <div>
-                  <p className="mb-2 text-xs font-bold uppercase tracking-widest text-accent">
+                  <p className="mb-2 text-xs font-bold uppercase tracking-widest text-black dark:text-accent">
                     {activeRegion.tagline}
                   </p>
                   <h3 className="mb-4 text-3xl font-bold text-foreground md:text-4xl">

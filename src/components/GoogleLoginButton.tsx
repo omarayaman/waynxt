@@ -35,12 +35,18 @@ export function GoogleLoginButton({
         const userInfoRes = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
           headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
         });
+        
+        if (!userInfoRes.ok) {
+          throw new Error("Failed to fetch user info from Google");
+        }
+        
         const userInfo = await userInfoRes.json();
 
         await authService.googleLogin({
           email: userInfo.email,
           full_name: userInfo.name,
           provider_id: userInfo.sub,
+          access_token: tokenResponse.access_token,
         });
 
         const { useAuthStore } = await import("@/store/useAuthStore");

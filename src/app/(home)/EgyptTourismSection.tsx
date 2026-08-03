@@ -68,7 +68,7 @@ export default function EgyptTourismSection() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="mb-14 max-w-[780px] text-center"
         >
-          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent-subtle px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-accent">
+          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-accent bg-accent-subtle px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-black dark:text-accent">
             <Globe2 size={14} />
             Why Egypt
           </span>

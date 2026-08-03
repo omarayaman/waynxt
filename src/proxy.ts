@@ -13,8 +13,10 @@ export function proxy(request: NextRequest) {
   const isProtected = protectedRoutes.some((route) => pathname.startsWith(route));
 
   if (isProtected && !token) {
-    // We let the client-side ProtectedRoute component handle showing the login modal
-    // instead of doing a hard redirect to the deleted /login page.
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    url.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(url);
   }
 
   // Continue the request if authenticated or route is not protected

@@ -74,8 +74,8 @@ function LoginPageContent() {
       {/* Full-screen Background Image */}
       <div className="absolute inset-0 z-0 dark:opacity-80 bg-black">
         <Image
-          src="/images/auth/view-ancient-temple-tomb-from-ancient-egyptian-times.jpg"
-          alt="Majestic ancient Egyptian temple interior bathed in soft morning sunlight"
+          src="/images/auth/temple-Light.png"
+          alt="Ancient Egyptian temple with palm trees and sandy landscape"
           fill
           quality={100}
           sizes="100vw"
@@ -94,8 +94,8 @@ function LoginPageContent() {
       </div>
 
       {/* Theme-aware gradient overlay */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-surface-card/95 from-[35%] via-surface-card/50 via-[50%] to-transparent to-[65%] dark:hidden" />
-      <div className="absolute inset-0 z-[1] hidden bg-gradient-to-r from-black/95 from-[35%] via-black/60 via-[50%] to-transparent to-[65%] dark:block" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-surface-card/85 from-[5%] via-surface-card/20 via-[30%] to-transparent to-[55%] dark:hidden" />
+      <div className="absolute inset-0 z-[1] hidden bg-gradient-to-r from-black/85 from-[5%] via-black/25 via-[30%] to-transparent to-[55%] dark:block" />
 
       <Navbar />
 

@@ -48,8 +48,10 @@ export default function HeroText() {
           setTypedText(currentWord.substring(0, typedText.length - 1));
         }, 50); // Deleting speed
       } else {
-        setIsDeleting(false);
-        setCurrentWordIndex((prev) => (prev + 1) % ROTATING_WORDS.length);
+        timeout = setTimeout(() => {
+          setIsDeleting(false);
+          setCurrentWordIndex((prev) => (prev + 1) % ROTATING_WORDS.length);
+        }, 50);
       }
     } else {
       if (typedText.length < currentWord.length) {

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {usePathname, useRouter} from "next/navigation";
 import {AnimatePresence, motion} from "framer-motion";
-import {Menu, Sparkles, X} from "lucide-react";
+import {Bell, Menu, Sparkles, X} from "lucide-react";
 import {useAuthStore} from "@/store/useAuthStore";
 import {ThemeToggle} from "@/components/ThemeToggle";
 import {GsapButton} from "@/components/GsapButton";
@@ -59,8 +59,22 @@ export default function NavbarHome({className}: {className?: string}) {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hasSubscribedToEvent, setHasSubscribedToEvent] = useState(false);
+  const [hasUnread, setHasUnread] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const isDark = useIsDark();
+
+  useEffect(() => {
+    const handleNotification = () => {
+      setHasSubscribedToEvent(true);
+      setHasUnread(true);
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 4000);
+    };
+    window.addEventListener('new-notification', handleNotification);
+    return () => window.removeEventListener('new-notification', handleNotification);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -171,6 +185,46 @@ export default function NavbarHome({className}: {className?: string}) {
 
           <div className="flex items-center gap-3">
             <ThemeToggle variant="navbar" />
+
+            {/* Notification Bell */}
+            {isAuthenticated && hasSubscribedToEvent && (
+              <div 
+                className="relative flex items-center"
+                onMouseEnter={() => setShowToast(true)}
+                onMouseLeave={() => setShowToast(false)}
+              >
+                <button
+                  type="button"
+                  onClick={() => setHasUnread(false)}
+                  className="relative rounded-full p-2 transition-colors text-[var(--navbar-muted)] hover:bg-[var(--navbar-control-bg)] hover:text-[var(--navbar-foreground)]"
+                  aria-label="Notifications"
+                >
+                  <Bell size={20} />
+                  {hasUnread && (
+                    <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[var(--navbar-solid)] animate-pulse"></span>
+                  )}
+                </button>
+
+                <AnimatePresence>
+                  {showToast && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      className="absolute top-full right-0 mt-4 w-72 bg-[#1a1a1a] border border-accent/30 text-white p-4 rounded-2xl shadow-[0_10px_40px_rgba(255,215,0,0.15)] flex flex-col gap-2 z-[210]"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="bg-accent/20 p-2 rounded-full text-accent shrink-0">
+                          <Bell size={16} />
+                        </div>
+                        <span className="font-bold text-sm">Notification Enabled!</span>
+                      </div>
+                      <span className="text-xs text-gray-400 pl-11">We will notify you 24 hours before the event.</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
 
             {isLoading ? (
               <div className="h-10 w-10 animate-pulse rounded-full bg-white/10" />

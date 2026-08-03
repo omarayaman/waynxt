@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Sora, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import "leaflet/dist/leaflet.css";
 import { PUBLIC_ASSETS } from "@/lib/public-assets";
 
 const fontDisplay = Sora({

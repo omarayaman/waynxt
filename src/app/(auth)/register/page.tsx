@@ -74,8 +74,8 @@ function RegisterPageContent() {
       {/* Full-screen Background Image */}
       <div className="absolute inset-0 z-0 dark:opacity-80 bg-black">
         <Image
-          src="/images/auth/pharaonic-light-register.jpg"
-          alt="Beautiful bright view of the Great Sphinx of Giza and Pyramids"
+          src="/images/auth/temple-Light.png"
+          alt="Ancient Egyptian temple with palm trees and sandy landscape"
           fill
           quality={100}
           sizes="100vw"
@@ -94,8 +94,8 @@ function RegisterPageContent() {
       </div>
 
       {/* Theme-aware gradient overlay */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-surface-card/95 from-[35%] via-surface-card/50 via-[50%] to-transparent to-[65%] dark:hidden" />
-      <div className="absolute inset-0 z-[1] hidden bg-gradient-to-r from-black/95 from-[35%] via-black/60 via-[50%] to-transparent to-[65%] dark:block" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-surface-card/60 from-[0%] via-surface-card/10 via-[30%] to-transparent to-[60%] dark:hidden" />
+      <div className="absolute inset-0 z-[1] hidden bg-gradient-to-r from-black/60 from-[0%] via-black/15 via-[30%] to-transparent to-[60%] dark:block" />
       {/* Top Navigation */}
       <NavbarRegister step={1} />
       {/* Form Content */}

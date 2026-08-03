@@ -33,20 +33,21 @@ export default async function PlaceDetailsPage({
   const reviewsMeta =
     reviewsResult.status === "fulfilled" ? reviewsResult.value.meta : undefined;
 
+  const getTopPlaces = (placesData: any[] | undefined, excludeId: number) => {
+    return (placesData ?? [])
+      .filter((p) => p.id !== excludeId)
+      .sort((a, b) => b.rating - a.rating)
+      .slice(0, 8);
+  };
+
   const relatedPlaces =
     relatedResult.status === "fulfilled"
-      ? (relatedResult.value.data ?? [])
-          .filter((p) => p.id !== place.id)
-          .sort((a, b) => b.rating - a.rating)
-          .slice(0, 8)
+      ? getTopPlaces(relatedResult.value.data, place.id)
       : [];
 
   const cityPlaces =
     cityResult.status === "fulfilled"
-      ? (cityResult.value.data ?? [])
-          .filter((p) => p.id !== place.id)
-          .sort((a, b) => b.rating - a.rating)
-          .slice(0, 8)
+      ? getTopPlaces(cityResult.value.data, place.id)
       : [];
 
   return (
