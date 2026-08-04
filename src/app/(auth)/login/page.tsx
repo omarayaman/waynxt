@@ -93,8 +93,7 @@ function LoginPageContent() {
         />
       </div>
 
-      {/* Theme-aware gradient overlay */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-surface-card/85 from-[5%] via-surface-card/20 via-[30%] to-transparent to-[55%] dark:hidden" />
+      {/* Dark mode gradient overlay */}
       <div className="absolute inset-0 z-[1] hidden bg-gradient-to-r from-black/85 from-[5%] via-black/25 via-[30%] to-transparent to-[55%] dark:block" />
 
       <Navbar />

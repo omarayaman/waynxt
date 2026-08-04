@@ -93,9 +93,9 @@ function RegisterPageContent() {
         />
       </div>
 
-      {/* Theme-aware gradient overlay */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-surface-card/60 from-[0%] via-surface-card/10 via-[30%] to-transparent to-[60%] dark:hidden" />
-      <div className="absolute inset-0 z-[1] hidden bg-gradient-to-r from-black/60 from-[0%] via-black/15 via-[30%] to-transparent to-[60%] dark:block" />
+      {/* Dark mode gradient overlay */}
+      <div className="absolute inset-0 z-[1] hidden bg-gradient-to-r from-black/85 from-[5%] via-black/25 via-[30%] to-transparent to-[55%] dark:block" />
+
       {/* Top Navigation */}
       <NavbarRegister step={1} />
       {/* Form Content */}

@@ -117,13 +117,7 @@ export function PlaceDetailsView({
                   <MapPin size={14} className="text-accent" />
                   {place.city}, Egypt
                 </p>
-                <button 
-                  onClick={() => setShowMap(true)}
-                  className="mt-4 flex w-fit items-center gap-2 rounded-full bg-[#F7EA00] px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-[#FCDF69] shadow-sm"
-                >
-                  <Map size={16} />
-                  View on Map
-                </button>
+
               </div>
               <SavePlaceButton
                 placeId={place.id}
@@ -150,7 +144,19 @@ export function PlaceDetailsView({
           </div>
 
           <aside className="min-w-0">
-            <div className="lg:sticky lg:top-24">
+            <div className="lg:sticky lg:top-24 flex flex-col gap-6">
+              {/* Inline Map */}
+              <div 
+                className="w-full h-[280px] rounded-2xl overflow-hidden border border-border shadow-sm relative z-0 group"
+                onDoubleClickCapture={() => setShowMap(true)}
+              >
+                <InteractiveMap places={[place]} />
+                {/* Tooltip to hint users */}
+                <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm text-white px-2 py-1 rounded text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  Double-click to expand
+                </div>
+              </div>
+
               <PlaceSidebar
                 place={place}
                 totalReviews={totalReviews}
