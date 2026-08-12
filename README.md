@@ -1,8 +1,36 @@
-# Waynxt - Frontend Web Application
+<div align="center">
+  <img src="./public/icons/waynxt.svg" alt="Waynx Logo" width="150" />
 
-Welcome to the **Waynxt** frontend repository! This is a modern web application built using Next.js, React, and Tailwind CSS. 
+# 🌍 Waynx - AI-Powered Smart Tourism Platform
 
-This README provides all the necessary details to understand the architecture, technologies used, and how to start contributing to the frontend.
+**Waynx** is a cutting-edge, AI-driven travel and tourism platform designed to revolutionize how explorers plan their journeys. By seamlessly blending intelligent trip curation, interactive geographical mapping, and an always-available AI assistant, Waynx eliminates the friction of travel planning, empowering users to discover hidden gems and orchestrate flawless itineraries with zero hassle.
+
+<div align="center">
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white" alt="Framer Motion" />
+  <img src="https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=white" alt="GSAP" />
+  <img src="https://img.shields.io/badge/Zustand-443E38?style=for-the-badge&logo=react&logoColor=white" alt="Zustand" />
+  <img src="https://img.shields.io/badge/Leaflet-199900?style=for-the-badge&logo=leaflet&logoColor=white" alt="Leaflet" />
+</div>
+
+<br/>
+</div>
+
+## ✨ Core Features & Capabilities
+
+Waynx goes beyond standard travel apps by integrating intelligent tools and a robust technology stack to deliver a world-class user experience.
+
+- 🗺️ **Places & Landmarks Exploration**: Discover a rich catalog of global destinations and attractions. Users can visually explore regions through intuitive UI components, browse paginated destination lists, and seamlessly bookmark/save favorite places for future reference.
+- 🧳 **Intelligent Trip Planning System**: A dedicated, interactive trip planner that allows users to construct, organize, and visualize their travel itineraries step-by-step. It provides dynamic routing and timeline management tailored to the user's specific travel goals.
+- 🤖 **AI Chatbot Assistant**: An omnipresent, floating AI assistant ready to provide real-time travel recommendations, answer queries about landmarks, and assist in itinerary generation. It acts as a personal travel concierge right at your fingertips.
+- 🔐 **Secure Authentication & Protected Routing**: A seamless onboarding experience featuring Google OAuth integration for instant access, coupled with robust Next.js route protection middleware ensuring that sensitive areas remain completely secure.
+- 📍 **Interactive Map Integrations**: Deep integration with Leaflet (`react-leaflet`) for highly interactive, clustered regional mapping. Users can visualize their planned routes and explore geographically pinpointed destinations with smooth panning and zooming.
+- 🎨 **Immersive & Responsive UX/UI**: Beautifully crafted layouts using Tailwind CSS, enhanced with complex micro-interactions, scroll-triggered animations (GSAP), and layout transitions (Framer Motion). The application is fully responsive across all devices and screen sizes.
+- 🌓 **Dynamic Theming System**: Built-in support for Dark/Light mode toggling, allowing users to customize the visual aesthetic of the platform according to their environmental preferences.
+- 🚀 **Performance & Feedback Overlays**: Features custom loading states (BootSplash, BootScreen), highly interactive modal windows, and a global toast notification system (Sonner) to ensure the user is always informed of background processes and API interactions.
 
 ## 🚀 Tech Stack
 
