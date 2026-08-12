@@ -1,6 +1,6 @@
 <div align="center">
   
-# <img src="./public/icons/waynxt.svg" alt="Waynx Logo" width="45" /> Waynx - AI-Powered Smart Tourism Platform
+# <img src="./public/icons/waynxt.svg" alt="Waynx Logo" width="40" /> Waynx - AI-Powered Smart Tourism Platform
 
 **Waynx** is a cutting-edge, AI-driven travel and tourism platform designed to revolutionize how explorers plan their journeys. By seamlessly blending intelligent trip curation, interactive geographical mapping, and an always-available AI assistant, Waynx eliminates the friction of travel planning, empowering users to discover hidden gems and orchestrate flawless itineraries with zero hassle.
 
