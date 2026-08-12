@@ -134,8 +134,8 @@ export default function HeroBackgroundSlider() {
             sizes="100vw"
             className={
               isDark
-                ? "object-cover object-center"
-                : "mt-12 object-cover object-right opacity-50"
+                ? "object-cover object-right lg:object-center"
+                : "mt-12 object-cover object-right lg:object-center opacity-50"
             }
           />
         </motion.div>

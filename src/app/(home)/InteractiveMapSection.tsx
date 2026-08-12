@@ -71,7 +71,7 @@ const MAP_REGIONS: MapRegion[] = [
   {
     id: "sharm",
     name: "Sharm El Sheikh",
-    cityFilter: "Sharm El Sheikh",
+    cityFilter: "Sharm El-Sheikh",
     tagline: "Sinai's crown jewel",
     description:
       "A resort haven between desert mountains and coral reefs — perfect for diving, relaxation, and desert adventures.",
