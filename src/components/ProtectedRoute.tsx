@@ -1,21 +1,23 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuthStore();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      const fullPath = searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname;
+      // Use window.location.search instead of useSearchParams hook to prevent prerendering build errors
+      // when this component is not wrapped in a Suspense boundary.
+      const search = window.location.search;
+      const fullPath = search ? `${pathname}${search}` : pathname;
       router.push(`/login?redirect=${encodeURIComponent(fullPath)}`);
     }
-  }, [isLoading, isAuthenticated, pathname, searchParams, router]);
+  }, [isLoading, isAuthenticated, pathname, router]);
 
   if (isLoading) {
     return (
