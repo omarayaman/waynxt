@@ -58,12 +58,23 @@ function RegisterPageContent() {
       const { useAuthStore } = await import('@/store/useAuthStore');
       await useAuthStore.getState().fetchCurrentUser();
       
-      router.push(postAuthRedirect);
+      window.location.href = postAuthRedirect;
     } catch (error: unknown) {
-      const err = error as { response?: { data?: { message?: string } } };
-      setErrorMessage(
-        err.response?.data?.message || "An error occurred during registration. Please try again."
-      );
+      const err = error as { response?: { data?: { message?: string, detail?: string | any[], error?: string } } };
+      const data = err.response?.data;
+      
+      let msg: string = "An error occurred during registration. Please try again.";
+      if (data) {
+        if (typeof data.message === 'string') msg = data.message;
+        else if (data.message && typeof data.message === 'object' && (data.message as any).message) msg = (data.message as any).message;
+        else if (typeof data.detail === 'string') msg = data.detail;
+        else if (Array.isArray(data.detail) && data.detail[0]?.msg) msg = data.detail[0].msg;
+        else if (typeof data.error === 'string') msg = data.error;
+        else if (data.error && typeof data.error === 'object' && (data.error as any).message) msg = (data.error as any).message;
+        else if (typeof data.message === 'object') msg = JSON.stringify(data.message);
+      }
+      
+      setErrorMessage(String(msg));
     } finally {
       setIsLoading(false);
     }
@@ -343,7 +354,7 @@ function RegisterPageContent() {
             <p className="text-center text-[14px] text-muted pt-6">
               Already have an account?{" "}
               <Link
-                href="/login"
+                href={`/login${searchParams.toString() ? `?${searchParams.toString()}` : ''}`}
                 className="text-accent hover:text-accent-hover font-bold transition-colors underline underline-offset-4"
               >
                 Log in

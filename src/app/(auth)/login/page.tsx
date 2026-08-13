@@ -56,11 +56,23 @@ function LoginPageContent() {
       const { useAuthStore } = await import('@/store/useAuthStore');
       await useAuthStore.getState().fetchCurrentUser();
       
-      router.push(postAuthRedirect);
+      window.location.href = postAuthRedirect;
     } catch (error: unknown) {
-      const err = error as { response?: { status?: number, data?: { message?: string } } };
-      const msg = err.response?.data?.message || "An error occurred during login. Please try again.";
-      setErrorMessage(msg);
+      const err = error as { response?: { status?: number, data?: { message?: string, detail?: string | string[], error?: string } } };
+      const data = err.response?.data;
+      
+      let msg: string = "An error occurred during login. Please try again.";
+      if (data) {
+        if (typeof data.message === 'string') msg = data.message;
+        else if (data.message && typeof data.message === 'object' && (data.message as unknown as { message?: string }).message) msg = (data.message as unknown as { message: string }).message;
+        else if (typeof data.detail === 'string') msg = data.detail;
+        else if (Array.isArray(data.detail) && (data.detail[0] as unknown as { msg?: string })?.msg) msg = (data.detail[0] as unknown as { msg: string }).msg;
+        else if (typeof data.error === 'string') msg = data.error;
+        else if (data.error && typeof data.error === 'object' && (data.error as unknown as { message?: string }).message) msg = (data.error as unknown as { message: string }).message;
+        else if (typeof data.message === 'object') msg = JSON.stringify(data.message);
+      }
+      
+      setErrorMessage(String(msg));
       
       // Always show the sign up button on error since we might not get a specific "not found" message
       setIsAccountNotFound(true);
@@ -115,7 +127,7 @@ function LoginPageContent() {
               </div>
               {isAccountNotFound && (
                 <Link
-                  href="/register"
+                  href={`/register${searchParams.toString() ? `?${searchParams.toString()}` : ''}`}
                   className="w-full flex justify-center items-center gap-2 bg-transparent border border-accent text-accent hover:bg-accent/10 font-bold text-[15px] py-3.5 rounded-xl transition-all duration-300 shadow-[0_0_10px_color-mix(in srgb, var(--accent) %, transparent)] hover:shadow-[0_0_15px_color-mix(in srgb, var(--accent) %, transparent)]"
                 >
                   Create a new account
@@ -293,7 +305,7 @@ function LoginPageContent() {
             <p className="text-center text-[14px] text-muted pt-6">
               Don&apos;t have an account?{" "}
               <Link
-                href="/register"
+                href={`/register${searchParams.toString() ? `?${searchParams.toString()}` : ''}`}
                 className="text-accent hover:text-accent-hover font-bold transition-colors underline underline-offset-4"
               >
                 Sign up

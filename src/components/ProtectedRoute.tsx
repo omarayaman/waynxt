@@ -1,19 +1,21 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuthStore();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
+      const fullPath = searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname;
+      router.push(`/login?redirect=${encodeURIComponent(fullPath)}`);
     }
-  }, [isLoading, isAuthenticated, pathname, router]);
+  }, [isLoading, isAuthenticated, pathname, searchParams, router]);
 
   if (isLoading) {
     return (
